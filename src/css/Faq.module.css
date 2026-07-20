@@ -1,0 +1,18 @@
+.faq h2{
+background: linear-gradient(90deg, #0D1C4F 40%, #5368B5);
+    background-clip: text;
+    color: #fff0;
+    color: rgb(19, 41, 118);
+    margin-bottom: 10px;
+    font-size: 45px;
+    font-weight: lighter;
+}
+.faq h3{
+background: linear-gradient(90deg, #0D1C4F 40%, #5368B5);
+    background-clip: text;
+    color: #fff0;
+    color: rgb(19, 41, 118);
+    margin-bottom: 10px;
+    font-size: 21px;
+    font-weight: lighter;
+}

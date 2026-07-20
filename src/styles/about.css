@@ -1,0 +1,969 @@
+/* ============================================
+   ABOUT PAGE — Super AI Polaris
+   ============================================ */
+
+/* ── Hero Banner ── */
+.about-hero {
+    position: relative;
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 160px 24px 100px;
+    overflow: hidden;
+    background: linear-gradient(180deg, #05060a 0%, #0a0920 50%, #05060a 100%);
+    background-color: #050d12;
+    /* Removed: this was hotlinked from an unrelated commercial WordPress
+       theme demo (thepixelcurve.com) — licensing exposure plus a runtime
+       dependency on a third-party domain. Add your own asset here. */
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.about-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(600px circle at 30% 40%, rgba(139, 92, 246, 0.12), transparent 60%),
+        radial-gradient(500px circle at 70% 60%, rgba(99, 102, 241, 0.08), transparent 60%);
+    pointer-events: none;
+}
+
+.about-hero-grid {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right, #80808006 1px, transparent 1px),
+        linear-gradient(to bottom, #80808006 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+}
+
+.about-hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 820px;
+    margin: 0 auto;
+}
+
+.about-hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 20px;
+    border-radius: 999px;
+    border: 1px solid rgba(139, 92, 246, 0.25);
+    background: rgba(139, 92, 246, 0.06);
+    color: #c4b5fd;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 32px;
+    box-shadow: 0 0 25px rgba(139, 92, 246, 0.1);
+}
+
+.about-hero-badge .pulse-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #a78bfa;
+    animation: pulse-glow 2s infinite;
+}
+
+.about-hero h1 {
+    font-size: clamp(36px, 6vw, 64px) !important;
+    font-weight: 600 !important;
+    line-height: 1.1;
+    margin-bottom: 24px;
+    letter-spacing: -0.02em;
+    font-size: clamp(36px, 6vw, 58px) !important;
+    font-weight: 600 !important;
+    line-height: 1.1;
+    margin-bottom: 20px;
+    letter-spacing: -0.02em;
+}
+
+.about-hero-subtitle {
+    font-size: 18px;
+    color: #a0aec0;
+    line-height: 1.8;
+    max-width: 680px;
+    margin: 0 auto;
+}
+
+/* ── Section Wrapper ── */
+.about-section {
+    position: relative;
+    padding: 100px 24px;
+    overflow: hidden;
+}
+
+.about-section-dark {
+    background: #05060a;
+}
+
+.about-section-alt {
+    background: linear-gradient(180deg, #08071a, #05060a);
+}
+
+.about-section-inner {
+    max-width: 1140px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+}
+
+.about-section-header {
+    text-align: center;
+    margin-bottom: 64px;
+}
+
+.about-section-header .section-title {
+    margin-bottom: 16px;
+}
+
+.about-section-header .section-subtitle {
+    max-width: 640px;
+    margin: 0 auto;
+}
+
+.about-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 18px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    box-shadow: 0 0 18px rgba(139, 92, 246, 0.1);
+}
+
+.about-badge-purple {
+    border: 1px solid rgba(139, 92, 246, 0.25);
+    background: rgba(139, 92, 246, 0.06);
+    color: #c4b5fd;
+}
+
+.about-badge-cyan {
+    border: 1px solid rgba(6, 182, 212, 0.25);
+    background: rgba(6, 182, 212, 0.06);
+    color: #67e8f9;
+}
+
+.about-badge-emerald {
+    border: 1px solid rgba(16, 185, 129, 0.25);
+    background: rgba(16, 185, 129, 0.06);
+    color: #6ee7b7;
+}
+
+.about-badge-amber {
+    border: 1px solid rgba(245, 158, 11, 0.25);
+    background: rgba(245, 158, 11, 0.06);
+    color: #fcd34d;
+}
+
+.about-badge .badge-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    animation: pulse-glow 2s infinite;
+}
+
+/* ── What We Do — Product Cards ── */
+.about-products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 20px;
+}
+
+.about-product-card {
+    position: relative;
+    padding: 32px 24px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.02);
+    text-align: center;
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow: hidden;
+}
+
+.about-product-card:hover {
+    border-color: rgba(139, 92, 246, 0.25);
+    background: rgba(255, 255, 255, 0.04);
+    transform: translateY(-6px);
+    box-shadow: 0 20px 50px -15px rgba(0, 0, 0, 0.4);
+}
+
+.about-product-card .card-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    font-size: 26px;
+    transition: transform 0.3s ease;
+}
+
+.about-product-card:hover .card-icon {
+    transform: scale(1.12);
+}
+
+.about-product-card h4 {
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    color: #fff;
+    margin-bottom: 8px;
+}
+
+.about-product-card p {
+    font-size: 13px;
+    color: #94a3b8;
+    line-height: 1.6;
+}
+
+/* ── Employees / Team Members — premium cards ── */
+.emp-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(232px, 1fr));
+    gap: 26px;
+}
+
+.emp-card {
+    position: relative;
+    padding: 40px 26px 30px;
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.012));
+    backdrop-filter: blur(6px);
+    text-align: center;
+    overflow: hidden;
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.5s ease, box-shadow 0.5s ease;
+}
+
+.emp-card:hover {
+    transform: translateY(-10px);
+    border-color: rgba(255, 255, 255, 0.16);
+    box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.6);
+}
+
+.emp-glow {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    pointer-events: none;
+}
+
+.emp-card:hover .emp-glow {
+    opacity: 1;
+}
+
+.emp-accent {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    opacity: 0.45;
+    transition: opacity 0.5s ease;
+}
+
+.emp-card:hover .emp-accent {
+    opacity: 1;
+}
+
+/* Avatar + rotating gradient ring */
+.emp-avatar-wrap {
+    position: relative;
+    width: 108px;
+    height: 108px;
+    margin: 0 auto 20px;
+}
+
+.emp-avatar-wrap::before {
+    content: "";
+    position: absolute;
+    inset: -2px;
+    border-radius: 50%;
+    background: conic-gradient(from 0deg, var(--ring-color), transparent 32%, var(--ring-color) 68%, var(--ring-color));
+    opacity: 0.5;
+    transition: opacity 0.5s ease;
+    animation: emp-spin 6s linear infinite;
+    animation-play-state: paused;
+}
+
+.emp-card:hover .emp-avatar-wrap::before {
+    opacity: 1;
+    animation-play-state: running;
+}
+
+@keyframes emp-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.emp-avatar {
+    position: absolute;
+    inset: 4px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 1;
+    overflow: hidden;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+.emp-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.emp-name {
+    font-size: 17px !important;
+    font-weight: 700 !important;
+    color: #fff;
+    margin-bottom: 5px;
+    letter-spacing: 0.2px;
+}
+
+.emp-role {
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.5;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.emp-socials {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 18px;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: all 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.emp-card:hover .emp-socials {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.emp-socials a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    color: #94a3b8;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.03);
+    transition: all 0.3s ease;
+}
+
+.emp-socials a:hover {
+    color: #fff;
+    border-color: var(--sc);
+    background: var(--sc);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px -6px var(--sc);
+}
+
+/* ── Vision & Mission ── */
+.about-vm-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 28px;
+}
+
+@media (max-width: 768px) {
+    .about-vm-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.about-vm-card {
+    position: relative;
+    padding: 48px 36px;
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.02);
+    backdrop-filter: blur(20px);
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow: hidden;
+}
+
+.about-vm-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    border-radius: 24px 24px 0 0;
+    opacity: 0.7;
+}
+
+.about-vm-card.vision::before {
+    background: linear-gradient(90deg, #8b5cf6, #6366f1);
+}
+
+.about-vm-card.mission::before {
+    background: linear-gradient(90deg, #06b6d4, #10b981);
+}
+
+.about-vm-card:hover {
+    border-color: rgba(255, 255, 255, 0.12);
+    transform: translateY(-4px);
+    box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.4);
+}
+
+.about-vm-card .vm-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 24px;
+    font-size: 24px;
+}
+
+.about-vm-card h3 {
+    font-size: 26px !important;
+    font-weight: 700 !important;
+    color: #fff;
+    margin-bottom: 16px;
+}
+
+.about-vm-card p {
+    font-size: 15px;
+    color: #94a3b8;
+    line-height: 1.8;
+}
+
+/* ── Interactive Leadership Section ── */
+.leadership-interactive {
+    display: flex;
+    gap: 32px;
+    align-items: flex-start;
+}
+
+/* Left column: scrollable hover cards */
+.leadership-cards-col {
+    flex: 1;
+    max-height: 620px;
+    overflow-y: auto;
+    padding-right: 12px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(139, 92, 246, 0.55) rgba(255, 255, 255, 0.04);
+    /* Keeps a wheel gesture that reaches the end of this list from carrying
+       on into the page scroll, which reads as the section "jumping". */
+    overscroll-behavior: contain;
+}
+
+/* Widened from 4px — the thumb was too thin to see or grab. */
+.leadership-cards-col::-webkit-scrollbar {
+    width: 8px;
+}
+
+.leadership-cards-col::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 8px;
+}
+
+.leadership-cards-col::-webkit-scrollbar-thumb {
+    background: rgba(139, 92, 246, 0.55);
+    border-radius: 8px;
+}
+
+.leadership-cards-col::-webkit-scrollbar-thumb:hover {
+    background: rgba(139, 92, 246, 0.8);
+}
+
+.leadership-cat-group {
+    margin-bottom: 24px;
+}
+
+.leadership-cat-group:last-child {
+    margin-bottom: 0;
+}
+
+.leadership-cat-label {
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #64748b;
+    margin-bottom: 10px;
+    padding-left: 16px;
+}
+
+.leadership-hover-card {
+    padding: 16px 20px;
+    margin-bottom: 6px;
+    border-radius: 14px;
+    border-left: 3px solid transparent;
+    background: rgba(255, 255, 255, 0.02);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Hover and active share one offset. They previously differed (6px vs
+   8px), so hovering slid the card twice — once on hover, again when it
+   became active a frame later — nudging its edge past the cursor. */
+.leadership-hover-card:hover {
+    background: rgba(255, 255, 255, 0.04);
+    transform: translateX(8px);
+}
+
+.leadership-hover-card.active {
+    background: rgba(139, 92, 246, 0.06);
+    border-left-color: #8b5cf6 !important;
+    transform: translateX(8px);
+    box-shadow: 0 4px 20px -8px rgba(139, 92, 246, 0.2);
+}
+
+.leadership-hover-card h4 {
+    font-size: 15px !important;
+    font-weight: 700 !important;
+    color: #fff;
+    margin: 0 0 2px 0;
+}
+
+.leadership-hover-card p {
+    font-size: 12px;
+    color: #94a3b8;
+    margin: 0;
+}
+
+.leadership-hover-card.active h4 {
+    color: #e9e5ff;
+}
+
+/* Right column: profile viewer */
+.leadership-profile-col {
+    flex: 1;
+    position: sticky;
+    top: 100px;
+}
+
+.leadership-profile-card {
+    position: relative;
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.02);
+    backdrop-filter: blur(24px);
+    overflow: hidden;
+    transition: border-color 0.4s ease;
+    /* Holds the card at a constant height so the sticky column below never
+       reflows when a different person is selected. Any slack collects at
+       the bottom of the card rather than as a gap between blocks.
+       Reduced from 460px when the tagline block was hidden. */
+    min-height: 400px;
+}
+
+.leadership-profile-card:hover {
+    border-color: rgba(139, 92, 246, 0.15);
+}
+
+.profile-gradient-bar {
+    height: 4px;
+    transition: background 0.5s ease;
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 32px 32px 20px;
+}
+
+.profile-avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    font-weight: 800;
+    flex-shrink: 0;
+    overflow: hidden;
+    transition: all 0.4s ease;
+}
+
+.profile-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: inherit;
+}
+
+.profile-name {
+    font-size: 22px !important;
+    font-weight: 800 !important;
+    color: #fff;
+    margin: 0 0 4px 0;
+    line-height: 1.2;
+}
+
+.profile-role {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    transition: color 0.4s ease;
+}
+
+/* ── Height stability ─────────────────────────────────────────────
+   .leadership-profile-col is position:sticky, so ANY height change in
+   this card forces the browser to recalculate the sticky offset. The
+   card's content changes on every hover — and the bio types out one
+   character at a time, re-wrapping several times per second — which
+   made the whole section visibly shake.
+
+   The three blocks below each reserve room for their longest state, so
+   the card keeps a constant height no matter which person is selected
+   or how far the typewriter has got. Do not remove these min-heights
+   without also removing the sticky positioning. */
+
+.profile-tagline {
+    margin: 0 32px 18px;
+    padding: 11px 16px;
+    border-left: 3px solid #8b5cf6;
+    border-radius: 0 12px 12px 0;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.05), transparent);
+    font-size: 14.5px;
+    font-style: italic;
+    font-weight: 500;
+    line-height: 1.5;
+    color: #e2e8f0;
+    animation: tagIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+    /* No min-height here: every tagline fits on one line at desktop width,
+       so reserving two lines left a blank gap under each. The 1-vs-2 line
+       difference at narrow widths is absorbed by the card's min-height
+       instead, where the slack lands at the bottom and is not visible. */
+}
+
+.profile-tagline::before {
+    content: "“";
+    font-size: 20px;
+    font-weight: 800;
+    margin-right: 2px;
+    opacity: 0.6;
+}
+
+.profile-bio-area {
+    padding: 0 32px 28px;
+}
+
+.profile-bio-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #64748b;
+    margin-bottom: 12px;
+}
+
+.sparkle-icon {
+    font-size: 14px;
+}
+
+.profile-bio-text {
+    font-size: 15px;
+    color: #cbd5e1;
+    line-height: 1.8;
+    /* Three lines of 15px/1.8 text plus padding. The longest bio wraps to
+       two, so the box never grows while the typewriter runs. */
+    min-height: 122px;
+    padding: 20px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.typing-cursor {
+    display: inline-block;
+    color: #8b5cf6;
+    font-weight: 300;
+    animation: blink-cursor 0.9s step-end infinite;
+    margin-left: 1px;
+}
+
+@keyframes blink-cursor {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0;
+    }
+}
+
+.profile-tags {
+    display: flex;
+    gap: 8px;
+    padding: 0 32px 28px;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    /* One row of pills plus the bottom padding — tag sets differ in width
+       and would otherwise wrap to a second row for some people only. */
+    min-height: 62px;
+}
+
+.profile-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    background: rgba(139, 92, 246, 0.08);
+    border: 1px solid rgba(139, 92, 246, 0.15);
+    color: #c4b5fd;
+    cursor: default;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+    animation: tagIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.profile-tag::before {
+    content: "";
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: currentColor;
+    box-shadow: 0 0 8px currentColor;
+}
+
+.profile-tag:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.15);
+    box-shadow: 0 8px 18px -8px currentColor;
+}
+
+@keyframes tagIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.92);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* ── Responsive: stack on mobile ── */
+@media (max-width: 860px) {
+    .leadership-interactive {
+        flex-direction: column;
+    }
+
+    .leadership-cards-col {
+        max-height: 300px;
+    }
+
+    .leadership-profile-col {
+        position: relative;
+        top: 0;
+    }
+}
+
+/* ── Hover spotlight (reused pattern) ── */
+.about-product-card .card-spotlight {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.about-product-card:hover .card-spotlight {
+    opacity: 1;
+}
+
+/* ── Associations & Recognitions ── */
+.about-assoc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+}
+
+.about-assoc-card {
+    position: relative;
+    padding: 28px 24px;
+    border-radius: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.02);
+    transition: all 0.45s ease;
+    overflow: hidden;
+}
+
+.about-assoc-card:hover {
+    border-color: rgba(139, 92, 246, 0.2);
+    background: rgba(255, 255, 255, 0.04);
+    transform: translateY(-3px);
+}
+
+.about-assoc-card .assoc-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+    font-size: 20px;
+}
+
+.about-assoc-card h4 {
+    font-size: 15px !important;
+    font-weight: 700 !important;
+    color: #fff;
+    margin-bottom: 8px;
+}
+
+.about-assoc-card p {
+    font-size: 13px;
+    color: #94a3b8;
+    line-height: 1.7;
+}
+
+/* ── CTA Section ── */
+.about-cta {
+    position: relative;
+    padding: 120px 24px;
+    text-align: center;
+    overflow: hidden;
+    background: linear-gradient(180deg, #05060a, #0a0920, #05060a);
+}
+
+.about-cta::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 700px;
+    height: 350px;
+    background: radial-gradient(ellipse, rgba(139, 92, 246, 0.1), transparent 70%);
+    filter: blur(80px);
+    pointer-events: none;
+}
+
+.about-cta-inner {
+    position: relative;
+    z-index: 2;
+    max-width: 640px;
+    margin: 0 auto;
+}
+
+.about-cta h2 {
+    font-size: clamp(32px, 5vw, 52px) !important;
+    font-weight: 800 !important;
+    margin-bottom: 20px;
+    line-height: 1.15;
+}
+
+.about-cta p {
+    font-size: 18px;
+    color: #a0aec0;
+    line-height: 1.7;
+    margin-bottom: 36px;
+}
+
+.about-cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 40px;
+    border: none;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #8b5cf6, #6366f1);
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 0 30px rgba(139, 92, 246, 0.3);
+}
+
+.about-cta-btn:hover {
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 0 50px rgba(139, 92, 246, 0.5);
+}
+
+/* "Our Team" link under the leadership viewer. The class is also used on a
+   <button> elsewhere, so the underline reset is scoped to the anchor. */
+a.about-cta-btn,
+a.about-cta-btn:hover {
+    text-decoration: none;
+    color: #fff;
+}
+
+.about-team-cta {
+    display: flex;
+    justify-content: center;
+    margin-top: 48px;
+}
+
+/* ── Ambient Glows (reusable) ── */
+.about-glow {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    filter: blur(100px);
+}
+
+/* ── Responsive ── */
+@media (max-width: 640px) {
+    .about-hero {
+        padding: 140px 16px 80px;
+        min-height: 50vh;
+    }
+
+    .about-section {
+        padding: 70px 16px;
+    }
+
+    .about-products-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .about-team-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .about-assoc-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .about-vm-card {
+        padding: 32px 24px;
+    }
+}

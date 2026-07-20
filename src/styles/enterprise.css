@@ -1,0 +1,176 @@
+/* =========================================
+   ENTERPRISE PAGE STYLES (Super AI Polaris)
+   ========================================= */
+
+.enterprise-page {
+    background-color: #05060a;
+    color: #e0e0e0;
+    font-family: 'Inter', system-ui, sans-serif;
+    overflow-x: hidden;
+}
+
+/* Base Styles & Utility */
+.enterprise-page h1,
+.enterprise-page h2,
+.enterprise-page h3,
+.enterprise-page h4 {
+    font-weight: 800;
+    font-weight: 600 !important;
+    line-height: 1.1;
+    margin-bottom: 20px;
+    letter-spacing: -0.02em;
+}
+
+/* INTRO SECTION */
+.ent-intro {
+    padding: 160px 5% 60px;
+    text-align: center;
+    background: radial-gradient(ellipse at top, rgba(20, 20, 30, 0.8) 0%, transparent 70%);
+}
+
+.ent-intro .main-title {
+    /* Was a flat 3.5rem (56px): ~5 characters per line at 320px. */
+    font-size: clamp(2rem, 7vw, 3.5rem);
+    margin-bottom: 1.5rem;
+}
+
+.ent-intro .subtitle {
+    font-size: 1.25rem;
+    color: #94a3b8;
+    max-width: 900px;
+    margin: 0 auto;
+    line-height: 1.8;
+}
+
+/* REVEAL ANIMATIONS */
+.reveal-fade-up {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: all 0.8s ease-out;
+}
+
+.reveal-fade-up.revealed {
+    opacity: 1;
+    transform: translateY(0);
+    padding-top: 90px;
+}
+
+/* NEURAEDGE 1 */
+.neuraedge-section {
+    padding: 80px 0;
+}
+
+.hero-banner-edge {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    padding: 0 5%;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+@media(min-width: 1024px) {
+    .hero-banner-edge {
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .edge-content {
+        flex: 1;
+        padding-right: 2rem;
+    }
+
+    .edge-media {
+        flex: 1;
+    }
+}
+
+.edge-content h2 {
+    /* Was a flat 3rem (48px) with no mobile query in this file. */
+    font-size: clamp(1.75rem, 6vw, 3rem);
+    line-height: 1.2;
+    margin-bottom: 1rem;
+}
+
+.edge-content .highlight {
+    color: #64748b;
+    font-weight: 300;
+}
+
+.edge-pill {
+    padding: 6px 14px;
+    background: rgba(0, 210, 255, 0.1);
+    border: 1px solid rgba(0, 210, 255, 0.3);
+    border-radius: 20px;
+    font-size: 0.85rem;
+    color: #00d2ff;
+    font-family: monospace;
+}
+
+.edge-media .img-container {
+    position: relative;
+}
+
+.eagle-glow-pill {
+    padding: 8px 16px;
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    border-radius: 24px;
+    font-size: 0.9rem;
+    color: #34d399;
+    box-shadow: 0 0 15px rgba(16, 185, 129, 0.1);
+    transition: all 0.3s;
+}
+
+.eagle-glow-pill:hover {
+    background: rgba(16, 185, 129, 0.2);
+    box-shadow: 0 0 25px rgba(16, 185, 129, 0.4);
+    transform: translateY(-2px);
+}
+
+/* ── Mobile / tablet ────────────────────────────────────────────────
+   This stylesheet previously contained a single @media(min-width:1024px)
+   block and nothing else, so every viewport below 1024px rendered the
+   unmodified desktop rules. That was the root cause of the Enterprise
+   page collapsing on phones and tablets. */
+@media (max-width: 1023px) {
+
+    .neurabot-section,
+    .physical-ai-section,
+    .agentic-section {
+        /* Inline margins are set per-section in the JSX; this clips any
+           child that still exceeds the viewport instead of letting
+           body{overflow-x:hidden} silently crop it. */
+        overflow: hidden;
+    }
+
+    .caps-grid,
+    .phases-flex {
+        width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    .bot-split {
+        padding: 20px !important;
+    }
+}
+
+@media (max-width: 640px) {
+
+    .neurabot-section,
+    .physical-ai-section,
+    .agentic-section,
+    .eaglei-section,
+    .edubot-section {
+        /* Halve the large vertical rhythm; 90px top and bottom is a third
+           of a 568px phone screen. */
+        margin-top: 48px !important;
+        margin-bottom: 48px !important;
+    }
+
+    .ent-intro {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+}

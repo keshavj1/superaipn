@@ -1,0 +1,11 @@
+node_modules
+dist
+dist-ssr
+.git
+# secrets — never upload
+.env
+*.env
+**/.env
+# local chatbot backend (not part of the frontend deploy)
+Chatbot
+server

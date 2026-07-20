@@ -1,0 +1,286 @@
+/* ─── Team page (/team) ───────────────────────────────────────
+   Person cards reuse the .emp-* rules from about.css; everything
+   here is page chrome (hero, group headers, CTA). Colours come from
+   the shared theme variables so light/dark both work. */
+
+.tp-page {
+    background: var(--color-bg);
+    color: var(--color-text-primary);
+    min-height: 100vh;
+}
+
+.tp-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+/* ─── Hero ─── */
+.tp-hero {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 140px 24px 64px;
+}
+
+.tp-hero-inner {
+    max-width: 820px;
+}
+
+.tp-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--color-border);
+    background: var(--color-bg-card);
+    color: var(--color-text-secondary);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 26px;
+}
+
+.tp-hero-title {
+    font-size: clamp(2.4rem, 5.6vw, 4rem);
+    font-weight: 800;
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    margin: 0 0 22px;
+}
+
+.tp-hero-highlight {
+    background: linear-gradient(100deg, #8b5cf6, #6366f1 45%, #06b6d4);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.tp-hero-sub {
+    font-size: 1.06rem;
+    line-height: 1.75;
+    color: var(--color-text-secondary);
+    max-width: 640px;
+    margin: 0;
+}
+
+/* ─── Hero stats ─── */
+.tp-stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    margin-top: 44px;
+    max-width: 620px;
+}
+
+.tp-stat {
+    border: 1px solid var(--color-border);
+    background: var(--color-bg-card);
+    border-radius: 14px;
+    padding: 20px 18px;
+    transition: border-color .3s ease, background .3s ease, transform .3s ease;
+}
+
+.tp-stat:hover {
+    border-color: var(--color-border-hover);
+    background: var(--color-bg-card-hover);
+    transform: translateY(-3px);
+}
+
+.tp-stat-value {
+    font-size: 1.9rem;
+    font-weight: 800;
+    line-height: 1;
+    background: linear-gradient(100deg, #8b5cf6, #06b6d4);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.tp-stat-label {
+    margin-top: 8px;
+    font-size: 0.74rem;
+    font-weight: 600;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+}
+
+/* ─── Group blocks ─── */
+.tp-group {
+    padding: 56px 0;
+    border-top: 1px solid var(--color-border);
+}
+
+.tp-group:first-child {
+    border-top: none;
+}
+
+.tp-group-head {
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
+    margin-bottom: 38px;
+}
+
+.tp-group-index {
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--color-text-muted);
+    padding-top: 8px;
+    font-variant-numeric: tabular-nums;
+}
+
+.tp-group-title {
+    font-size: clamp(1.5rem, 2.6vw, 2rem);
+    font-weight: 750;
+    letter-spacing: -0.015em;
+    margin: 0 0 8px;
+}
+
+.tp-group-blurb {
+    font-size: 0.97rem;
+    line-height: 1.65;
+    color: var(--color-text-secondary);
+    max-width: 620px;
+    margin: 0;
+}
+
+.tp-group-count {
+    margin-left: auto;
+    flex-shrink: 0;
+    min-width: 38px;
+    height: 38px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    border: 1px solid var(--color-border);
+    background: var(--color-bg-card);
+    color: var(--color-text-secondary);
+    font-size: 0.85rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Bio line inside the shared person card (Team page only) */
+.emp-bio {
+    margin: 10px 0 0;
+    font-size: 0.86rem;
+    line-height: 1.62;
+    color: var(--color-text-muted);
+}
+
+/* ─── Join us CTA ─── */
+.tp-cta {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 24px 110px;
+}
+
+.tp-cta-card {
+    border: 1px solid var(--color-border);
+    background: var(--color-bg-card);
+    border-radius: 20px;
+    padding: 46px 32px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.tp-cta-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(520px 200px at 50% 0%, rgba(139, 92, 246, .14), transparent 70%);
+    pointer-events: none;
+}
+
+.tp-cta-icon {
+    color: #8b5cf6;
+    margin-bottom: 12px;
+}
+
+.tp-cta-title {
+    font-size: 1.5rem;
+    font-weight: 750;
+    margin: 0 0 10px;
+    letter-spacing: -0.015em;
+}
+
+.tp-cta-text {
+    color: var(--color-text-secondary);
+    margin: 0 0 24px;
+    font-size: 0.98rem;
+}
+
+.tp-cta-btn {
+    display: inline-block;
+    padding: 12px 26px;
+    border-radius: 999px;
+    background: linear-gradient(100deg, #8b5cf6, #6366f1);
+    color: #fff;
+    font-weight: 650;
+    font-size: 0.94rem;
+    text-decoration: none;
+    transition: transform .25s ease, box-shadow .25s ease;
+    position: relative;
+}
+
+.tp-cta-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px -10px rgba(139, 92, 246, .6);
+    color: #fff;
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 768px) {
+    .tp-hero {
+        padding: 112px 20px 48px;
+    }
+
+    .tp-container,
+    .tp-cta {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .tp-stats {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+    }
+
+    .tp-stat {
+        padding: 15px 12px;
+    }
+
+    .tp-stat-value {
+        font-size: 1.45rem;
+    }
+
+    .tp-stat-label {
+        font-size: 0.66rem;
+        letter-spacing: 0.06em;
+    }
+
+    .tp-group {
+        padding: 42px 0;
+    }
+
+    .tp-group-head {
+        gap: 12px;
+        margin-bottom: 28px;
+    }
+
+    .tp-group-index {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .tp-stats {
+        grid-template-columns: 1fr;
+    }
+}

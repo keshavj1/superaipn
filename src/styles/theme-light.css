@@ -1,0 +1,537 @@
+/* ============================================================
+   LIGHT THEME
+   Activated by  <html data-theme="light">  (toggled in the Navbar).
+   Dark is the default; everything here overrides for light mode.
+   ============================================================ */
+
+html[data-theme="light"] {
+    --color-bg: #f4f5fa;
+    --color-bg-card: #ffffff;
+    --color-bg-card-hover: #eceef5;
+    --color-border: rgba(15, 23, 42, 0.10);
+    --color-border-hover: rgba(15, 23, 42, 0.20);
+    --color-text-primary: #0f172a;
+    --color-text-secondary: #475569;
+    --color-text-muted: #64748b;
+
+    /* Light counterparts of the section surfaces — same shapes (flat, radial
+       vignette, vertical band), inverted tonally. */
+    --surface-section: #f4f5fa;
+    --surface-galaxy: radial-gradient(ellipse at center, #eef0fb, #f4f5fa);
+    --surface-band-cool: linear-gradient(180deg, #f4f5fa, #eaeef8, #f4f5fa);
+    --surface-band-violet: linear-gradient(180deg, #f4f5fa, #efedfa, #f4f5fa);
+
+    --badge-text: #5b21b6;
+    --badge-bg: rgba(139, 92, 246, 0.10);
+    --badge-border: rgba(139, 92, 246, 0.35);
+    --btn-secondary-bg: rgba(15, 23, 42, 0.03);
+    --btn-secondary-text: #0f172a;
+    --btn-secondary-border: rgba(15, 23, 42, 0.18);
+    --btn-secondary-border-hover: rgba(15, 23, 42, 0.38);
+    --galaxy-label-a: #6d28d9;
+    --galaxy-label-b: #5b21b6;
+    --hero-title-shadow: 0 10px 30px rgba(15, 23, 42, 0.12);
+    --surface-footer: #f1f2f7;
+    --careers-surface-bg: #ffffff;
+    --careers-card-shadow: 0 12px 30px -18px rgba(15, 23, 42, 0.35);
+    --careers-card-shadow-hover: 0 18px 40px -16px rgba(15, 23, 42, 0.45);
+    --careers-glow-colour: radial-gradient(ellipse at center, rgba(139, 92, 246, 0.42), rgba(6, 182, 212, 0.18) 60%, transparent 75%);
+    --careers-sheen-colour: rgba(255, 255, 255, 0.6);
+
+    color-scheme: light;
+    background-color: var(--color-bg);
+}
+
+html[data-theme="light"] body {
+    background-color: var(--color-bg);
+    color: var(--color-text-primary);
+}
+
+/* Typography needs no overrides here: index.css paints headings and links with
+   --color-text-primary / --color-text-secondary, which the tokens above swap. */
+
+/* Muted text utilities -> readable slate (kept off pure text-white,
+   which is still needed on coloured buttons) */
+html[data-theme="light"] .text-gray-300,
+html[data-theme="light"] .text-gray-400,
+html[data-theme="light"] .text-gray-500,
+html[data-theme="light"] .text-slate-300,
+html[data-theme="light"] .text-slate-400,
+html[data-theme="light"] .text-slate-500 {
+    color: #475569 !important;
+}
+
+/* ---- Solid dark surfaces -> light (Tailwind arbitrary classes) ---- */
+html[data-theme="light"] .bg-\[\#05060a\],
+html[data-theme="light"] .bg-\[\#050505\],
+html[data-theme="light"] .bg-\[\#0a0b10\],
+html[data-theme="light"] .bg-\[\#0A0B10\],
+html[data-theme="light"] .bg-\[\#0b0c16\],
+html[data-theme="light"] .bg-\[\#070810\],
+html[data-theme="light"] .bg-\[\#090e17\],
+html[data-theme="light"] .bg-\[\#0b0f19\],
+html[data-theme="light"] .bg-\[\#0f141e\],
+html[data-theme="light"] .bg-\[\#0c1220\],
+html[data-theme="light"] .bg-\[\#05080f\],
+html[data-theme="light"] .bg-\[\#020408\],
+html[data-theme="light"] .bg-\[\#121826\] {
+    background-color: #ffffff !important;
+}
+
+/* Translucent dark borders are invisible on white — darken them */
+html[data-theme="light"] .border-white\/5,
+html[data-theme="light"] .border-white\/10,
+html[data-theme="light"] .border-white\/20 {
+    border-color: rgba(15, 23, 42, 0.12) !important;
+}
+
+/* ---- Navbar ---- */
+html[data-theme="light"] nav {
+    background-color: rgba(255, 255, 255, 0.75) !important;
+    border-color: rgba(15, 23, 42, 0.08) !important;
+}
+
+html[data-theme="light"] nav .text-white {
+    color: #0f172a !important;
+}
+
+html[data-theme="light"] nav .text-gray-400 {
+    color: #64748b !important;
+}
+
+html[data-theme="light"] .centerhead_sec {
+    background: rgba(15, 23, 42, 0.03) !important;
+}
+
+/* Mobile menu / dropdown panels that use inline dark backgrounds */
+html[data-theme="light"] nav .lg\:hidden[style] {
+    background: rgba(255, 255, 255, 0.97) !important;
+}
+
+/* ---- Page hero gradients (shared across pages) ---- */
+html[data-theme="light"] .about-hero,
+html[data-theme="light"] .research-hero,
+html[data-theme="light"] .partners-hero,
+html[data-theme="light"] .contact-hero,
+html[data-theme="light"] .products-hero,
+html[data-theme="light"] .education-hero {
+    background: linear-gradient(180deg, #ffffff 0%, #eef0fb 50%, #ffffff 100%) !important;
+}
+
+/* ---- About page sections + cards ---- */
+html[data-theme="light"] .about-section-dark {
+    background: #ffffff !important;
+}
+
+html[data-theme="light"] .about-section-alt {
+    background: linear-gradient(180deg, #f1f2fb, #ffffff) !important;
+}
+
+html[data-theme="light"] .about-product-card,
+html[data-theme="light"] .about-assoc-card,
+html[data-theme="light"] .about-vm-card,
+html[data-theme="light"] .emp-card,
+html[data-theme="light"] .leadership-hover-card,
+html[data-theme="light"] .leadership-profile-card {
+    background: #ffffff !important;
+    border-color: rgba(15, 23, 42, 0.10) !important;
+    box-shadow: 0 10px 30px -18px rgba(15, 23, 42, 0.25);
+}
+
+html[data-theme="light"] .about-product-card p,
+html[data-theme="light"] .emp-role {
+    color: #475569;
+}
+
+/* Profile / leadership viewer text */
+html[data-theme="light"] .profile-name,
+html[data-theme="light"] .leadership-hover-card h4 {
+    color: #0f172a !important;
+}
+
+html[data-theme="light"] .profile-bio-text,
+html[data-theme="light"] .leadership-hover-card p {
+    color: #475569 !important;
+}
+
+/* ---- Chatbot panel (keep its own dark identity but lighten base) ---- */
+html[data-theme="light"] .chat-scroll {
+    scrollbar-color: rgba(99, 102, 241, 0.5) transparent;
+}
+
+/* ============================================================
+   INNER PAGES — light-mode text legibility
+   Auto-generated from hardcoded white/gray text colours on
+   About/Products/Research/Partners/Contact/Enterprise/Education.
+   Light-mode only; dark is untouched.
+   ============================================================ */
+html[data-theme="light"] .about-hero-subtitle { color: #0f172a !important; }
+html[data-theme="light"] .about-product-card h4 { color: #0f172a !important; }
+html[data-theme="light"] .about-product-card p { color: #475569 !important; }
+html[data-theme="light"] .emp-name { color: #0f172a !important; }
+html[data-theme="light"] .emp-socials a { color: #475569 !important; }
+html[data-theme="light"] .emp-socials a:hover { color: #475569 !important; }
+html[data-theme="light"] .about-vm-card h3 { color: #0f172a !important; }
+html[data-theme="light"] .about-vm-card p { color: #475569 !important; }
+html[data-theme="light"] .leadership-hover-card h4 { color: #0f172a !important; }
+html[data-theme="light"] .leadership-hover-card p { color: #475569 !important; }
+html[data-theme="light"] .leadership-hover-card.active h4 { color: #0f172a !important; }
+html[data-theme="light"] .profile-name { color: #0f172a !important; }
+html[data-theme="light"] .profile-tagline { color: #475569 !important; }
+html[data-theme="light"] .profile-bio-text { color: #475569 !important; }
+html[data-theme="light"] .about-assoc-card h4 { color: #0f172a !important; }
+html[data-theme="light"] .about-assoc-card p { color: #475569 !important; }
+html[data-theme="light"] /* ========================================= PRODUCTS PAGE STYLES (Super AI Polaris) ========================================= */ .products-page { color: #475569 !important; }
+html[data-theme="light"] .section-tagline { color: #475569 !important; }
+html[data-theme="light"] .section-intro { color: #475569 !important; }
+html[data-theme="light"] .products-hero p { color: #475569 !important; }
+html[data-theme="light"] .category-card:hover .category-icon { color: #475569 !important; }
+html[data-theme="light"] .category-card p { color: #475569 !important; }
+html[data-theme="light"] .platform-desc { color: #475569 !important; }
+html[data-theme="light"] .best-for { color: #475569 !important; }
+html[data-theme="light"] .highlight-icon { color: #475569 !important; }
+html[data-theme="light"] .capability-card h4 { color: #0f172a !important; }
+html[data-theme="light"] .capability-card p { color: #475569 !important; }
+html[data-theme="light"] .use-case-col li { color: #475569 !important; }
+html[data-theme="light"] /* ================= ROBOTICS SECTION ================= */ .robotics-section { color: #475569 !important; }
+html[data-theme="light"] .panel-body p { color: #475569 !important; }
+html[data-theme="light"] .tool-card h4 { color: #0f172a !important; }
+html[data-theme="light"] .tool-card p { color: #475569 !important; }
+html[data-theme="light"] .integrations-box h5 { color: #0f172a !important; }
+html[data-theme="light"] .integration-logo { color: #0f172a !important; }
+html[data-theme="light"] .integration-logo:hover { color: #0f172a !important; }
+html[data-theme="light"] .research-hero-subtitle { color: #0f172a !important; }
+html[data-theme="light"] .research-focus-card .focus-number { color: #0f172a !important; }
+html[data-theme="light"] .research-focus-card h3 { color: #0f172a !important; }
+html[data-theme="light"] .research-focus-card>p { color: #475569 !important; }
+html[data-theme="light"] .hiw-step h5 { color: #0f172a !important; }
+html[data-theme="light"] .hiw-step p { color: #475569 !important; }
+html[data-theme="light"] .pipeline-node { color: #475569 !important; }
+html[data-theme="light"] .formula-block .formula-desc { color: #475569 !important; }
+html[data-theme="light"] .module-card h5 { color: #0f172a !important; }
+html[data-theme="light"] .module-card p { color: #475569 !important; }
+html[data-theme="light"] .whitepaper-card h3 { color: #0f172a !important; }
+html[data-theme="light"] .whitepaper-card>p { color: #475569 !important; }
+html[data-theme="light"] .capability-card h5 { color: #0f172a !important; }
+html[data-theme="light"] .claim-num { color: #0f172a !important; }
+html[data-theme="light"] .claim-item span { color: #475569 !important; }
+html[data-theme="light"] /* ── Sub-section title ── */ .sub-section-title { color: #0f172a !important; }
+html[data-theme="light"] .partners-hero-subtitle { color: #0f172a !important; }
+html[data-theme="light"] .partners-track-card h4 { color: #0f172a !important; }
+html[data-theme="light"] .partners-track-card p { color: #475569 !important; }
+html[data-theme="light"] .academic-intro { color: #475569 !important; }
+html[data-theme="light"] .academic-benefits-card h5 { color: #0f172a !important; }
+html[data-theme="light"] .academic-benefits-card ul li { color: #475569 !important; }
+html[data-theme="light"] .academic-associations p { color: #475569 !important; }
+html[data-theme="light"] .industry-card h4 { color: #0f172a !important; }
+html[data-theme="light"] .industry-card p { color: #475569 !important; }
+html[data-theme="light"] .world-map-title h4 { color: #0f172a !important; }
+html[data-theme="light"] .world-map-title p { color: #0f172a !important; }
+html[data-theme="light"] .map-country-dot { color: #0f172a !important; }
+html[data-theme="light"] .stepper-step h4 { color: #0f172a !important; }
+html[data-theme="light"] .stepper-step p { color: #475569 !important; }
+html[data-theme="light"] .training-card h4 { color: #0f172a !important; }
+html[data-theme="light"] .training-card p { color: #475569 !important; }
+html[data-theme="light"] .activate-header h3 { color: #0f172a !important; }
+html[data-theme="light"] .activate-header p { color: #0f172a !important; }
+html[data-theme="light"] .activate-item span { color: #475569 !important; }
+html[data-theme="light"] .contact-hero-subtitle { color: #0f172a !important; }
+html[data-theme="light"] .quickselect-card span { color: #475569 !important; }
+html[data-theme="light"] .contact-form-card h3 { color: #0f172a !important; }
+html[data-theme="light"] .contact-form-card .form-intro { color: #475569 !important; }
+html[data-theme="light"] .form-group label { color: #0f172a !important; }
+html[data-theme="light"] .form-group input { color: #475569 !important; }
+html[data-theme="light"] .form-group select { color: #475569 !important; }
+html[data-theme="light"] .form-group textarea { color: #475569 !important; }
+html[data-theme="light"] .form-group select option { color: #475569 !important; }
+html[data-theme="light"] .contact-detail-card h5 { color: #0f172a !important; }
+html[data-theme="light"] .contact-detail-card p { color: #475569 !important; }
+html[data-theme="light"] .response-card .response-label { color: #0f172a !important; }
+html[data-theme="light"] .social-link .social-name { color: #0f172a !important; }
+html[data-theme="light"] .demo-product-card h4 { color: #0f172a !important; }
+html[data-theme="light"] .demo-product-card .demo-desc { color: #475569 !important; }
+html[data-theme="light"] .expect-strip h3 { color: #0f172a !important; }
+html[data-theme="light"] .expect-step h4 { color: #0f172a !important; }
+html[data-theme="light"] .expect-step p { color: #475569 !important; }
+html[data-theme="light"] .demo-form-card h3 { color: #0f172a !important; }
+html[data-theme="light"] .demo-format-card h4 { color: #0f172a !important; }
+html[data-theme="light"] .demo-format-card p { color: #475569 !important; }
+html[data-theme="light"] /* ========================================= ENTERPRISE PAGE STYLES (Super AI Polaris) ========================================= */ .enterprise-page { color: #475569 !important; }
+html[data-theme="light"] .ent-intro .subtitle { color: #0f172a !important; }
+html[data-theme="light"] /* ========================================= EDUCATION PAGE STYLES (Super AI Polaris) ========================================= */ .education-page { color: #475569 !important; }
+html[data-theme="light"] .edu-hero .section-intro { color: #475569 !important; }
+html[data-theme="light"] .stat-block p { color: #0f172a !important; }
+html[data-theme="light"] .outcome-box p { color: #475569 !important; }
+html[data-theme="light"] .split-feature h5 { color: #0f172a !important; }
+html[data-theme="light"] .split-feature p { color: #475569 !important; }
+html[data-theme="light"] .equipment-card h4 { color: #0f172a !important; }
+html[data-theme="light"] .equipment-card p { color: #475569 !important; }
+html[data-theme="light"] .book-info h3 { color: #0f172a !important; }
+html[data-theme="light"] .book-info p { color: #475569 !important; }
+html[data-theme="light"] .book-topics h5 { color: #0f172a !important; }
+html[data-theme="light"] .book-topics li { color: #475569 !important; }
+html[data-theme="light"] .step-dot { color: #475569 !important; }
+
+/* ============================================================
+   INNER PAGES — light-mode icon legibility
+   Icon glyphs use inline accent colours on pale tinted boxes, which
+   wash out on white. A brightness/saturate filter deepens whatever
+   colour they carry without overriding the per-card hue.
+   ============================================================ */
+html[data-theme="light"] :is(
+    .card-icon, .vm-icon, .category-icon, .focus-number, .quickselect-icon,
+    .assoc-icon, .cap-icon, .detail-icon, .format-icon, .highlight-icon,
+    .industry-card-icon, .panel-icon-large, .tag-icon, .track-card-icon,
+    .training-card-icon, .icon-wrap, .icon-blue, .icon-gold, .sparkle-icon
+) svg,
+html[data-theme="light"] :is(
+    .card-icon, .vm-icon, .category-icon, .focus-number, .quickselect-icon,
+    .assoc-icon, .cap-icon, .detail-icon, .format-icon, .highlight-icon,
+    .industry-card-icon, .panel-icon-large, .tag-icon, .track-card-icon,
+    .training-card-icon, .icon-wrap, .icon-blue, .icon-gold, .sparkle-icon
+) i {
+    filter: brightness(0.48) saturate(1.45);
+}
+
+/* Icon boxes themselves: give the pale inline tint a readable edge */
+html[data-theme="light"] :is(
+    .card-icon, .vm-icon, .category-icon, .quickselect-icon, .assoc-icon,
+    .cap-icon, .detail-icon, .format-icon, .highlight-icon, .industry-card-icon,
+    .track-card-icon, .training-card-icon
+) {
+    box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.06);
+}
+
+/* ============================================================
+   INNER PAGES — light-mode surfaces
+   Dark page roots / glass cards / section fills that were never
+   theme-aware, mapped to light so the (now dark) text is legible.
+   Light-mode only.
+   ============================================================ */
+html[data-theme="light"] .about-hero { background: linear-gradient(180deg,#ffffff 0%,#eef0fb 50%,#ffffff 100%) !important; }
+html[data-theme="light"] .about-section-dark { background: linear-gradient(180deg,#ffffff 0%,#eef0fb 50%,#ffffff 100%) !important; }
+html[data-theme="light"] .about-section-alt { background: linear-gradient(180deg,#ffffff 0%,#eef0fb 50%,#ffffff 100%) !important; }
+html[data-theme="light"] .about-cta { background: linear-gradient(180deg,#ffffff 0%,#eef0fb 50%,#ffffff 100%) !important; }
+html[data-theme="light"] .products-page { background: var(--color-bg) !important; }
+html[data-theme="light"] .glass-card { background: var(--color-bg-card) !important; }
+html[data-theme="light"] .products-hero::before { background: none !important; }
+html[data-theme="light"] .tab-content { background: var(--color-bg-card) !important; }
+html[data-theme="light"] .best-for { background: var(--color-bg-card) !important; }
+html[data-theme="light"] .platform-visual { background: var(--color-bg-card) !important; }
+html[data-theme="light"] .automation-section { background: linear-gradient(180deg,#ffffff 0%,#eef0fb 50%,#ffffff 100%) !important; }
+html[data-theme="light"] .use-cases-block { background: var(--color-bg-card) !important; }
+html[data-theme="light"] .robotics-section { background: linear-gradient(180deg,#ffffff 0%,#eef0fb 50%,#ffffff 100%) !important; }
+html[data-theme="light"] .robotics-panel { background: var(--color-bg-card) !important; }
+html[data-theme="light"] .panel-visual { background: var(--color-bg-card) !important; }
+html[data-theme="light"] .panel-visual::after { background: none !important; }
+html[data-theme="light"] .dev-tools-section { background: var(--color-bg-card) !important; }
+html[data-theme="light"] .dev-terminal { background: var(--color-bg-card) !important; }
+html[data-theme="light"] .terminal-header { background: var(--color-bg-card) !important; }
+html[data-theme="light"] .tool-card { background: var(--color-bg-card) !important; }
+html[data-theme="light"] .research-hero { background: linear-gradient(180deg,#ffffff 0%,#eef0fb 50%,#ffffff 100%) !important; }
+html[data-theme="light"] .research-section-dark { background: linear-gradient(180deg,#ffffff 0%,#eef0fb 50%,#ffffff 100%) !important; }
+html[data-theme="light"] .research-section-alt { background: linear-gradient(180deg,#ffffff 0%,#eef0fb 50%,#ffffff 100%) !important; }
+html[data-theme="light"] .partners-hero { background: linear-gradient(180deg,#ffffff 0%,#eef0fb 50%,#ffffff 100%) !important; }
+html[data-theme="light"] .partners-section-dark { background: linear-gradient(180deg,#ffffff 0%,#eef0fb 50%,#ffffff 100%) !important; }
+html[data-theme="light"] .partners-section-alt { background: linear-gradient(180deg,#ffffff 0%,#eef0fb 50%,#ffffff 100%) !important; }
+html[data-theme="light"] .contact-hero { background: linear-gradient(180deg,#ffffff 0%,#eef0fb 50%,#ffffff 100%) !important; }
+html[data-theme="light"] .contact-section-dark { background: linear-gradient(180deg,#ffffff 0%,#eef0fb 50%,#ffffff 100%) !important; }
+html[data-theme="light"] .contact-section-alt { background: linear-gradient(180deg,#ffffff 0%,#eef0fb 50%,#ffffff 100%) !important; }
+html[data-theme="light"] .form-group select option { background: linear-gradient(180deg,#ffffff 0%,#eef0fb 50%,#ffffff 100%) !important; }
+html[data-theme="light"] .enterprise-page { background: var(--color-bg) !important; }
+html[data-theme="light"] .ent-intro { background: linear-gradient(180deg,#ffffff 0%,#eef0fb 50%,#ffffff 100%) !important; }
+html[data-theme="light"] .education-page { background: var(--color-bg) !important; }
+html[data-theme="light"] .edu-hero { background: linear-gradient(180deg,#ffffff 0%,#eef0fb 50%,#ffffff 100%) !important; }
+html[data-theme="light"] .k12-section { background: linear-gradient(180deg,#ffffff 0%,#eef0fb 50%,#ffffff 100%) !important; }
+html[data-theme="light"] .outcome-box { background: var(--color-bg-card) !important; }
+html[data-theme="light"] .split-panel { background: var(--color-bg-card) !important; }
+html[data-theme="light"] .labs-section { background: linear-gradient(180deg,#ffffff 0%,#eef0fb 50%,#ffffff 100%) !important; }
+html[data-theme="light"] .equipment-card { background: var(--color-bg-card) !important; }
+html[data-theme="light"] .books-section { background: var(--color-bg-card) !important; }
+html[data-theme="light"] .book-card { background: var(--color-bg-card) !important; }
+html[data-theme="light"] .step-dot { background: var(--color-bg-card) !important; }
+
+/* ============================================================
+   INNER PAGES — light-mode faint text + icons (second pass)
+   Content labels/tags carried inline white or light-slate that the
+   first pass missed; badges/pills sat on pale tints; lucide icons
+   were white. All light-mode only.
+   ============================================================ */
+
+/* Content labels & body tags -> readable (beats inline white via !important) */
+html[data-theme="light"] :is(.data-tag, .msg-bubble, .track-explore-link, .demo-ideal, .academic-ideal-tag) {
+    color: #475569 !important;
+}
+html[data-theme="light"] :is(.focus-number, .formula) {
+    color: #0f172a !important;
+}
+
+/* Badges / pills: readable deep-purple ink on a firmer tint */
+html[data-theme="light"] :is(
+    .about-badge, .about-hero-badge, .research-badge, .contact-badge,
+    .partners-hero-badge, .live-badge, .country-pill, .partners-pill,
+    .research-nav-pill
+) {
+    color: #5b21b6 !important;
+    border-color: rgba(139, 92, 246, 0.35) !important;
+}
+html[data-theme="light"] :is(.country-pill, .partners-pill, .research-nav-pill, .live-badge) {
+    background: rgba(139, 92, 246, 0.10) !important;
+}
+
+/* Icons: darken white/light lucide glyphs in page content (skip nav & buttons,
+   which keep white on their coloured chrome). */
+/* All content icons across every page, darker for light mode. Broadened from
+   .lucide to any svg in page content; nav / buttons / CTAs keep white on their
+   coloured chrome. */
+html[data-theme="light"] :is([class*="-page"], main section, .research-hero, .contact-hero, .partners-hero, #hero) svg {
+    filter: brightness(0.48) saturate(1.4);
+}
+html[data-theme="light"] :is(nav, button, a[class*="btn"], [class*="waitlist"], [class*="cta"], [class*="gradient-to"], video, .hero-btn) svg {
+    filter: none;
+}
+
+/* ============================================================
+   INNER PAGES — light-mode Tailwind dark-utility surfaces + text-white
+   Cards built with bg-black/40, bg-zinc-950 etc. (utility classes, not
+   the page CSS) stayed dark; their text-white/icons then vanished.
+   Scoped to <main> so the navbar keeps its own treatment.
+   ============================================================ */
+
+/* Dark utility card surfaces -> light card */
+html[data-theme="light"] main :is(
+    [class*="bg-black/"], [class*="bg-zinc-9"], [class*="bg-slate-9"],
+    [class*="bg-neutral-9"], [class*="bg-gray-9"], .eagle-card, .glass-card
+) {
+    background-color: var(--color-bg-card) !important;
+    border-color: rgba(15, 23, 42, 0.08) !important;
+}
+
+/* Content text-white -> dark ... */
+html[data-theme="light"] main .text-white {
+    color: #0f172a !important;
+}
+/* ... but keep it white on coloured buttons / gradient CTAs */
+html[data-theme="light"] main :is(button, a[class*="btn"], [class*="gradient-to"], [class*="waitlist"]) .text-white,
+html[data-theme="light"] main button.text-white,
+html[data-theme="light"] main a[class*="btn"].text-white {
+    color: #ffffff !important;
+}
+
+/* ============================================================
+   INNER PAGES — light-mode headings & secondary buttons (third pass)
+   Plain headings still pinned white by page CSS; outline/ghost buttons
+   carried white text on transparent fills.
+   ============================================================ */
+
+/* Plain headings -> dark; leave gradient-clip headings (transparent fill) alone */
+html[data-theme="light"] main :is(h1, h2, h3, h4, h5, h6):not([class*="text-transparent"]):not([class*="gradient"]):not([class*="clip"]) {
+    color: #0f172a !important;
+}
+
+/* Outline / secondary / ghost buttons -> readable dark (filled ones keep white) */
+html[data-theme="light"] main :is(
+    [class*="-sec"], [class*="secondary"], [class*="-outline"], [class*="ghost"],
+    .cta-btn-sec, .track-explore-link
+):is(a, button) {
+    color: #0f172a !important;
+    border-color: rgba(15, 23, 42, 0.2) !important;
+}
+
+/* ============================================================
+   ALL PAGES — purple accent text, darker for light mode
+   Light purples (text-purple-300/400, #c4b5fd, #a78bfa, #8b5cf6) read as
+   washed-out on white; deepen to a readable violet. Gradient-clip headings
+   are excluded so their multi-stop fill stays intact.
+   ============================================================ */
+html[data-theme="light"] :is(
+    [class*="text-purple-3"], [class*="text-purple-4"],
+    [class*="text-violet-2"], [class*="text-violet-3"], [class*="text-violet-4"],
+    [class*="text-fuchsia-3"], [class*="text-fuchsia-4"],
+    [class*="text-indigo-3"], [class*="text-indigo-4"]
+):not([class*="text-transparent"]):not([class*="bg-clip"]) {
+    color: #6d28d9 !important;
+}
+
+/* ============================================================
+   HOME HERO — floating decorative blocks, light mode
+   On white these shapes were near-invisible (purple/cyan at /10–/20),
+   so their float animation didn't read. Boost their visibility and give
+   them a livelier drift + rotate + breathe. Light-mode only.
+   ============================================================ */
+html[data-theme="light"] #hero .animate-float-slow {
+    border-color: rgba(124, 58, 237, 0.45) !important;
+    background: linear-gradient(to top right, rgba(124, 58, 237, 0.18), transparent) !important;
+    animation: heroBlockDriftA 9s ease-in-out infinite !important;
+}
+html[data-theme="light"] #hero .animate-float-slower {
+    border-color: rgba(8, 145, 178, 0.45) !important;
+    background: linear-gradient(to bottom left, rgba(8, 145, 178, 0.16), transparent) !important;
+    animation: heroBlockDriftB 11s ease-in-out infinite !important;
+}
+html[data-theme="light"] #hero .animate-pulse-glow {
+    border-color: rgba(219, 39, 119, 0.55) !important;
+    background: rgba(219, 39, 119, 0.10) !important;
+    animation: heroBlockSpin 8s ease-in-out infinite !important;
+}
+
+/* Ambient parallax glows: make them tint the light hero softly */
+html[data-theme="light"] #hero .hero-glow-1 {
+    background: radial-gradient(circle, rgba(124, 58, 237, 0.14), transparent 70%) !important;
+}
+html[data-theme="light"] #hero .hero-glow-2 {
+    background: radial-gradient(circle, rgba(8, 145, 178, 0.12), transparent 70%) !important;
+}
+
+@keyframes heroBlockDriftA {
+    0%, 100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+    50%      { transform: translate(14px, -18px) rotate(18deg) scale(1.08); }
+}
+@keyframes heroBlockDriftB {
+    0%, 100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+    50%      { transform: translate(-16px, 14px) rotate(-16deg) scale(1.1); }
+}
+@keyframes heroBlockSpin {
+    0%, 100% { transform: rotate(45deg) scale(1); opacity: 0.7; }
+    50%      { transform: rotate(225deg) scale(1.25); opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html[data-theme="light"] #hero .animate-float-slow,
+    html[data-theme="light"] #hero .animate-float-slower,
+    html[data-theme="light"] #hero .animate-pulse-glow {
+        animation: none !important;
+    }
+}
+
+/* ============================================================
+   HOME — capability cards (.secondsect_one), light mode
+   The card used a translucent dark fill (#12111159) that reads as grey on
+   the light section, with white PNG icons. Make them white cards with dark
+   icons, matching the Products page cards.
+   ============================================================ */
+html[data-theme="light"] .secondsect_one {
+    background-color: var(--color-bg-card) !important;
+    border-color: rgba(15, 23, 42, 0.08) !important;
+    box-shadow: 0 12px 34px -20px rgba(15, 23, 42, 0.22) !important;
+}
+html[data-theme="light"] .secondsect_one:hover {
+    background: #ffffff !important;
+    border-color: rgba(139, 92, 246, 0.30) !important;
+    box-shadow: 0 20px 44px -20px rgba(139, 92, 246, 0.25) !important;
+}
+/* White PNG glyphs -> dark so they read on the white card */
+html[data-theme="light"] .secondsect_one img {
+    filter: brightness(0.28) saturate(1.15);
+}
+
+/* ============================================================
+   HOME — Proven Traction stat numbers, light mode
+   The big numbers use an inline white->#c4b5fd gradient clipped to text,
+   which is near-invisible on white. Swap to a deep-violet gradient.
+   ============================================================ */
+html[data-theme="light"] .cartssect1se div[style*="linear-gradient"] {
+    background: linear-gradient(135deg, #6d28d9 0%, #4c1d95 100%) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+}
