@@ -24,6 +24,9 @@ const footerLinks = [
         links: [
             { name: "About Us", to: "/About" },
             { name: "Our Vision", to: "/About" },
+            /* Team is not in the navbar, so the footer carries the site-wide
+               link that keeps it discoverable and crawlable. */
+            { name: "Our Team", to: "/Team" },
             { name: "Careers", to: "/Careers" },
             { name: "Contact", to: "/Contact#contact-us" },
             { name: "Partners", to: "/Partners" },

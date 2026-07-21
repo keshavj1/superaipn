@@ -229,7 +229,7 @@ const Enterprise = () => {
                     </div>
                 </div>
 
-                <div className="caps-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-16 px-6" style={{ width: '100%', maxWidth: '900px', margin: '70px auto' }}>
+                <div className="caps-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-16 px-6" style={{ width: '100%', maxWidth: '900px', margin: 'clamp(36px, 7vw, 70px) auto' }}>
                     {neuraEdgeCaps.map((cap, i) => (
                         <div key={i} className="cap-card glass-card p-6" style={{ padding: '18px' }}>
                             <cap.icon size={32} className="icon-cyan mb-4 text-[#00d2ff]" />
@@ -367,7 +367,7 @@ const Enterprise = () => {
             </section>
 
             {/* 4. NeuraBOT */}
-            <section id="neurabot" className="neurabot-section reveal-fade-up py-24 bg-[#05060a]" style={{ margin: '90px 0' }} ref={addToRefs}>
+            <section id="neurabot" className="neurabot-section reveal-fade-up py-24 bg-[#05060a]" style={{ margin: 'clamp(48px, 9vw, 90px) 0' }} ref={addToRefs}>
                 <div className="max-w-7xl mx-auto px-6">
                     <div className="bot-header text-center mb-16">
                         <p className="tagline text-purple-400 font-bold uppercase tracking-widest text-xs mb-4">From FAQ to full intelligence. One platform.</p>
@@ -484,7 +484,7 @@ const Enterprise = () => {
             </section>
 
             {/* 5. Physical AI */}
-            <section id="physical-ai" className="physical-ai-section reveal-fade-up relative py-32 bg-[#05080f] overflow-hidden" ref={addToRefs} style={{ marginTop: '90px', marginBottom: '90px' }}>
+            <section id="physical-ai" className="physical-ai-section reveal-fade-up relative py-32 bg-[#05080f] overflow-hidden" ref={addToRefs} style={{ marginTop: 'clamp(48px, 9vw, 90px)', marginBottom: 'clamp(48px, 9vw, 90px)' }}>
                 <div className="absolute inset-0 z-0">
                     <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-cyan-900/20 rounded-full blur-[120px] pointer-events-none"></div>
                     <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-emerald-900/10 rounded-full blur-[100px] pointer-events-none"></div>
@@ -567,7 +567,7 @@ const Enterprise = () => {
             </section>
 
             {/* 6. Agentic AI */}
-            <section id="agentic-ai" className="agentic-section reveal-fade-up py-32 bg-[#020408] relative overflow-hidden" style={{ margin: '90px auto' }} ref={addToRefs}>
+            <section id="agentic-ai" className="agentic-section reveal-fade-up py-32 bg-[#020408] relative overflow-hidden" style={{ margin: 'clamp(48px, 9vw, 90px) auto' }} ref={addToRefs}>
                 <div className="absolute top-0 right-[20%] w-[600px] h-[600px] bg-purple-900/20 rounded-full blur-[120px] pointer-events-none"></div>
                 <div className="absolute bottom-0 left-[10%] w-[500px] h-[500px] bg-indigo-900/20 rounded-full blur-[100px] pointer-events-none"></div>
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Sun, Moon } from "lucide-react";
 import logo from "../assets/super_aip_logo.png";
@@ -36,7 +36,9 @@ function ThemeToggle({ theme, onToggle }) {
 
 const navItems = [
     { title: "About", href: "/About" },
-    { title: "Team", href: "/Team" },
+    /* "Team" is intentionally not in the navbar. The page still lives at
+       /Team and is reached from the "Our Team" button on the About page,
+       so it stays crawlable and linked — just not in the top-level nav. */
     {
         title: "Solutions",
         children: [
@@ -57,25 +59,59 @@ function NavbarItem({ item, pathname }) {
         ? pathname.toLowerCase() === item.href.toLowerCase()
         : item.children?.some(child => pathname.toLowerCase() === child.href.toLowerCase());
 
+    /* The dropdown was shown purely by Tailwind's `group-hover:block`, so
+       focusing the trigger did nothing and its two links sat inside a
+       display:none container — removed from the tab order entirely. Two
+       navigation destinations were unreachable by keyboard on desktop.
+
+       State drives visibility now; hover still opens it via mouse handlers
+       on the wrapper, so the pointer experience is unchanged. */
+    const [open, setOpen] = useState(false);
+    const wrapRef = useRef(null);
+
+    // Close when focus leaves the whole item (Tab out of the last link).
+    const handleBlur = (e) => {
+        if (!wrapRef.current?.contains(e.relatedTarget)) setOpen(false);
+    };
+
+    /* No effect needed to close on navigation — the child links close it in
+       their own onClick, and pointer-leave/blur/Escape cover the rest. */
+
     return (
-        <div className="relative group px-1">
+        <div
+            ref={wrapRef}
+            className="relative group px-1"
+            onMouseEnter={() => item.children && setOpen(true)}
+            onMouseLeave={() => item.children && setOpen(false)}
+            onBlur={handleBlur}
+            onKeyDown={(e) => { if (e.key === "Escape") setOpen(false); }}
+        >
             {item.href ? (
                 <Link
                     to={item.href}
+                    aria-current={isActive ? "page" : undefined}
                     className={`flex items-center gap-1 py-2 px-3 text-sm font-medium transition-colors duration-300 ${isActive ? 'text-white' : 'text-gray-400 hover:text-white'}`}
                 >
                     {item.title}
                 </Link>
             ) : (
-                <button className={`flex items-center gap-1 py-2 px-3 text-sm font-medium transition-colors duration-300 ${isActive ? 'text-white' : 'text-gray-400 hover:text-white'}`}>
+                <button
+                    type="button"
+                    aria-expanded={open}
+                    aria-haspopup="true"
+                    onClick={() => setOpen((v) => !v)}
+                    onFocus={() => setOpen(true)}
+                    className={`flex items-center gap-1 py-2 px-3 text-sm font-medium transition-colors duration-300 ${isActive ? 'text-white' : 'text-gray-400 hover:text-white'}`}
+                >
                     {item.title}
                     {item.children && (
                         <svg
-                            className="w-3 h-3 group-hover:rotate-180 transition-transform duration-300"
+                            className={`w-3 h-3 transition-transform duration-300 ${open ? 'rotate-180' : ''}`}
                             viewBox="0 0 24 24"
                             fill="none"
                             stroke="currentColor"
                             strokeWidth="2"
+                            aria-hidden="true"
                         >
                             <path d="m6 9 6 6 6-6" />
                         </svg>
@@ -85,19 +121,20 @@ function NavbarItem({ item, pathname }) {
 
             {/* Active bottom line indicator */}
             <div
+                aria-hidden="true"
                 className={`absolute bottom-0 left-3 right-3 h-[2px] rounded-full transition-all duration-300 ${isActive ? 'opacity-100' : 'opacity-0'}`}
                 style={{ background: 'linear-gradient(90deg, #8b5cf6, #6366f1)' }}
             />
 
             {item.children && (
-                <div className="absolute hidden group-hover:block w-56 pt-3 left-0 z-50">
+                <div className={`absolute w-56 pt-3 left-0 z-50 ${open ? 'block' : 'hidden'}`}>
                     <div
-                        className="border border-white/10 rounded-2xl p-2 shadow-2xl shadow-black/50"
+                        className="border border-white/10 rounded-2xl shadow-2xl shadow-black/50"
                         style={{
-                            background: "rgba(10, 11, 16, 0.95)",
+                            background: "var(--nav-dropdown-bg, rgba(10, 11, 16, 0.95))",
                             backdropFilter: "blur(24px)",
-                            minHeight: "99px",
-                            padding: '10px'
+                            WebkitBackdropFilter: "blur(24px)",
+                            padding: '10px',
                         }}
                     >
                         {item.children.map((child, i) => {
@@ -106,17 +143,21 @@ function NavbarItem({ item, pathname }) {
                                 <Link
                                     key={i}
                                     to={child.href}
-                                    className={`block px-4 py-2.5 text-sm rounded-xl transition-all duration-200 ${isChildActive ? 'text-white bg-white/5' : 'text-gray-400 hover:text-white hover:bg-white/5'}`}
-                                    style={{ color: "white", padding: '20px 0px', marginBottom: '10px' }}>
+                                    aria-current={isChildActive ? "page" : undefined}
+                                    onClick={() => setOpen(false)}
+                                    className="nav-drop-link"
+                                    style={{
+                                        background: isChildActive ? "var(--nav-dropdown-active)" : "transparent",
+                                        color: "var(--nav-dropdown-text)",
+                                    }}>
                                     {child.title}
                                 </Link>
                             );
                         })}
                     </div>
                 </div>
-            )
-            }
-        </div >
+            )}
+        </div>
     );
 }
 

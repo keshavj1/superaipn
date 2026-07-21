@@ -157,15 +157,24 @@ function LeadershipSection({ visible }) {
             {cat.members.map((person, pi) => {
               const isActive = activePerson && activePerson.name === person.name;
               return (
-                <div
+                /* Was a <div onMouseEnter> with no keyboard or touch path, so
+                   those users were permanently stuck on founders[0].
+                   A <button> adds focus, Enter/Space and tap; onFocus mirrors
+                   the hover so arrowing through the list updates the panel.
+                   aria-pressed reports which person is currently shown. */
+                <button
                   key={pi}
+                  type="button"
+                  aria-pressed={isActive}
                   className={`leadership-hover-card${isActive ? " active" : ""}`}
                   onMouseEnter={() => setActivePerson(person)}
+                  onFocus={() => setActivePerson(person)}
+                  onClick={() => setActivePerson(person)}
                   style={{ borderLeftColor: isActive ? person.color : "transparent" }}
                 >
                   <h4>{person.name}</h4>
                   <p>{person.role}</p>
-                </div>
+                </button>
               );
             })}
           </div>
@@ -174,7 +183,9 @@ function LeadershipSection({ visible }) {
 
       {/* Right: Profile Viewer */}
       <div className="leadership-profile-col">
-        <div className="leadership-profile-card">
+        {/* aria-live: selecting a different person swaps this panel's content
+            with no page change, so screen readers need it announced. */}
+        <div className="leadership-profile-card" aria-live="polite">
           {/* Gradient top bar */}
           <div className="profile-gradient-bar" style={{
             background: `linear-gradient(90deg, ${activePerson?.color || "#8b5cf6"}, ${activePerson?.color || "#8b5cf6"}88, transparent)`,
@@ -289,7 +300,9 @@ function TeamViewer({ visible, categories, tags = ["Team", "Super AIP", "AI"] })
 
       {/* Right: Profile Viewer */}
       <div className="leadership-profile-col">
-        <div className="leadership-profile-card">
+        {/* aria-live: selecting a different person swaps this panel's content
+            with no page change, so screen readers need it announced. */}
+        <div className="leadership-profile-card" aria-live="polite">
           <div className="profile-gradient-bar" style={{
             background: `linear-gradient(90deg, ${activePerson?.color || "#8b5cf6"}, ${activePerson?.color || "#8b5cf6"}88, transparent)`,
           }} />

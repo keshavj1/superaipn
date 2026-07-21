@@ -239,7 +239,7 @@ const Education = () => {
                         Super AIP's K-12 AI Learning Platform introduces students to Artificial Intelligence through hands-on learning,
                         coding, simulations, and real-world problem-solving.
                     </p>
-                    <div className="edge-media" style={{ margin: '90px 0px', borderRadius: '43px' }}>
+                    <div className="edge-media" style={{ margin: 'clamp(40px, 9vw, 90px) 0', borderRadius: '43px' }}>
                         <div className="video-wrapper" style={{ borderRadius: '43px' }}>
                             <video
                                 src={K12LearningPlatformVideo}
@@ -373,7 +373,7 @@ const Education = () => {
                     alt="Super AI Educational Lab"
                     className="labs-hero-image"
                 /> */}
-                <div className="edge-media" style={{ margin: '90px 0px', borderRadius: '43px' }}>
+                <div className="edge-media" style={{ margin: 'clamp(40px, 9vw, 90px) 0', borderRadius: '43px' }}>
                     <div className="video-wrapper" style={{ borderRadius: '43px' }}>
                         <video
                             src={EndToEndLabsVideo}
@@ -408,7 +408,7 @@ const Education = () => {
                 <div style={{ textAlign: 'center' }}>
                     <p className="section-tagline" style={{ color: '#f6d365' }}>Every concept. Every class.</p>
                     <h2 style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>AI & Robotics Books (Class 1–12)</h2>
-                    <p className="section-intro" style={{ margin: '90px auto' }}>
+                    <p className="section-intro" style={{ margin: 'clamp(40px, 9vw, 90px) auto' }}>
                         Super AI Polaris publishes a complete series of AI & Robotics textbooks aligned with CBSE, ICSE, and NEP 2020.
                     </p>
                     <div className="edge-media" style={{ margin: '10px 0px', borderRadius: '43px' }}>

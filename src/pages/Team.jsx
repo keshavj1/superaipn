@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import { Users, Sparkles } from "lucide-react";
+import { Sparkles } from "lucide-react";
 import PersonCard from "../components/PersonCard";
 import MeetTheBrains from "../components/MeetTheBrains";
+import TeamHero from "../components/TeamHero";
 import { teamGroups, founders, educationAdvisors, employees } from "../data/team";
 import "../styles/about.css";
 import "../styles/team-page.css";
@@ -84,40 +85,12 @@ function TeamGroup({ group, index }) {
 }
 
 export default function Team() {
-  const [heroRef, heroVis] = useReveal(0.2);
-
+  /* The hero no longer scroll-reveals — it is above the fold, so fading it
+     in delayed the largest text on the page for no benefit. */
   return (
     <div className="tp-page">
       {/* ─── Hero ─── */}
-      <section className="tp-hero" ref={heroRef} style={revealStyle(heroVis)}>
-        <div className="tp-hero-inner">
-          <div className="tp-badge">
-            <Users size={14} />
-            Our Team
-          </div>
-
-          <h1 className="tp-hero-title">
-            The people behind
-            <br />
-            <span className="tp-hero-highlight">Super AI Polaris</span>
-          </h1>
-
-          <p className="tp-hero-sub">
-            Founders, advisors, and engineers building sovereign AI for education,
-            enterprise, and government — across Enterprise AI, NeuraEdge, Education AI,
-            Robotics, and Physical AI.
-          </p>
-
-          <div className="tp-stats">
-            {teamStats.map((s) => (
-              <div className="tp-stat" key={s.label}>
-                <div className="tp-stat-value">{s.value}</div>
-                <div className="tp-stat-label">{s.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <TeamHero stats={teamStats} />
 
       {/* ─── Meet the brains: leadership, shown as horizontal cards ─── */}
       <MeetTheBrains

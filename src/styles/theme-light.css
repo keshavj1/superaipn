@@ -21,6 +21,13 @@ html[data-theme="light"] {
     --surface-band-cool: linear-gradient(180deg, #f4f5fa, #eaeef8, #f4f5fa);
     --surface-band-violet: linear-gradient(180deg, #f4f5fa, #efedfa, #f4f5fa);
 
+    /* Navbar dropdown: light panel with dark text, mirroring the dark-mode
+       treatment rather than leaving a black panel on a light page. */
+    --nav-dropdown-bg: rgba(255, 255, 255, 0.97);
+    --nav-dropdown-text: #0f172a;
+    --nav-dropdown-hover: rgba(15, 23, 42, 0.06);
+    --nav-dropdown-active: rgba(139, 92, 246, 0.12);
+
     --badge-text: #5b21b6;
     --badge-bg: rgba(139, 92, 246, 0.10);
     --badge-border: rgba(139, 92, 246, 0.35);

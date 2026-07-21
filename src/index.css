@@ -58,6 +58,12 @@
     --btn-secondary-text: #ffffff;
     --btn-secondary-border: rgba(255, 255, 255, 0.2);
     --btn-secondary-border-hover: rgba(255, 255, 255, 0.4);
+    /* Navbar dropdown panel — tokenised so it can invert with the theme
+       instead of staying dark on a light page. */
+    --nav-dropdown-bg: rgba(10, 11, 16, 0.95);
+    --nav-dropdown-text: #ffffff;
+    --nav-dropdown-hover: rgba(255, 255, 255, 0.07);
+    --nav-dropdown-active: rgba(255, 255, 255, 0.12);
     --galaxy-label-a: #c4b5fd;
     --galaxy-label-b: #a78bfa;
     --hero-title-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
@@ -1027,4 +1033,26 @@ textarea:focus-visible,
         transition-duration: 0.01ms !important;
         scroll-behavior: auto !important;
     }
+}
+
+
+/* ── Navbar dropdown links ──────────────────────────────────────────
+   Styled here rather than with Tailwind white-overlay utilities, which
+   were invisible against the light-theme panel. */
+.nav-drop-link {
+    display: block;
+    padding: 14px 16px;
+    margin-bottom: 6px;
+    border-radius: 12px;
+    font-size: 14px;
+    transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.nav-drop-link:last-child {
+    margin-bottom: 0;
+}
+
+.nav-drop-link:hover {
+    background: var(--nav-dropdown-hover) !important;
+    color: var(--nav-dropdown-text) !important;
 }

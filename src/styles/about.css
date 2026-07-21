@@ -515,6 +515,16 @@
 }
 
 .leadership-hover-card {
+    /* Now a <button> for keyboard access — reset UA styling so it renders
+       exactly as the <div> did. */
+    display: block;
+    width: 100%;
+    text-align: left;
+    font: inherit;
+    color: inherit;
+    border-top: none;
+    border-right: none;
+    border-bottom: none;
     padding: 16px 20px;
     margin-bottom: 6px;
     border-radius: 14px;
