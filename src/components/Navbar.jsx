@@ -3,6 +3,14 @@ import { Link, useLocation } from "react-router-dom";
 import { Sun, Moon } from "lucide-react";
 import logo from "../assets/super_aip_logo.png";
 
+/* Set to true to bring the light/dark switch back into the navbar.
+   While false the site is locked to the dark theme — including for anyone
+   who previously saved "light" in localStorage, who would otherwise be
+   stranded in light mode with no control to switch back.
+   The whole theme system (theme-light.css, the tokens, the pre-paint
+   script in index.html) is left intact so this is a one-line reversal. */
+const SHOW_THEME_TOGGLE = false;
+
 /* Animated dark/light theme switch */
 function ThemeToggle({ theme, onToggle }) {
     const isLight = theme === "light";
@@ -164,9 +172,13 @@ function NavbarItem({ item, pathname }) {
 export default function Navbar() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
-    const [theme, setTheme] = useState(
-        () => (typeof document !== "undefined" && document.documentElement.getAttribute("data-theme")) || "dark"
-    );
+    /* With the toggle hidden there is no way to leave light mode, so force
+       dark. The effect below then rewrites the persisted value, clearing a
+       stale "light" for anyone who had switched before it was removed. */
+    const [theme, setTheme] = useState(() => {
+        if (!SHOW_THEME_TOGGLE) return "dark";
+        return (typeof document !== "undefined" && document.documentElement.getAttribute("data-theme")) || "dark";
+    });
     const location = useLocation();
 
     useEffect(() => {
@@ -224,7 +236,7 @@ export default function Navbar() {
 
                     {/* Theme toggle + CTA (desktop) */}
                     <div className="hidden lg:flex items-center gap-4">
-                        <ThemeToggle theme={theme} onToggle={toggleTheme} />
+                        {SHOW_THEME_TOGGLE && <ThemeToggle theme={theme} onToggle={toggleTheme} />}
                         <div className="relative group">
                             <div className="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-indigo-600 rounded-full blur opacity-30 group-hover:opacity-75 transition duration-500"></div>
                             <Link to="/Contact#contact-us" className="btnshead relative inline-flex px-6 py-2.5 text-sm font-semibold text-white rounded-full bg-black/50 border border-white/10 hover:border-purple-500/50 transition-all duration-300 hover:-translate-y-0.5 overflow-hidden group-hover:bg-[#05060a]/80">
@@ -241,7 +253,7 @@ export default function Navbar() {
 
                     {/* Theme toggle + hamburger (mobile) */}
                     <div className="flex items-center gap-3 lg:hidden">
-                        <ThemeToggle theme={theme} onToggle={toggleTheme} />
+                        {SHOW_THEME_TOGGLE && <ThemeToggle theme={theme} onToggle={toggleTheme} />}
                         <button
                             className="navbar-burger text-white w-10 h-10 flex items-center justify-center rounded-xl border border-white/10 hover:bg-white/5 transition-colors"
                             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
