@@ -251,9 +251,15 @@ export default function Partners() {
                                 </div>
                                 <h4>{t.title}</h4>
                                 <p>{t.desc}</p>
-                                <span className="track-explore-link">
-                                    Explore Track <ArrowRight size={14} />
-                                </span>
+                                {/* Was a <span> with cursor:pointer — it looked like a
+                                    CTA and did nothing when clicked. */}
+                                <Link
+                                    to="/Contact#contact-us"
+                                    className="track-explore-link"
+                                    aria-label={`Explore the ${t.title} partner track`}
+                                >
+                                    Explore Track <ArrowRight size={14} aria-hidden="true" />
+                                </Link>
                             </div>
                         ))}
                     </div>

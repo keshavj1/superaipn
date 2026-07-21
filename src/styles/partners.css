@@ -207,6 +207,11 @@
 }
 
 .partners-track-card {
+    /* Flex column so the "Explore Track" link can be pushed to the bottom —
+       descriptions differ in length, so the CTAs previously sat at four
+       different heights across the row. */
+    display: flex;
+    flex-direction: column;
     position: relative;
     padding: 36px 30px;
     border-radius: 22px;
@@ -270,6 +275,11 @@
 }
 
 .track-explore-link {
+    /* margin-top:auto pins this to the card bottom regardless of how long
+       the description above it runs. align-self keeps it from stretching
+       to the full card width. */
+    margin-top: auto;
+    align-self: flex-start;
     display: inline-flex;
     align-items: center;
     gap: 6px;
@@ -290,7 +300,16 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 48px;
-    align-items: start;
+    /* Was `start`, which disables grid's default stretch — so "For
+       Institutions" (5 items) and "For Super AIP" (4 items) rendered at
+       different heights side by side. */
+    align-items: stretch;
+}
+
+/* Belt-and-braces: fill the stretched grid area even if a card picks up an
+   intrinsic height from its own content. */
+.academic-benefits-card {
+    height: 100%;
 }
 
 @media (max-width: 860px) {
