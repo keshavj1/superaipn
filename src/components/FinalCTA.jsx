@@ -38,7 +38,9 @@ export default function FinalCTA() {
                     <h2
                         className="text-4xl md:text-6xl font-black mb-6 tracking-tight leading-tight"
                         style={{
-                            background: "linear-gradient(135deg, #ffffff 0%, #c4b5fd 50%, #8b5cf6 100%)",
+                            /* Start stop is tokenised — a literal #ffffff here made
+                               the site's closing headline half-invisible in light mode. */
+                            background: "linear-gradient(135deg, var(--gradient-text-start) 0%, #c4b5fd 50%, #8b5cf6 100%)",
                             WebkitBackgroundClip: "text",
                             WebkitTextFillColor: "transparent",
                         }}

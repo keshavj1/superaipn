@@ -228,7 +228,9 @@ export default function VideoShowcase() {
                                 <div
                                     className="text-4xl md:text-5xl font-black mb-2 tracking-tight transition-transform duration-500 group-hover:scale-110"
                                     style={{
-                                        background: `linear-gradient(135deg, #ffffff 30%, ${stat.color} 100%)`,
+                                        // Tokenised start stop: a literal white washed
+                                        // these stat numbers out on a light background.
+                                        background: `linear-gradient(135deg, var(--gradient-text-start) 30%, ${stat.color} 100%)`,
                                         WebkitBackgroundClip: "text",
                                         WebkitTextFillColor: "transparent",
                                     }}

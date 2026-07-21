@@ -64,6 +64,12 @@
     --nav-dropdown-text: #ffffff;
     --nav-dropdown-hover: rgba(255, 255, 255, 0.07);
     --nav-dropdown-active: rgba(255, 255, 255, 0.12);
+    /* Start stop for clipped-text gradients. These use
+       -webkit-text-fill-color: transparent, so a  override cannot
+       fix them in light mode — the GRADIENT itself has to change. */
+    --gradient-text-start: #ffffff;
+    --gradient-teal-a: #ffffff;
+    --gradient-teal-b: #ffffff;
     --galaxy-label-a: #c4b5fd;
     --galaxy-label-b: #a78bfa;
     --hero-title-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
@@ -345,7 +351,7 @@ img {
 
 /* Gradient Text */
 .gradient-text {
-    background: linear-gradient(135deg, #ffffff 0%, #c4b5fd 50%, #818cf8 100%);
+    background: linear-gradient(135deg, var(--gradient-text-start) 0%, #c4b5fd 50%, #818cf8 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;

@@ -120,7 +120,10 @@ const Chatbot = () => {
   };
 
   return (
-    <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-[9999] flex flex-col items-end font-sans">
+    /* chatbot-root is the hook theme-light.css uses. This widget renders
+       outside <main>, so the site-wide "main .text-white" light-mode rule
+       never reached it — its text stayed white while its panel turned white. */
+    <div className="chatbot-root fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-[9999] flex flex-col items-end font-sans">
       {/* ===== Chat Window ===== */}
       <div
         className={`mb-4 flex flex-col overflow-hidden rounded-3xl border border-white/10 bg-[#0b0c16]/95 backdrop-blur-xl shadow-[0_24px_60px_-15px_rgba(99,102,241,0.45)] transition-all duration-500 origin-bottom-right ${

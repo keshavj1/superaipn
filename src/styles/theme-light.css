@@ -28,6 +28,12 @@ html[data-theme="light"] {
     --nav-dropdown-hover: rgba(15, 23, 42, 0.06);
     --nav-dropdown-active: rgba(139, 92, 246, 0.12);
 
+    /* Clipped-text gradients: white start stops are invisible on a light
+       page, so they darken here. */
+    --gradient-text-start: #312e81;
+    --gradient-teal-a: #0f766e;
+    --gradient-teal-b: #115e59;
+
     --badge-text: #5b21b6;
     --badge-bg: rgba(139, 92, 246, 0.10);
     --badge-border: rgba(139, 92, 246, 0.35);
@@ -541,4 +547,98 @@ html[data-theme="light"] .cartssect1se div[style*="linear-gradient"] {
     background: linear-gradient(135deg, #6d28d9 0%, #4c1d95 100%) !important;
     -webkit-background-clip: text !important;
     background-clip: text !important;
+}
+
+
+/* ============================================================
+   LIGHT-MODE GAPS CLOSED (theme audit)
+   Each block below fixes a surface or text colour that the
+   allowlist above could not reach.
+   ============================================================ */
+
+/* ── Chatbot ──────────────────────────────────────────────────
+   The widget renders OUTSIDE <main> (App.jsx), so the
+   "main .text-white" rule never applied to it while its panel
+   background WAS forced white — white text on a white panel. */
+html[data-theme="light"] .chatbot-panel,
+html[data-theme="light"] [class*="bg-[#0b0c16]"],
+html[data-theme="light"] [class*="bg-[#070810]"] {
+    background-color: #ffffff !important;
+    border-color: rgba(15, 23, 42, 0.12) !important;
+}
+
+html[data-theme="light"] .chatbot-root .text-white,
+html[data-theme="light"] .chatbot-root .text-slate-100,
+html[data-theme="light"] .chatbot-root .text-slate-200,
+html[data-theme="light"] .chatbot-root .text-gray-100 {
+    color: #0f172a !important;
+}
+
+/* Keep white text where it sits on the violet gradient header/button. */
+html[data-theme="light"] .chatbot-root [class*="from-purple"] .text-white,
+html[data-theme="light"] .chatbot-root [class*="bg-purple"] .text-white,
+html[data-theme="light"] .chatbot-root button[class*="gradient"] .text-white {
+    color: #ffffff !important;
+}
+
+/* ── Enterprise phone mockup ──────────────────────────────────
+   The screen BODY was whitened by the hex allowlist while the
+   frame, header and bubbles stayed dark navy — a half-converted
+   mockup with dark slate text on dark bubbles. Keep the whole
+   device dark in light mode: a phone screen reading dark is
+   intentional-looking; a half-light one is not. */
+html[data-theme="light"] .phone,
+html[data-theme="light"] .phone .screen-header,
+html[data-theme="light"] .phone .screen-body,
+html[data-theme="light"] .phone .screen-input,
+html[data-theme="light"] .phone .msg-bubble {
+    background-color: #1a1f2e !important;
+}
+
+html[data-theme="light"] .phone .screen-header,
+html[data-theme="light"] .phone .screen-input {
+    background-color: #252b3d !important;
+}
+
+html[data-theme="light"] .phone .msg-bubble {
+    background-color: #252b3d !important;
+    color: #e2e8f0 !important;
+}
+
+html[data-theme="light"] .phone .msg-bubble[class*="bg-purple"] {
+    background-color: #7c3aed !important;
+    color: #ffffff !important;
+}
+
+html[data-theme="light"] .phone .notch {
+    background-color: #000000 !important;
+}
+
+html[data-theme="light"] .phone .text-white {
+    color: #ffffff !important;
+}
+
+/* ── Home hero video frame ────────────────────────────────────
+   Solid near-black letterbox that stayed black on a light page. */
+html[data-theme="light"] .hero-video-inner {
+    background: #e8eaf3 !important;
+}
+
+/* ── Research sector tags ─────────────────────────────────────
+   #cbd5e1 on an effectively-white chip. */
+html[data-theme="light"] .sector-tag {
+    color: #475569 !important;
+    background: rgba(15, 23, 42, 0.05) !important;
+}
+
+/* ── Navbar CTA hover ─────────────────────────────────────────
+   group-hover:bg-[#05060a]/80 is an opacity variant, so the exact-hex
+   allowlist missed it and the button flashed near-black on hover. */
+html[data-theme="light"] .btnshead {
+    background-color: rgba(15, 23, 42, 0.04) !important;
+    color: #0f172a !important;
+}
+
+html[data-theme="light"] .group:hover .btnshead {
+    background-color: rgba(139, 92, 246, 0.10) !important;
 }
