@@ -469,13 +469,19 @@ export default function Partners() {
                         transform: collabVis ? "translateY(0)" : "translateY(20px)",
                         transition: "all 0.8s cubic-bezier(0.16,1,0.3,1) 200ms",
                     }}>
-                        <div className="stepper-row">
+                        {/* `is-drawn` starts the connector animation once the section
+                            scrolls into view: the line draws 1 → 2 → 3 and each circle
+                            activates as the line reaches it. */}
+                        <div className={`stepper-row${collabVis ? " is-drawn" : ""}`}>
                             {onboardingSteps.map((step, i) => (
                                 <div className="stepper-step" key={i}>
                                     <div className="stepper-number" style={{
                                         background: `${step.color}12`,
                                         borderColor: `${step.color}40`,
                                         color: step.color,
+                                        // Circle i lights up as the drawing line arrives.
+                                        "--step-delay": `${i * 620}ms`,
+                                        "--step-color": step.color,
                                     }}>
                                         {step.num}
                                     </div>

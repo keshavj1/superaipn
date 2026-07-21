@@ -284,12 +284,12 @@ const Chatbot = () => {
 
       {/* ===== Floating Action Button ===== */}
       <button
-        className="group relative flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 via-violet-500 to-purple-600 shadow-xl shadow-purple-500/30 transition-all duration-500 hover:-translate-y-1 hover:shadow-purple-500/50 active:scale-95"
+        className="group relative flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 via-violet-500 to-purple-600 shadow-xl shadow-purple-500/30 transition-all duration-500 hover:-translate-y-1 hover:shadow-purple-500/50 active:scale-95"
         onClick={() => setIsOpen((v) => !v)}
         aria-label={isOpen ? 'Close chat' : 'Open chat'}
       >
         {/* Glow */}
-        <span className="absolute inset-0 -z-10 rounded-2xl bg-violet-500 opacity-50 blur-xl transition-opacity duration-500 group-hover:opacity-80" />
+        <span className="absolute inset-0 -z-10 rounded-full bg-violet-500 opacity-50 blur-xl transition-opacity duration-500 group-hover:opacity-80" />
 
         {/* Icons cross-fade between open/closed states */}
         <X
@@ -307,7 +307,7 @@ const Chatbot = () => {
             <img src={superAipLogo} alt="Super AIP" className="h-7 w-7 sm:h-8 sm:w-8 object-contain" />
           </span>
           {/* Notification badge */}
-          <span className="absolute -top-1.5 -right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-rose-500 ring-2 ring-[#05060a]">
+          <span className="absolute -top-1.5 -right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-rose-500 ring-2 ring-[var(--color-bg)]">
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-rose-400 opacity-75" />
           </span>
         </span>

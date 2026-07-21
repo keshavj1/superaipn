@@ -120,7 +120,7 @@ export default function VideoShowcase() {
             <img src="/shape5.png" alt="" className="absolute bottom-[20%] right-[15%] w-8 h-8 pointer-events-none opacity-40" style={{ animation: "float 7s ease-in-out infinite 1.5s" }} />
             <img src="/shape6.png" alt="" className="absolute bottom-[30%] left-[12%] w-6 h-6 pointer-events-none opacity-40" style={{ animation: "float 9s ease-in-out infinite 0.8s" }} /> */}
 
-            <div className="max-w-7xl mx-auto px-6 relative z-10">
+            <div className="max-w-7xl mx-auto px-6 py-5 relative z-10">
 
                 {/* ─── Header ─── */}
                 <div
@@ -136,8 +136,9 @@ export default function VideoShowcase() {
                         What We Deliver
                     </div>
                     <h2 className="testst">
-                        Built for Real-World Impact
-                        <span className="text-heading">Built for Real-World Impact </span>
+                        {/* The phrase was rendered twice — a bare text node followed
+                            by a span repeating it, so users saw it duplicated. */}
+                        <span className="text-heading">Built for Real-World Impact</span>
                         <span className="relative inline-block">
                             <span
                                 style={{

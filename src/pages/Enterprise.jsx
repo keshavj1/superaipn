@@ -268,7 +268,7 @@ const Enterprise = () => {
             <section id="neuraeaglei" className="eaglei-section reveal-fade-up bg-[#090e17] py-24 relative overflow-hidden" ref={addToRefs}>
                 <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTU5IDB2NjBoLTZWMHoiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wMykiLz48cGF0aCBkPSJNMCA1OWg2MHYtNkgwcyIgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjAzKSIvPjwvc3ZnPg==')] opacity-20"></div>
 
-                <div className="max-w-7xl mx-auto px-6 relative z-10">
+                <div className="max-w-7xl mx-auto px-6 py-5 relative z-10">
                     <div className="eagle-header text-center mb-16">
                         <p className="tagline t-green text-[#10b981] font-semibold tracking-wider text-sm uppercase mb-3">Every camera. Total intelligence.</p>
                         <h2 className="text-4xl font-extrabold text-white mb-6">NeuraEaglei <span className="text-gray-500 font-normal">- Vision Analytics</span></h2>
@@ -314,7 +314,7 @@ const Enterprise = () => {
             {/* 3. NeuraEduBOT */}
             <section id="neuraedubot" className="edubot-section reveal-fade-up bg-[#090e17] py-24 relative overflow-hidden" style={{ padding: '60px 0px' }} ref={addToRefs}>
                 <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-white/5 to-transparent pointer-events-none"></div>
-                <div className="max-w-7xl mx-auto px-6 relative z-10">
+                <div className="max-w-7xl mx-auto px-6 py-5 relative z-10">
                     <div className="edu-badges flex gap-4 mb-8">
                         <span className="badge bg-white/10 border border-white/20 text-white px-4 py-1.5 rounded-full text-xs font-semibold backdrop-blur-md">Microsoft 365 Native</span>
                         <span className="badge bg-white/10 border border-white/20 text-white px-4 py-1.5 rounded-full text-xs font-semibold backdrop-blur-md">AICTE Partnered</span>
@@ -490,7 +490,7 @@ const Enterprise = () => {
                     <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-emerald-900/10 rounded-full blur-[100px] pointer-events-none"></div>
                 </div>
 
-                <div className="max-w-7xl mx-auto px-6 relative z-10 w-full">
+                <div className="max-w-7xl mx-auto px-6 py-5 relative z-10 w-full">
                     {/* Modern Banner/Header Split */}
                     <div className="flex flex-col lg:flex-row gap-12 items-center mb-20 bg-gradient-to-br from-[#0c1220] to-[#070b14] rounded-3xl p-8 md:p-12 shadow-2xl relative overflow-hidden group" style={{ border: '1px solid #e8dada24 !important', padding: '25px' }}>
                         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTQwIDB2NDBoLTRWMHoiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wMikiLz48cGF0aCBkPSJNMCA0MGg0MHYtNEgwaHoiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wMikiLz48L3N2Zz4=')] opacity-30 group-hover:opacity-50 transition-opacity duration-700 pointer-events-none"></div>
@@ -571,7 +571,7 @@ const Enterprise = () => {
                 <div className="absolute top-0 right-[20%] w-[600px] h-[600px] bg-purple-900/20 rounded-full blur-[120px] pointer-events-none"></div>
                 <div className="absolute bottom-0 left-[10%] w-[500px] h-[500px] bg-indigo-900/20 rounded-full blur-[100px] pointer-events-none"></div>
 
-                <div className="max-w-7xl mx-auto px-6 relative z-10">
+                <div className="max-w-7xl mx-auto px-6 py-5 relative z-10">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                         <div className="agentic-text">
                             <p className="tagline text-pink-400 font-bold uppercase tracking-widest text-xs mb-4">Beyond chat. Beyond analytics. AI that executes.</p>

@@ -656,6 +656,7 @@
     position: relative;
 }
 
+/* Dim track — the full path the line will be drawn along. */
 .stepper-row::before {
     content: "";
     position: absolute;
@@ -663,8 +664,67 @@
     left: 12%;
     right: 12%;
     height: 2px;
-    background: linear-gradient(90deg, rgba(6, 182, 212, 0.3), rgba(139, 92, 246, 0.3), rgba(236, 72, 153, 0.3));
+    background: rgba(255, 255, 255, 0.07);
     z-index: 0;
+}
+
+/* Bright line drawn over the track. scaleX from a left origin is a
+   compositor-only transform, so this animates on the GPU rather than
+   forcing layout on every frame. */
+.stepper-row::after {
+    content: "";
+    position: absolute;
+    top: 36px;
+    left: 12%;
+    right: 12%;
+    height: 2px;
+    background: linear-gradient(90deg, #06b6d4, #8b5cf6 50%, #ec4899);
+    transform: scaleX(0);
+    transform-origin: left center;
+    z-index: 0;
+    box-shadow: 0 0 12px rgba(139, 92, 246, 0.45);
+}
+
+.stepper-row.is-drawn::after {
+    /* ~1.9s total so each of the three circles gets its own beat. */
+    animation: stepper-draw 1.9s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+
+@keyframes stepper-draw {
+    from {
+        transform: scaleX(0);
+    }
+
+    to {
+        transform: scaleX(1);
+    }
+}
+
+/* Circles start dimmed and pop as the line reaches them. --step-delay is
+   set per-step in Partners.jsx. */
+.stepper-row.is-drawn .stepper-number {
+    animation: stepper-pop 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    animation-delay: var(--step-delay, 0ms);
+}
+
+@keyframes stepper-pop {
+    0% {
+        transform: scale(0.82);
+        opacity: 0.35;
+        box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+    }
+
+    60% {
+        transform: scale(1.12);
+        opacity: 1;
+        box-shadow: 0 0 26px -4px var(--step-color, #8b5cf6);
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+        box-shadow: 0 0 18px -6px var(--step-color, #8b5cf6);
+    }
 }
 
 @media (max-width: 768px) {
@@ -672,8 +732,18 @@
         grid-template-columns: 1fr;
     }
 
-    .stepper-row::before {
+    /* Stacked vertically — a horizontal connector would cut across the cards. */
+    .stepper-row::before,
+    .stepper-row::after {
         display: none;
+    }
+}
+
+/* The global prefers-reduced-motion rule collapses the durations; make sure
+   the end state is still the drawn line rather than an invisible one. */
+@media (prefers-reduced-motion: reduce) {
+    .stepper-row.is-drawn::after {
+        transform: scaleX(1);
     }
 }
 
