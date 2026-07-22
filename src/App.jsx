@@ -1,41 +1,54 @@
-// import { useState, useEffect } from "react";
+import { lazy, Suspense } from 'react';
 import './App.css';
 import { Routes, Route } from 'react-router-dom';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-// import Loader from './components/Loader';
 import Home from './pages/Home';
-import About from './pages/About';
-import Contact from './pages/Contact';
-import Partners from './pages/Partners';
-import Research from './pages/Research';
-import Products from './pages/Products';
-import Education from './pages/Education';
-import Enterprise from './pages/Enterprise';
-import Careers from './pages/Careers';
-import Team from './pages/Team';
-import Legal from './pages/Legal';
-import NotFound from './pages/NotFound';
 import PageMeta from './components/PageMeta';
 import Navbar from './components/Navbar';
 import ScrollToTop from './components/ScrollToTop';
 import Footer from "./components/Footer";
 import Chatbot from "./components/Chatbot";
+import ErrorBoundary from "./components/ErrorBoundary";
 
+/* Every route used to be a static import, so a visitor landing on the homepage
+   downloaded and parsed all 14 pages — including three.js, Swiper and
+   slick-carousel — before anything rendered. Splitting per route lets each page
+   arrive on navigation instead.
+
+   Home stays eagerly imported: it is the most common entry point, and lazily
+   loading it would only add a network round trip before the first paint. */
+const About = lazy(() => import('./pages/About'));
+const Contact = lazy(() => import('./pages/Contact'));
+const Partners = lazy(() => import('./pages/Partners'));
+const Research = lazy(() => import('./pages/Research'));
+const Products = lazy(() => import('./pages/Products'));
+const Education = lazy(() => import('./pages/Education'));
+const Enterprise = lazy(() => import('./pages/Enterprise'));
+const Careers = lazy(() => import('./pages/Careers'));
+const Team = lazy(() => import('./pages/Team'));
+const Legal = lazy(() => import('./pages/Legal'));
+const NotFound = lazy(() => import('./pages/NotFound'));
+
+/* Shown while a route chunk is in flight. Deliberately minimal — a spinner that
+   appears for 100ms reads as a flicker, so this just holds the viewport height
+   to stop the footer jumping up and back down. role="status" announces the wait
+   to screen readers. */
+function RouteFallback() {
+  return (
+    <div
+      role="status"
+      aria-live="polite"
+      aria-label="Loading page"
+      style={{ minHeight: '70vh' }}
+    />
+  );
+}
 
 function App() {
-  // const [loading, setLoading] = useState(true);
-
-  // useEffect(() => {
-  //   const timer = setTimeout(() => setLoading(false), 1000);
-  //   return () => clearTimeout(timer);
-  // }, []);
-
-  // if (loading) return <Loader />;
-
   return (
     <>
-      <div >
+      <div>
         {/* Resets scroll on every route change — must sit inside the router. */}
         <ScrollToTop />
         {/* Per-route <title>/description/canonical. */}
@@ -45,32 +58,38 @@ function App() {
         <a href="#main-content" className="skip-link">Skip to main content</a>
         <Navbar />
         <main id="main-content" tabIndex={-1}>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/About" element={<About />} />
-            <Route path="/Contact" element={<Contact />} />
-            <Route path="/Partners" element={<Partners />} />
-            <Route path="/Research" element={<Research />} />
-            <Route path="/Products" element={<Products />} />
-            <Route path="/Education" element={<Education />} />
-            <Route path="/Enterprise" element={<Enterprise />} />
-            <Route path="/solutions/enterprise" element={<Enterprise />} />
-            <Route path="/Careers" element={<Careers />} />
-            <Route path="/careers" element={<Careers />} />
-            <Route path="/Team" element={<Team />} />
-            <Route path="/team" element={<Team />} />
-            <Route path="/privacy" element={<Legal doc="privacy" />} />
-            <Route path="/terms" element={<Legal doc="terms" />} />
-            <Route path="/cookies" element={<Legal doc="cookies" />} />
-            {/* Catch-all: previously an unknown URL rendered a blank page. */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+          {/* A route that throws now shows a recovery message instead of
+              blanking the page. Inside <main> so the navbar, footer and skip
+              link survive the failure and the user can still navigate out. */}
+          <ErrorBoundary>
+            <Suspense fallback={<RouteFallback />}>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/About" element={<About />} />
+                <Route path="/Contact" element={<Contact />} />
+                <Route path="/Partners" element={<Partners />} />
+                <Route path="/Research" element={<Research />} />
+                <Route path="/Products" element={<Products />} />
+                <Route path="/Education" element={<Education />} />
+                <Route path="/Enterprise" element={<Enterprise />} />
+                <Route path="/Careers" element={<Careers />} />
+                <Route path="/Team" element={<Team />} />
+                <Route path="/privacy" element={<Legal doc="privacy" />} />
+                <Route path="/terms" element={<Legal doc="terms" />} />
+                <Route path="/cookies" element={<Legal doc="cookies" />} />
+                {/* Catch-all: previously an unknown URL rendered a blank page. */}
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </Suspense>
+          </ErrorBoundary>
         </main>
         <Footer />
       </div>
 
       {/* Floating AI assistant — fixed-position widget, overlays every route */}
-      <Chatbot />
+      <ErrorBoundary silent>
+        <Chatbot />
+      </ErrorBoundary>
     </>
   );
 }

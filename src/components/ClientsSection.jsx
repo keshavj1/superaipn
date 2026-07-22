@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import Slider from "react-slick";
+import usePrefersReducedMotion from "../hooks/usePrefersReducedMotion";
 
 /* \u2500\u2500\u2500 Partner testimonials \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
    Real, attributable quotes. These replaced three invented ones
@@ -56,6 +57,7 @@ const testimonials = [
 
 export default function ClientsSection() {
   const sectionRef = useRef(null);
+  const prefersReducedMotion = usePrefersReducedMotion();
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -73,7 +75,8 @@ export default function ClientsSection() {
     dots: true,
     infinite: true,
     speed: 600,
-    autoplay: true,
+    // Auto-advancing content is motion the CSS guard cannot reach.
+    autoplay: !prefersReducedMotion,
     autoplaySpeed: 4000,
     arrows: true,
     slidesToShow: 1,
@@ -88,6 +91,10 @@ export default function ClientsSection() {
       },
     ],
   };
+
+  /* Slick renders its shell — dots, arrows, track — even with no slides, so an
+     empty data set produced a visibly broken band rather than nothing. */
+  if (testimonials.length === 0) return null;
 
   return (
     <section ref={sectionRef} className="clients-section">
@@ -108,8 +115,8 @@ export default function ClientsSection() {
             }`}
         >
           <Slider {...settings}>
-            {testimonials.map((t, i) => (
-              <div key={i}>
+            {testimonials.map((t) => (
+              <div key={t.name || t.company}>
                 <div className="testimonial-card testimonial_card11 group relative overflow-hidden bg-[#0A0B10]  hover:border-purple-500/30 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_15px_40px_-15px_rgba(139,92,246,0.3)] cursor-default">
                   {/* Subtle hover gradient */}
                   <div className="absolute inset-0 bg-gradient-to-br from-purple-500/0 via-purple-500/0 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />

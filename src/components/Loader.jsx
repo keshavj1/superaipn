@@ -7,7 +7,7 @@ function Loader() {
     <div>
         
         <div className='ring' >
-          <img src={logo}/>
+          <img src={logo} alt="Super AI Polaris" width={96} height={96} />
           <span className='span1'></span>
         </div>
        

@@ -1,4 +1,26 @@
 {
+  "redirects": [
+    {
+      "//": "Real Enterprise content lived at this alias, but PageMeta has no entry for it, so it was served with the 404's noindex tag. Redirect it to the canonical page.",
+      "source": "/solutions/enterprise",
+      "destination": "/enterprise",
+      "permanent": true
+    },
+    {
+      "//": "Routes resolve case-insensitively (react-router) and canonicals are lowercase, so /About and /about both returned 200 with identical content — duplicate URLs for non-JS crawlers. 301 the capitalised forms to the canonical lowercase. Only affects hard loads / crawlers; in-app SPA navigation never hits the edge.",
+      "source": "/About",
+      "destination": "/about",
+      "permanent": true
+    },
+    { "source": "/Products", "destination": "/products", "permanent": true },
+    { "source": "/Enterprise", "destination": "/enterprise", "permanent": true },
+    { "source": "/Education", "destination": "/education", "permanent": true },
+    { "source": "/Research", "destination": "/research", "permanent": true },
+    { "source": "/Partners", "destination": "/partners", "permanent": true },
+    { "source": "/Team", "destination": "/team", "permanent": true },
+    { "source": "/Careers", "destination": "/careers", "permanent": true },
+    { "source": "/Contact", "destination": "/contact", "permanent": true }
+  ],
   "rewrites": [
     {
       "source": "/(.*)",

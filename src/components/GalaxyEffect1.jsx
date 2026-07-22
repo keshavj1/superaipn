@@ -20,10 +20,19 @@ function GalaxyEffect1() {
     );
     camera.position.set(0, 0, 10);
 
-    const renderer = new THREE.WebGLRenderer({
-      antialias: true,
-      alpha: true,
-    });
+    /* WebGL is not guaranteed: it can be disabled by policy, unavailable in a
+       VM or on old hardware, or refused when the GPU process is under pressure
+       ("context lost and was blocked"). The constructor THROWS in those cases,
+       and an uncaught throw inside an effect unmounts the whole React tree —
+       which turned a failed decorative background into a completely blank
+       homepage. Degrade to no galaxy instead. */
+    let renderer;
+    try {
+      renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    } catch {
+      // The section keeps its CSS gradient background; only the 3D layer is lost.
+      return;
+    }
     renderer.setSize(container.clientWidth, container.clientHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     container.appendChild(renderer.domElement);
@@ -31,7 +40,9 @@ function GalaxyEffect1() {
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.dampingFactor = 0.05;
-    controls.autoRotate = true;
+    /* A full-viewport scene rotating forever is continuous motion the CSS
+       reduced-motion guard cannot reach (WCAG 2.3.3). */
+    controls.autoRotate = !window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
     controls.autoRotateSpeed = 0.4;
     controls.enableZoom = false;
 
@@ -167,7 +178,7 @@ function GalaxyEffect1() {
       }
     };
 
-    window.addEventListener("mousemove", handleMouseMove);
+    container.addEventListener("mousemove", handleMouseMove);
 
     const handleResize = () => {
       const width = container.clientWidth;
@@ -181,9 +192,14 @@ function GalaxyEffect1() {
 
     return () => {
       cancelAnimationFrame(animationFrameId);
-      window.removeEventListener("mousemove", handleMouseMove);
+      container.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("resize", handleResize);
       controls.dispose();
+      scene.traverse((obj) => {
+        obj.geometry?.dispose();
+        if (Array.isArray(obj.material)) obj.material.forEach((m) => m.dispose());
+        else obj.material?.dispose();
+      });
       renderer.dispose();
       if (container.contains(renderer.domElement)) {
         container.removeChild(renderer.domElement);
@@ -244,7 +260,8 @@ function GalaxyEffect1() {
               padding: "8px 16px",
               borderRadius: "10px",
               pointerEvents: "none",
-              zIndex: 100,
+              /* below the navbar (z-50) — was 100, which painted over it */
+              zIndex: 20,
             }}
           />
 

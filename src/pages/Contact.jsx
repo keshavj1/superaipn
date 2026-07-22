@@ -10,6 +10,30 @@ import {
   GraduationCap, Cog, Sparkles, ChevronRight,
 } from "lucide-react";
 
+/* Deliberately permissive — enough to catch a typo like "name@" or a missing
+   dot, without rejecting the valid-but-unusual addresses a strict regex does. */
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+/* An error must not look like a confirmation. role="alert" also makes a
+   screen reader announce failures immediately rather than politely. */
+function FormStatus({ status }) {
+  if (!status) return null;
+  const isError = status.type === "error";
+  return (
+    <p
+      role={isError ? "alert" : "status"}
+      aria-live={isError ? "assertive" : "polite"}
+      style={{
+        marginTop: 14,
+        fontSize: 13,
+        color: isError ? "#fca5a5" : "#67e8f9",
+      }}
+    >
+      {status.message}
+    </p>
+  );
+}
+
 /* ─── Scroll-reveal hook ─── */
 function useReveal(threshold = 0.15) {
   const ref = useRef(null);
@@ -104,7 +128,10 @@ export default function Contact() {
 
   /* ─── Contact form → email submission ─── */
   const CONTACT_EMAIL = "keshav.j@superaip.com";
-  const [contactStatus, setContactStatus] = useState("");
+  /* { type: "error" | "success", message } rather than a bare string: a
+     validation failure and a successful hand-off previously rendered in the
+     identical cyan, so users could not tell them apart. */
+  const [contactStatus, setContactStatus] = useState(null);
 
   const handleContactSubmit = (e) => {
     e.preventDefault();
@@ -115,7 +142,11 @@ export default function Contact() {
     const email = get("email");
     const message = get("message");
     if (!fullName || !email || !message) {
-      setContactStatus("Please fill in at least your name, email, and message.");
+      setContactStatus({ type: "error", message: "Please fill in your name, email, and message." });
+      return;
+    }
+    if (!EMAIL_RE.test(email)) {
+      setContactStatus({ type: "error", message: "That email address doesn't look right — please check it." });
       return;
     }
 
@@ -135,12 +166,15 @@ export default function Contact() {
     ].join("\n");
 
     window.location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    setContactStatus(`Opening your email app to send to ${CONTACT_EMAIL}… If nothing opens, email us directly there.`);
+    setContactStatus({
+      type: "success",
+      message: `Opening your email app to send to ${CONTACT_EMAIL}… If nothing opens, email us directly there.`,
+    });
   };
 
   /* Demo request → same mailto hand-off as the contact form above. The 13
      inputs now carry name attributes so FormData can read them. */
-  const [demoStatus, setDemoStatus] = useState("");
+  const [demoStatus, setDemoStatus] = useState(null);
 
   const handleDemoSubmit = (e) => {
     e.preventDefault();
@@ -150,7 +184,11 @@ export default function Contact() {
     const fullName = get("fullName");
     const email = get("email");
     if (!fullName || !email) {
-      setDemoStatus("Please fill in at least your name and work email.");
+      setDemoStatus({ type: "error", message: "Please fill in your name and work email." });
+      return;
+    }
+    if (!EMAIL_RE.test(email)) {
+      setDemoStatus({ type: "error", message: "That email address doesn't look right — please check it." });
       return;
     }
 
@@ -177,7 +215,10 @@ export default function Contact() {
     ].join("\n");
 
     window.location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    setDemoStatus(`Opening your email app to send to ${CONTACT_EMAIL}… If nothing opens, email us directly there.`);
+    setDemoStatus({
+      type: "success",
+      message: `Opening your email app to send to ${CONTACT_EMAIL}… If nothing opens, email us directly there.`,
+    });
   };
 
   return (
@@ -259,7 +300,7 @@ export default function Contact() {
             <div className="contact-form-card">
               <h3>Send Us a Message</h3>
               <p className="form-intro">Fill in the form below and our team will get back to you promptly.</p>
-              <form onSubmit={handleContactSubmit}>
+              <form onSubmit={handleContactSubmit} noValidate>
                 <div className="form-grid">
                   <div className="form-group">
                     <label htmlFor="cf-name">Full Name</label>
@@ -304,12 +345,14 @@ export default function Contact() {
                     <textarea id="cf-message" name="message" rows={4} placeholder="Tell us how we can help…" required />
                   </div>
                 </div>
-                <button type="submit" className="form-submit-btn" id="submit-enquiry" style={{ marginTop: 20 }}>
-                  Submit Enquiry <Send size={16} />
-                </button>
-                {contactStatus && (
-                  <p role="status" aria-live="polite" style={{ marginTop: 14, fontSize: 13, color: "#67e8f9" }}>{contactStatus}</p>
-                )}
+                {/* Centred to match the demo form's submit block below — the two
+                    forms sit on the same page and previously disagreed. */}
+                <div style={{ textAlign: "center", marginTop: 24 }}>
+                  <button type="submit" className="form-submit-btn" id="submit-enquiry">
+                    Submit Enquiry <Send size={16} />
+                  </button>
+                  <FormStatus status={contactStatus} />
+                </div>
               </form>
             </div>
 
@@ -321,7 +364,7 @@ export default function Contact() {
                     {d.icon}
                   </div>
                   <div>
-                    <h5>{d.title}</h5>
+                    <h4>{d.title}</h4>
                     {d.link
                       ? <p><a href={d.link}>{d.value}</a></p>
                       : <p>{d.value}</p>
@@ -442,11 +485,14 @@ export default function Contact() {
             transition: "all 0.8s cubic-bezier(0.16,1,0.3,1) 200ms",
           }}>
             <div style={{ textAlign: "center", marginBottom: 28 }}>
-              <h3 style={{ fontSize: 20, fontWeight: 700, color: "#fff", marginBottom: 6 }}>Choose Your Product Demo</h3>
+              <h3 id="demo-product-heading" style={{ fontSize: 20, fontWeight: 700, color: "#fff", marginBottom: 6 }}>Choose Your Product Demo</h3>
               <p style={{ fontSize: 14, color: "#94a3b8" }}>Select one or more products you'd like to see in action</p>
             </div>
 
-            <div className="demo-product-grid">
+            {/* role="group" + aria-labelledby ties the six checkbox cards to
+                their heading, so a screen reader announces the set as one
+                labelled group rather than six loose checkboxes. */}
+            <div className="demo-product-grid" role="group" aria-labelledby="demo-product-heading">
               {demoProducts.map((prod, i) => {
                 const isSelected = selectedProducts.includes(prod.name);
                 return (
@@ -518,7 +564,7 @@ export default function Contact() {
             {/* Was onSubmit={(e) => e.preventDefault()} with no name attributes
                 on any input — the button did nothing and the data existed
                 nowhere, not even client-side. */}
-            <form onSubmit={handleDemoSubmit}>
+            <form onSubmit={handleDemoSubmit} noValidate>
               <div className="form-grid">
                 <div className="form-group">
                   <label htmlFor="df-name">Full Name</label>
@@ -599,12 +645,7 @@ export default function Contact() {
                 <button type="submit" className="form-submit-btn" id="request-demo-btn">
                   Request My Demo <Rocket size={16} />
                 </button>
-                {/* role="status" so the outcome is announced, not just shown. */}
-                {demoStatus && (
-                  <p role="status" aria-live="polite" style={{ marginTop: 14, fontSize: 13, color: "#67e8f9" }}>
-                    {demoStatus}
-                  </p>
-                )}
+                <FormStatus status={demoStatus} />
               </div>
             </form>
           </div>

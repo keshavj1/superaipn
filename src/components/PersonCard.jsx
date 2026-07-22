@@ -41,7 +41,7 @@ export default function PersonCard({ name, role, image, imgPosition, color, soci
         </div>
       </div>
 
-      <h4 className="emp-name">{name}</h4>
+      <h3 className="emp-name">{name}</h3>
       <p className="emp-role" style={{ color }}>{role}</p>
 
       {/* Bio is optional — the About grid omits it, the Team page shows it */}

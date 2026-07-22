@@ -19,17 +19,61 @@ const useReveal = () => {
     };
 
     useEffect(() => {
+        const pending = new Set(revealRefs.current);
+
+        const reveal = (el) => {
+            el.classList.add('revealed');
+            observer.unobserve(el);
+            pending.delete(el);
+        };
+
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('revealed');
-                    observer.unobserve(entry.target);
-                }
+                if (entry.isIntersecting) reveal(entry.target);
             });
-        }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
+        }, {
+            /* threshold 0 + margin, not threshold 0.1: requiring 10% of a
+               section visible at once means a section taller than ~10 viewports
+               can NEVER reveal on a short screen. Edge-triggered reveal works
+               at any section height. */
+            threshold: 0,
+            rootMargin: "0px 0px -10% 0px",
+        });
+        pending.forEach(el => observer.observe(el));
 
-        revealRefs.current.forEach(ref => observer.observe(ref));
-        return () => observer.disconnect();
+        /* IntersectionObserver misses elements that pass entirely through the
+           viewport within one frame — fast flick-scrolls, the End key, and
+           full-page screenshot tools all do this. The enter and exit coalesce
+           into no notification and the section stays hidden forever. This
+           rAF-throttled scroll check reveals anything the observer skipped. */
+        let raf = null;
+        const onScroll = () => {
+            if (raf !== null) return;
+            raf = requestAnimationFrame(() => {
+                raf = null;
+                const limit = window.innerHeight;
+                pending.forEach(el => {
+                    if (el.getBoundingClientRect().top < limit) reveal(el);
+                });
+            });
+        };
+        window.addEventListener('scroll', onScroll, { passive: true });
+
+        /* Failsafe: nothing may stay hidden forever. Lenis owns the scroll
+           loop and overrides programmatic native jumps, which starves
+           IntersectionObserver under scroll-and-stitch capture tools, print,
+           and some assistive tech. Normal browsing reveals on approach long
+           before this fires; this guarantees content for everything else. */
+        const failsafe = setTimeout(() => {
+            pending.forEach(el => reveal(el));
+        }, 4000);
+
+        return () => {
+            observer.disconnect();
+            window.removeEventListener('scroll', onScroll);
+            if (raf !== null) cancelAnimationFrame(raf);
+            clearTimeout(failsafe);
+        };
     }, []);
 
     return addToRefs;
@@ -193,7 +237,7 @@ const Products = () => {
                                 <div className="category-icon">
                                     <cat.icon size={32} />
                                 </div>
-                                <h3>{cat.title}</h3>
+                                <h2>{cat.title}</h2>
                                 <p>{cat.desc}</p>
                             </button>
                         ))}
@@ -213,10 +257,18 @@ const Products = () => {
                 </div>
 
                 <div className="tabs-container">
-                    <div className="platform-tabs">
+                    {/* Proper tab semantics so a screen reader announces the
+                        switcher as tabs and the selected state, and arrow keys
+                        move between them — mirrors the Enterprise bot tabs. */}
+                    <div className="platform-tabs" role="tablist" aria-label="AI platforms">
                         {Object.keys(platformsData).map((key) => (
                             <button
                                 key={key}
+                                id={`platform-tab-${key}`}
+                                role="tab"
+                                aria-selected={activePlatform === key}
+                                aria-controls="platform-tabpanel"
+                                tabIndex={activePlatform === key ? 0 : -1}
                                 className={`tab-btn ${activePlatform === key ? 'active' : ''}`}
                                 onClick={() => setActivePlatform(key)}
                             >
@@ -225,7 +277,13 @@ const Products = () => {
                         ))}
                     </div>
 
-                    <div className="tab-content active glass-card">
+                    <div
+                        className="tab-content active glass-card"
+                        id="platform-tabpanel"
+                        role="tabpanel"
+                        aria-labelledby={`platform-tab-${activePlatform}`}
+                        tabIndex={0}
+                    >
                         <div className="platform-details">
                             <div>
                                 <h3>{platformsData[activePlatform].title}</h3>
@@ -252,7 +310,7 @@ const Products = () => {
                             </div>
 
                             <div className="platform-visual">
-                                <img src={platformsData[activePlatform].image} alt={platformsData[activePlatform].title} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.6 }} />
+                                <img src={platformsData[activePlatform].image} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.6 }} />
                             </div>
                         </div>
                     </div>
@@ -285,17 +343,17 @@ const Products = () => {
                 <div className="capabilities-grid">
                     <div className="capability-card glass-card">
                         <Cpu size={40} color="#a18cd1" />
-                        <h4>Intelligent Process Automation</h4>
+                        <h3>Intelligent Process Automation</h3>
                         <p>AI-driven automation of repetitive, rule-based workflows — document routing, data extraction, form processing, and approval pipelines — with human-in-the-loop escalation where needed.</p>
                     </div>
                     <div className="capability-card glass-card">
                         <BrainCircuit size={40} color="#4facfe" />
-                        <h4>Agentic AI Workflows</h4>
+                        <h3>Agentic AI Workflows</h3>
                         <p>Multi-step reasoning agents that handle complex, conditional tasks end-to-end — RFP analysis, bill reconciliation, tender evaluation, and report generation — without manual intervention.</p>
                     </div>
                     <div className="capability-card glass-card">
                         <Activity size={40} color="#fbc2eb" />
-                        <h4>Sentiment & Analytics</h4>
+                        <h3>Sentiment & Analytics</h3>
                         <p>Automated sentiment monitoring across citizen submissions, customer feedback, and grievance portals — delivering real-time dashboards and actionable intelligence to leadership.</p>
                     </div>
                 </div>
@@ -305,7 +363,7 @@ const Products = () => {
                     <div className="use-cases-grid">
                         {automationUseCases.map((uc, i) => (
                             <div key={i} className="use-case-col">
-                                <h5>{uc.sector}</h5>
+                                <h4>{uc.sector}</h4>
                                 <ul>
                                     {uc.items.map((item, j) => <li key={j}>{item}</li>)}
                                 </ul>
@@ -344,7 +402,7 @@ const Products = () => {
                                     <panel.icon className="panel-icon-large" />
                                 </div>
                                 <div className="panel-body">
-                                    <h4>{panel.title}</h4>
+                                    <h3>{panel.title}</h3>
                                     <p>{panel.desc}</p>
                                 </div>
                             </div>
@@ -400,14 +458,14 @@ const Products = () => {
                     {devTools.map((tool, idx) => (
                         <div key={idx} className="tool-card reveal-fade-up" ref={addToRefs}>
                             <Code size={24} color="#60a5fa" style={{ marginBottom: '1rem' }} />
-                            <h4>{tool.title}</h4>
+                            <h3>{tool.title}</h3>
                             <p>{tool.desc}</p>
                         </div>
                     ))}
                 </div>
 
                 <div className="integrations-box reveal-fade-up" ref={addToRefs}>
-                    <h5>Integration Compatibility</h5>
+                    <h3>Integration Compatibility</h3>
                     <div className="logo-wrapper">
                         {integrationLogos.map((logo, i) => (
                             <div key={i} className="integration-logo">{logo}</div>

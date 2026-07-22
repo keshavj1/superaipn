@@ -75,7 +75,7 @@ export default function ProvenTraction() {
     return (
         <section
             ref={sectionRef}
-            className="relative py-28 overflow-hidden section_sectss"
+            className="relative py-16 overflow-hidden section_sectss"
             style={{ background: "var(--surface-band-cool)" }}
         >
             {/* Ambient glows */}
@@ -85,7 +85,7 @@ export default function ProvenTraction() {
             <div className="max-w-6xl mx-auto px-6 relative z-10">
                 {/* Header */}
                 <div
-                    className="text-center mb-16 max-w-3xl mx-auto"
+                    className="text-center mb-10 max-w-3xl mx-auto"
                     style={{
                         opacity: visible ? 1 : 0,
                         transform: visible ? "translateY(0)" : "translateY(20px)",

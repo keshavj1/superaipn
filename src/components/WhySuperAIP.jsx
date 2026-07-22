@@ -95,8 +95,14 @@ function FeatureCard({ feature, index, visible }) {
                     }}
                 >
 
-                    <img src={feature.image} alt={feature.title} />
-                    {feature.icon}
+                    <img
+                        src={feature.image}
+                        alt=""
+                        width={28}
+                        height={28}
+                        loading="lazy"
+                        className="w-7 h-7 object-contain"
+                    />
                 </div>
                 <h3 className="text-heading font-bold text-base mb-2">{feature.title}</h3>
                 <p className="text-gray-400 text-sm leading-relaxed">{feature.description}</p>
@@ -123,7 +129,7 @@ export default function WhySuperAIP() {
     return (
         <section
             ref={sectionRef}
-            className="relative py-28 overflow-hidden"
+            className="relative py-16 overflow-hidden"
             style={{ background: "var(--surface-band-violet)" }}
         >
             {/* Ambient */}

@@ -191,8 +191,8 @@ export default function Partners() {
                     </p>
 
                     <div className="partners-pills">
-                        {["Solution Providers", "Technology Partners", "ISVs & OEMs", "Training Partners"].map((pill, i) => (
-                            <a key={i} href={`#partner-tracks`} className="partners-pill">{pill}</a>
+                        {["Solution Providers", "Technology Partners", "ISVs & OEMs", "Training Partners"].map((pill) => (
+                            <Link key={pill} to="/Partners#partner-tracks" className="partners-pill">{pill}</Link>
                         ))}
                     </div>
 
@@ -249,7 +249,7 @@ export default function Partners() {
                                 <div className="track-card-icon" style={{ background: `${t.color}15`, border: `1px solid ${t.color}25`, color: t.color }}>
                                     {t.icon}
                                 </div>
-                                <h4>{t.title}</h4>
+                                <h3>{t.title}</h3>
                                 <p>{t.desc}</p>
                                 {/* Was a <span> with cursor:pointer — it looked like a
                                     CTA and did nothing when clicked. */}
@@ -309,13 +309,13 @@ export default function Partners() {
                         {/* Two-column benefits */}
                         <div className="academic-layout">
                             <div className="academic-benefits-card">
-                                <h5><GraduationCap size={18} style={{ color: "#22d3ee" }} /> For Institutions</h5>
+                                <h3><GraduationCap size={18} style={{ color: "#22d3ee" }} /> For Institutions</h3>
                                 <ul>
                                     {academicForInstitutions.map((b, i) => <li key={i}>{b}</li>)}
                                 </ul>
                             </div>
                             <div className="academic-benefits-card">
-                                <h5><Lightbulb size={18} style={{ color: "#a78bfa" }} /> For Super AIP</h5>
+                                <h3><Lightbulb size={18} style={{ color: "#a78bfa" }} /> For Super AIP</h3>
                                 <ul>
                                     {academicForSuperAIP.map((b, i) => <li key={i}>{b}</li>)}
                                 </ul>
@@ -324,7 +324,7 @@ export default function Partners() {
 
                         {/* Current Associations */}
                         <div className="academic-associations" style={{ marginTop: 28 }}>
-                            <h5>Current Academic Associations</h5>
+                            <h3>Current Academic Associations</h3>
                             <p>✦ University of Delhi · NIT Rourkela · AICTE Empanelled Institutions · KVS Ecosystem · NCERT · Chandigarh University</p>
                         </div>
 
@@ -400,7 +400,7 @@ export default function Partners() {
                                 <div className="industry-card-icon" style={{ background: `${cat.color}15`, border: `1px solid ${cat.color}25`, color: cat.color }}>
                                     {cat.icon}
                                 </div>
-                                <h4>{cat.title}</h4>
+                                <h3>{cat.title}</h3>
                                 <p>{cat.desc}</p>
                                 {cat.live && (
                                     <div className="live-badge">
@@ -419,7 +419,7 @@ export default function Partners() {
                         transition: "all 0.8s cubic-bezier(0.16,1,0.3,1) 600ms",
                     }}>
                         <div className="world-map-title">
-                            <h4>Global Partner Presence</h4>
+                            <h3>Global Partner Presence</h3>
                             <p>Super AIP's industry partner network spans 14+ countries across Asia, the Middle East, Africa, Europe, and the Americas.</p>
                         </div>
                         <div className="world-map-dots">
@@ -491,7 +491,7 @@ export default function Partners() {
                                     }}>
                                         {step.num}
                                     </div>
-                                    <h4>{step.title}</h4>
+                                    <h3>{step.title}</h3>
                                     <p>{step.desc}</p>
                                 </div>
                             ))}
@@ -525,7 +525,7 @@ export default function Partners() {
                                     <div className="training-card-icon" style={{ background: `${feat.color}15`, border: `1px solid ${feat.color}25`, color: feat.color }}>
                                         {feat.icon}
                                     </div>
-                                    <h4>{feat.title}</h4>
+                                    <h3>{feat.title}</h3>
                                     <p>{feat.desc}</p>
                                 </div>
                             ))}

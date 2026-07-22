@@ -9,21 +9,29 @@
     overflow-x: hidden;
 }
 
-/* Base Styles & Utility */
-.enterprise-page h1,
-.enterprise-page h2,
-.enterprise-page h3,
-.enterprise-page h4 {
-    font-weight: 800;
-    font-weight: 600 !important;
-    line-height: 1.1;
-    margin-bottom: 20px;
-    letter-spacing: -0.02em;
+/* Base Styles & Utility
+   Wrapped in @layer components so the Tailwind utilities these headings
+   already carry (mb-2, text-xl, font-bold) win: unlayered CSS beats anything
+   in @layer utilities regardless of specificity, so this blanket rule was
+   silently overriding the per-element margins set in the JSX.
+   `font-weight` was also declared twice — 800 then 600 !important. */
+@layer components {
+
+    .enterprise-page h1,
+    .enterprise-page h2,
+    .enterprise-page h3,
+    .enterprise-page h4,
+    .enterprise-page h5 {
+        font-weight: 600;
+        line-height: 1.1;
+        margin-bottom: 20px;
+        letter-spacing: -0.02em;
+    }
 }
 
 /* INTRO SECTION */
 .ent-intro {
-    padding: 160px 5% 60px;
+    padding: clamp(120px, 18vw, 160px) var(--gutter) var(--space-section-sm);
     text-align: center;
     background: radial-gradient(ellipse at top, rgba(20, 20, 30, 0.8) 0%, transparent 70%);
 }
@@ -35,7 +43,7 @@
 }
 
 .ent-intro .subtitle {
-    font-size: 1.25rem;
+    font-size: clamp(1rem, 2.2vw, 1.25rem);
     color: #94a3b8;
     max-width: 900px;
     margin: 0 auto;
@@ -43,21 +51,15 @@
 }
 
 /* REVEAL ANIMATIONS */
-.reveal-fade-up {
-    opacity: 0;
-    transform: translateY(40px);
-    transition: all 0.8s ease-out;
-}
-
-.reveal-fade-up.revealed {
-    opacity: 1;
-    transform: translateY(0);
-    padding-top: 90px;
-}
+/* .reveal-fade-up moved to index.css. It lived here while Education and
+   Products also use the class — so their reveal behaviour silently depended on
+   whether the visitor had loaded THIS page's stylesheet first. Worse, the
+   revealed state carried a stray `padding-top: 90px` inside a `transition: all`,
+   so every section's padding visibly jumped as it revealed. */
 
 /* NEURAEDGE 1 */
 .neuraedge-section {
-    padding: 80px 0;
+    padding: var(--space-section-sm) 0;
 }
 
 .hero-banner-edge {
@@ -65,7 +67,7 @@
     flex-direction: column;
     gap: 40px;
     padding: 0 5%;
-    max-width: 1400px;
+    max-width: var(--container);
     margin: 0 auto;
 }
 
@@ -93,7 +95,7 @@
 }
 
 .edge-content .highlight {
-    color: #64748b;
+    color: var(--color-text-muted);
     font-weight: 300;
 }
 

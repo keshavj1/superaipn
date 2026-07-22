@@ -74,7 +74,12 @@ const META = {
   "/cookies": { title: `Cookie Policy — ${SITE}`, description: "How Super AI Polaris uses cookies and how to manage your preferences." },
 };
 
-const FALLBACK = META["/"];
+/* Unmatched routes get their own metadata rather than inheriting the
+   homepage's, and are marked noindex below. */
+const NOT_FOUND = {
+  title: `Page Not Found — ${SITE}`,
+  description: "The page you are looking for does not exist or has moved.",
+};
 
 /* Set an attribute on an existing tag, creating the tag if absent. */
 function upsertMeta(selector, attr, value, createAttrs) {
@@ -93,7 +98,12 @@ export default function PageMeta() {
   useLayoutEffect(() => {
     // Routes are registered in mixed case (/About and /about both resolve).
     const key = pathname.toLowerCase().replace(/\/+$/, "") || "/";
-    const meta = META[key] || FALLBACK;
+    /* An unmatched path renders <NotFound />. Previously it also fell back to
+       the homepage's title and description AND self-canonicalised, so — with
+       the SPA rewrite in vercel.json serving a 200 — arbitrary junk URLs were
+       indexable under the homepage's copy. */
+    const isKnown = Object.prototype.hasOwnProperty.call(META, key);
+    const meta = isKnown ? META[key] : NOT_FOUND;
     const url = `${ORIGIN}${key === "/" ? "/" : key}`;
 
     document.title = meta.title;
@@ -104,15 +114,29 @@ export default function PageMeta() {
     upsertMeta('meta[name="twitter:title"]', "content", meta.title, { name: "twitter:title" });
     upsertMeta('meta[name="twitter:description"]', "content", meta.description, { name: "twitter:description" });
 
+    /* Unknown paths must not invite indexing. The header comment in
+       NotFound.jsx already claimed a noindex tag existed; it did not. */
+    upsertMeta(
+      'meta[name="robots"]',
+      "content",
+      isKnown ? "index, follow" : "noindex, follow",
+      { name: "robots" }
+    );
+
     /* Canonical always points at the lowercase form, so /Team and /team are
-       not indexed as two pages with identical content. */
+       not indexed as two pages with identical content. A 404 has no canonical
+       at all — self-canonicalising it asserts the junk URL is the real one. */
     let canonical = document.head.querySelector('link[rel="canonical"]');
-    if (!canonical) {
-      canonical = document.createElement("link");
-      canonical.setAttribute("rel", "canonical");
-      document.head.appendChild(canonical);
+    if (isKnown) {
+      if (!canonical) {
+        canonical = document.createElement("link");
+        canonical.setAttribute("rel", "canonical");
+        document.head.appendChild(canonical);
+      }
+      canonical.setAttribute("href", url);
+    } else if (canonical) {
+      canonical.remove();
     }
-    canonical.setAttribute("href", url);
   }, [pathname]);
 
   return null;

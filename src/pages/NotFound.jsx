@@ -21,11 +21,11 @@ export default function NotFound() {
 
         <nav aria-label="Suggested pages">
           <ul style={{ listStyle: "none", padding: 0, margin: "0 0 32px", lineHeight: 2 }}>
-            <li><Link to="/" className="legal-link">Home</Link></li>
-            <li><Link to="/Products" className="legal-link">Products &amp; platforms</Link></li>
-            <li><Link to="/Enterprise" className="legal-link">Enterprise solutions</Link></li>
-            <li><Link to="/Education" className="legal-link">Education solutions</Link></li>
-            <li><Link to="/Contact" className="legal-link">Contact us</Link></li>
+            <li><Link to="/" className="legal-link nf-link">Home</Link></li>
+            <li><Link to="/products" className="legal-link nf-link">Products &amp; platforms</Link></li>
+            <li><Link to="/enterprise" className="legal-link nf-link">Enterprise solutions</Link></li>
+            <li><Link to="/education" className="legal-link nf-link">Education solutions</Link></li>
+            <li><Link to="/contact" className="legal-link nf-link">Contact us</Link></li>
           </ul>
         </nav>
       </div>

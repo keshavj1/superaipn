@@ -19,7 +19,7 @@ export default function FinalCTA() {
     return (
         <section
             ref={sectionRef}
-            className="relative py-32 overflow-hidden"
+            className="relative py-20 overflow-hidden"
             style={{ background: "var(--surface-section)" }}
         >
             {/* Background effects */}

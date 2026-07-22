@@ -10,7 +10,7 @@
     align-items: center;
     justify-content: center;
     text-align: center;
-    padding: 160px 24px 80px;
+    padding: clamp(120px, 18vw, 160px) var(--gutter) var(--space-section-sm);
     overflow: hidden;
     background: linear-gradient(180deg, #05060a 0%, #0a0920 50%, #05060a 100%);
     position: relative;
@@ -19,7 +19,7 @@
     align-items: center;
     justify-content: center;
     text-align: center;
-    padding: 160px 24px 100px;
+    padding: clamp(120px, 18vw, 160px) var(--gutter) var(--space-section);
     overflow: hidden;
     background: linear-gradient(180deg, #05060a 0%, #0a0920 50%, #05060a 100%);
     background-color: #050d12;
@@ -53,7 +53,7 @@
 .contact-hero-content {
     position: relative;
     z-index: 2;
-    max-width: 820px;
+    max-width: var(--container-narrow);
     margin: 0 auto;
 }
 
@@ -139,7 +139,7 @@
 /* ── Shared Section ── */
 .contact-section {
     position: relative;
-    padding: 100px 24px;
+    padding: var(--space-section) var(--gutter);
     overflow: hidden;
 }
 
@@ -152,7 +152,7 @@
 }
 
 .contact-section-inner {
-    max-width: 1160px;
+    max-width: var(--container);
     margin: 0 auto;
     position: relative;
     z-index: 2;
@@ -211,6 +211,7 @@
     border-radius: 24px;
     border: 1px solid rgba(255, 255, 255, 0.06);
     background: rgba(255, 255, 255, 0.02);
+    -webkit-backdrop-filter: blur(20px);
     backdrop-filter: blur(20px);
 }
 
@@ -268,14 +269,26 @@
     color: #e2e8f0;
     font-size: 14px;
     font-family: inherit;
+    /* `outline: none` here tied with the global input:focus-visible rule in
+       index.css on specificity, and contact.css loads later — so it won this
+       form and left every field with no visible focus indicator (WCAG 2.4.7).
+       Suppress the outline only when the field is NOT keyboard-focused. */
     outline: none;
-    transition: all 0.3s ease;
+    transition: border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
     width: 100%;
+}
+
+.form-group input:focus-visible,
+.form-group select:focus-visible,
+.form-group textarea:focus-visible {
+    outline: 2px solid #a78bfa;
+    outline-offset: 2px;
+    border-color: transparent;
 }
 
 .form-group input::placeholder,
 .form-group textarea::placeholder {
-    color: #64748b;
+    color: var(--color-text-muted);
 }
 
 .form-group input:focus,
@@ -361,7 +374,7 @@
     flex-shrink: 0;
 }
 
-.contact-detail-card h5 {
+.contact-detail-card h4 {
     font-size: 13px !important;
     font-weight: 700 !important;
     color: #e2e8f0;
@@ -472,7 +485,7 @@
 
 .social-link .social-desc {
     font-size: 11px;
-    color: #64748b;
+    color: var(--color-text-muted);
     text-align: center;
 }
 
@@ -504,6 +517,8 @@
     background: rgba(255, 255, 255, 0.02);
     cursor: pointer;
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    -webkit-user-select: none;
+    -moz-user-select: none;
     user-select: none;
 }
 
@@ -632,6 +647,7 @@
     border-radius: 24px;
     border: 1px solid rgba(255, 255, 255, 0.06);
     background: rgba(255, 255, 255, 0.02);
+    -webkit-backdrop-filter: blur(20px);
     backdrop-filter: blur(20px);
     margin-bottom: 56px;
 }
@@ -822,4 +838,15 @@
     font: inherit;
     text-align: left;
     cursor: pointer;
+}
+
+
+/* The contact-detail values (email, phone) are standalone tap targets on
+   mobile, not inline links inside a sentence, so the WCAG 2.5.8 inline
+   exception does not apply. They rendered ~15px tall. */
+.contact-detail-card a,
+.contact-detail-card p a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 40px;
 }

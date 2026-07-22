@@ -11,12 +11,16 @@
 .legal-inner {
     max-width: 780px;
     margin: 0 auto;
-    padding: 140px 24px 96px;
+    padding: clamp(120px, 18vw, 160px) var(--gutter) var(--space-section);
 }
 
 .legal-back {
-    display: inline-block;
-    margin-bottom: 32px;
+    /* Was a 23px-tall inline-block. This is a standalone navigation control,
+       not an inline link in a sentence, so it needs a real touch target. */
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    margin-bottom: 24px;
     font-size: 0.88rem;
     font-weight: 600;
     color: var(--color-text-secondary);
@@ -96,4 +100,15 @@
     .legal-inner {
         padding: 110px 20px 72px;
     }
+}
+
+/* The 404's recovery links are a navigation list, not inline prose — they are
+   the visitor's only route out of the page, so they get a real touch target
+   (WCAG 2.5.8) rather than the 17–20px an inline link renders at.
+   `.legal-link` itself stays inline: links inside a sentence are explicitly
+   exempt, and padding them out would break the text flow. */
+.nf-link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
 }

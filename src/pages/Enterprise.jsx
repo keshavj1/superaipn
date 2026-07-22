@@ -27,17 +27,61 @@ const useReveal = () => {
     };
 
     useEffect(() => {
+        const pending = new Set(revealRefs.current);
+
+        const reveal = (el) => {
+            el.classList.add('revealed');
+            observer.unobserve(el);
+            pending.delete(el);
+        };
+
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('revealed');
-                    observer.unobserve(entry.target);
-                }
+                if (entry.isIntersecting) reveal(entry.target);
             });
-        }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
+        }, {
+            /* threshold 0 + margin, not threshold 0.1: requiring 10% of a
+               section visible at once means a section taller than ~10 viewports
+               can NEVER reveal on a short screen. Edge-triggered reveal works
+               at any section height. */
+            threshold: 0,
+            rootMargin: "0px 0px -10% 0px",
+        });
+        pending.forEach(el => observer.observe(el));
 
-        revealRefs.current.forEach(ref => observer.observe(ref));
-        return () => observer.disconnect();
+        /* IntersectionObserver misses elements that pass entirely through the
+           viewport within one frame — fast flick-scrolls, the End key, and
+           full-page screenshot tools all do this. The enter and exit coalesce
+           into no notification and the section stays hidden forever. This
+           rAF-throttled scroll check reveals anything the observer skipped. */
+        let raf = null;
+        const onScroll = () => {
+            if (raf !== null) return;
+            raf = requestAnimationFrame(() => {
+                raf = null;
+                const limit = window.innerHeight;
+                pending.forEach(el => {
+                    if (el.getBoundingClientRect().top < limit) reveal(el);
+                });
+            });
+        };
+        window.addEventListener('scroll', onScroll, { passive: true });
+
+        /* Failsafe: nothing may stay hidden forever. Lenis owns the scroll
+           loop and overrides programmatic native jumps, which starves
+           IntersectionObserver under scroll-and-stitch capture tools, print,
+           and some assistive tech. Normal browsing reveals on approach long
+           before this fires; this guarantees content for everything else. */
+        const failsafe = setTimeout(() => {
+            pending.forEach(el => reveal(el));
+        }, 4000);
+
+        return () => {
+            observer.disconnect();
+            window.removeEventListener('scroll', onScroll);
+            if (raf !== null) cancelAnimationFrame(raf);
+            clearTimeout(failsafe);
+        };
     }, []);
 
     return addToRefs;
@@ -221,7 +265,9 @@ const Enterprise = () => {
                         <div className="video-wrapper">
                             <video
                                 src={neuraEdgeVideo}
+                                aria-label="NeuraEdge preview"
                                 controls
+                                preload="metadata"
                                 muted
                                 className="media-content"
                             />
@@ -229,35 +275,35 @@ const Enterprise = () => {
                     </div>
                 </div>
 
-                <div className="caps-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-16 px-6" style={{ width: '100%', maxWidth: '900px', margin: 'clamp(36px, 7vw, 70px) auto' }}>
+                <div className="caps-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-16 px-6" style={{ width: '100%', maxWidth: '900px', margin: 'clamp(20px, 3vw, 36px) auto' }}>
                     {neuraEdgeCaps.map((cap, i) => (
-                        <div key={i} className="cap-card glass-card p-6" style={{ padding: '18px' }}>
+                        <div key={i} className="cap-card glass-card p-6">
                             <cap.icon size={32} className="icon-cyan mb-4 text-[#00d2ff]" />
-                            <h4 className="text-xl font-bold mb-2 text-white">{cap.title}</h4>
+                            <h3 className="text-xl font-bold mb-2 text-white">{cap.title}</h3>
                             <p className="text-gray-400 text-sm leading-relaxed">{cap.desc}</p>
                         </div>
                     ))}
                 </div>
 
                 <div className="phases-container text-center mt-20 px-6">
-                    <h3 className="text-3xl font-bold mb-10 text-white" style={{ padding: '30px' }}>Three-Phase Implementation</h3>
+                    <h3 className="text-3xl font-bold mb-10 text-white" style={{ padding: '30px 0' }}>Three-Phase Implementation</h3>
                     <div className="phases-flex grid grid-cols-1 md:grid-cols-3 gap-8" style={{ width: '100%', maxWidth: '900px', margin: '0 auto' }}>
-                        <div className="phase-card bg-[#121826] border border-white/5 rounded-2xl p-8 relative overflow-hidden group hover:border-[#00d2ff]/30 transition-all" style={{ padding: '20px' }}>
+                        <div className="phase-card bg-[#121826] border border-white/5 rounded-2xl p-8 relative overflow-hidden group hover:border-[#00d2ff]/30 transition-all">
                             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyan-500 to-blue-500 transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform"></div>
                             <div className="step text-cyan-400 font-mono text-sm tracking-widest uppercase mb-4">Phase 1</div>
-                            <h4 className="text-xl font-bold text-white mb-2">File Intelligence & Prioritization</h4>
+                            <h3 className="text-xl font-bold text-white mb-2">File Intelligence & Prioritization</h3>
                             <p className="text-gray-400">Summarization & Priority Tagging</p>
                         </div>
-                        <div className="phase-card bg-[#121826] border border-white/5 rounded-2xl p-8 relative overflow-hidden group hover:border-[#00d2ff]/30 transition-all" style={{ padding: '20px' }}>
+                        <div className="phase-card bg-[#121826] border border-white/5 rounded-2xl p-8 relative overflow-hidden group hover:border-[#00d2ff]/30 transition-all">
                             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 to-indigo-500 transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform"></div>
                             <div className="step text-blue-400 font-mono text-sm tracking-widest uppercase mb-4">Phase 2</div>
-                            <h4 className="text-xl font-bold text-white mb-2">Communication & Doc Intelligence</h4>
+                            <h3 className="text-xl font-bold text-white mb-2">Communication & Doc Intelligence</h3>
                             <p className="text-gray-400">Cabinet Meeting Brief Preparation</p>
                         </div>
-                        <div className="phase-card bg-[#121826] border border-white/5 rounded-2xl p-8 relative overflow-hidden group hover:border-[#00d2ff]/30 transition-all" style={{ padding: '20px' }}>
+                        <div className="phase-card bg-[#121826] border border-white/5 rounded-2xl p-8 relative overflow-hidden group hover:border-[#00d2ff]/30 transition-all">
                             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-500 to-purple-500 transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform"></div>
                             <div className="step text-purple-400 font-mono text-sm tracking-widest uppercase mb-4">Phase 3</div>
-                            <h4 className="text-xl font-bold text-white mb-2">Citizen Intelligence & Transparency</h4>
+                            <h3 className="text-xl font-bold text-white mb-2">Citizen Intelligence & Transparency</h3>
                             <p className="text-gray-400">RTI & Grievance Management Insights</p>
                         </div>
                     </div>
@@ -265,11 +311,11 @@ const Enterprise = () => {
             </section>
 
             {/* 2. NeuraEaglei */}
-            <section id="neuraeaglei" className="eaglei-section reveal-fade-up bg-[#090e17] py-24 relative overflow-hidden" ref={addToRefs}>
+            <section id="neuraeaglei" className="eaglei-section reveal-fade-up bg-[#090e17] py-16 relative overflow-hidden" ref={addToRefs}>
                 <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTU5IDB2NjBoLTZWMHoiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wMykiLz48cGF0aCBkPSJNMCA1OWg2MHYtNkgwcyIgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjAzKSIvPjwvc3ZnPg==')] opacity-20"></div>
 
                 <div className="max-w-7xl mx-auto px-6 py-5 relative z-10">
-                    <div className="eagle-header text-center mb-16">
+                    <div className="eagle-header text-center mb-10">
                         <p className="tagline t-green text-[#10b981] font-semibold tracking-wider text-sm uppercase mb-3">Every camera. Total intelligence.</p>
                         <h2 className="text-4xl font-extrabold text-white mb-6">NeuraEaglei <span className="text-gray-500 font-normal">- Vision Analytics</span></h2>
                         <p className="desc text-gray-400 max-w-3xl mx-auto text-lg">Transforms passive camera networks into AI-powered command centers delivering real-time vision intelligence for security, safety, and operational analytics at scale.</p>
@@ -278,9 +324,9 @@ const Enterprise = () => {
                     <div className="eagle-layout grid grid-cols-1 lg:grid-cols-2 gap-12 items-center" style={{ paddingTop: '70px' }}>
                         <div className="eagle-cards grid grid-cols-1 sm:grid-cols-2 gap-6">
                             {neuraEagleiCaps.map((cap, i) => (
-                                <div key={i} className="eagle-card bg-black/40 border border-[#10b981]/10 rounded-xl p-6 hover:border-[#10b981]/40 transition-colors group" style={{ padding: '20px' }}>
+                                <div key={i} className="eagle-card bg-black/40 border border-[#10b981]/10 rounded-xl p-6 hover:border-[#10b981]/40 transition-colors group">
                                     <cap.icon size={28} className="text-[#10b981] mb-4 group-hover:scale-110 transition-transform" />
-                                    <h5 className="text-lg font-bold text-white mb-2">{cap.title}</h5>
+                                    <h3 className="text-lg font-bold text-white mb-2">{cap.title}</h3>
                                     <p className="text-gray-400 text-sm">{cap.desc}</p>
                                 </div>
                             ))}
@@ -293,16 +339,18 @@ const Enterprise = () => {
                             <div className="video-wrapper">
                                 <video
                                     src={NeuraEagleiVideo}
+                                aria-label="NeuraEaglei preview"
                                     controls
+                                    preload="metadata"
                                     muted
                                     className="media-content"
-                                    style={{ border: '1px solid #ffffff63 !important', borderRadius: '11px !important' }}
+                                    style={{ border: '1px solid var(--color-border-strong)', borderRadius: '11px' }}
                                 />
                             </div>
                         </div>
                     </div>
 
-                    <div className="live-cases flex flex-wrap justify-center gap-4 mt-16" style={{ padding: '60px 0px' }}>
+                    <div className="live-cases flex flex-wrap justify-center gap-4 mt-10" style={{ padding: '24px 0px' }}>
                         <span className="eagle-glow-pill">✦ Smart City Surveillance</span>
                         <span className="eagle-glow-pill">✦ Retail Footfall Analytics</span>
                         <span className="eagle-glow-pill">✦ Industrial Safety Monitoring</span>
@@ -312,13 +360,13 @@ const Enterprise = () => {
             </section>
 
             {/* 3. NeuraEduBOT */}
-            <section id="neuraedubot" className="edubot-section reveal-fade-up bg-[#090e17] py-24 relative overflow-hidden" style={{ padding: '60px 0px' }} ref={addToRefs}>
+            <section id="neuraedubot" className="edubot-section reveal-fade-up bg-[#090e17] py-16 relative overflow-hidden" ref={addToRefs}>
                 <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-white/5 to-transparent pointer-events-none"></div>
                 <div className="max-w-7xl mx-auto px-6 py-5 relative z-10">
                     <div className="edu-badges flex gap-4 mb-8">
-                        <span className="badge bg-white/10 border border-white/20 text-white px-4 py-1.5 rounded-full text-xs font-semibold backdrop-blur-md">Microsoft 365 Native</span>
-                        <span className="badge bg-white/10 border border-white/20 text-white px-4 py-1.5 rounded-full text-xs font-semibold backdrop-blur-md">AICTE Partnered</span>
-                        <span className="badge bg-white/10 border border-white/20 text-white px-4 py-1.5 rounded-full text-xs font-semibold backdrop-blur-md">CBSE Aligned</span>
+                        <span className="bg-white/10 border border-white/20 text-white px-4 py-1.5 rounded-full text-xs font-semibold backdrop-blur-md">Microsoft 365 Native</span>
+                        <span className="bg-white/10 border border-white/20 text-white px-4 py-1.5 rounded-full text-xs font-semibold backdrop-blur-md">AICTE Partnered</span>
+                        <span className="bg-white/10 border border-white/20 text-white px-4 py-1.5 rounded-full text-xs font-semibold backdrop-blur-md">CBSE Aligned</span>
                     </div>
 
                     <div className="edu-split grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
@@ -354,7 +402,9 @@ const Enterprise = () => {
                             <div className="video-wrapper">
                                 <video
                                     src={NeuraEdubotVideo}
+                                aria-label="NeuraEduBOT preview"
                                     controls
+                                    preload="metadata"
                                     muted
                                     className="media-content"
                                     style={{ border: '1px solid #ffffff63', borderRadius: '11px' }}
@@ -367,15 +417,15 @@ const Enterprise = () => {
             </section>
 
             {/* 4. NeuraBOT */}
-            <section id="neurabot" className="neurabot-section reveal-fade-up py-24 bg-[#05060a]" style={{ margin: 'clamp(48px, 9vw, 90px) 0' }} ref={addToRefs}>
+            <section id="neurabot" className="neurabot-section reveal-fade-up py-16 bg-[#05060a]" ref={addToRefs}>
                 <div className="max-w-7xl mx-auto px-6">
-                    <div className="bot-header text-center mb-16">
+                    <div className="bot-header text-center mb-10">
                         <p className="tagline text-purple-400 font-bold uppercase tracking-widest text-xs mb-4">From FAQ to full intelligence. One platform.</p>
                         <h2 className="text-4xl font-extrabold text-white mb-6">NeuraBOT <span className="text-gray-500 font-normal"> Conversational AI</span></h2>
                         <p className="desc text-gray-400 max-w-3xl mx-auto text-lg">A full-spectrum conversational AI platform spanning simple FAQ bots to fully LLM-powered agents built for citizen services, customer support, and HR operations.</p>
                     </div>
 
-                    <div className="bot-split grid grid-cols-1 lg:grid-cols-5 gap-12 bg-[#0b0f19] rounded-3xl p-8 shadow-2xl" style={{ padding: '30px 30px' }}>
+                    <div className="bot-split grid grid-cols-1 lg:grid-cols-5 gap-12 bg-[#0b0f19] rounded-3xl p-6 md:p-8 shadow-2xl">
                         <div className="bot-spectrum lg:col-span-3 flex flex-col md:flex-row gap-8">
                             <div className="tabs flex flex-col w-full md:w-1/2 gap-2" role="tablist" aria-label="NeuraBOT bot types">
                                 {botTabs.map((tab, i) => (
@@ -411,9 +461,9 @@ const Enterprise = () => {
                                 <span className="text-purple-400 text-[11px] font-bold uppercase tracking-widest">
                                     {botTabs[activeBotTab].label}
                                 </span>
-                                <h4 className="text-white font-bold text-lg mt-1 mb-2">
+                                <h3 className="text-white font-bold text-lg mt-1 mb-2">
                                     {botTabs[activeBotTab].name}
-                                </h4>
+                                </h3>
                                 <p className="text-gray-400 text-sm leading-relaxed mb-4">
                                     {botTabs[activeBotTab].desc}
                                 </p>
@@ -421,9 +471,9 @@ const Enterprise = () => {
                                     {botTabs[activeBotTab].deployment}
                                 </div>
 
-                                <h5 className="text-white font-bold text-sm mb-3 flex items-center gap-2">
+                                <h4 className="text-white font-bold text-sm mb-3 flex items-center gap-2">
                                     <Briefcase size={16} className="text-purple-400" /> Use Cases
-                                </h5>
+                                </h4>
 
                                 <ul className="space-y-3">
                                     {botTabs[activeBotTab].uses.map((use) => (
@@ -438,6 +488,7 @@ const Enterprise = () => {
                                     <video
                                         key={activeBotTab}
                                         src={botTabs[activeBotTab].video}
+                                        aria-label={`${botTabs[activeBotTab].name} preview`}
                                         controls
                                         muted
                                         playsInline
@@ -484,20 +535,20 @@ const Enterprise = () => {
             </section>
 
             {/* 5. Physical AI */}
-            <section id="physical-ai" className="physical-ai-section reveal-fade-up relative py-32 bg-[#05080f] overflow-hidden" ref={addToRefs} style={{ marginTop: 'clamp(48px, 9vw, 90px)', marginBottom: 'clamp(48px, 9vw, 90px)' }}>
+            <section id="physical-ai" className="physical-ai-section reveal-fade-up relative py-16 bg-[#05080f] overflow-hidden" ref={addToRefs}>
                 <div className="absolute inset-0 z-0">
                     <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-cyan-900/20 rounded-full blur-[120px] pointer-events-none"></div>
                     <div className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-emerald-900/10 rounded-full blur-[100px] pointer-events-none"></div>
                 </div>
 
-                <div className="max-w-7xl mx-auto px-6 py-5 relative z-10 w-full">
+                <div className="max-w-7xl mx-auto px-6 relative z-10 w-full">
                     {/* Modern Banner/Header Split */}
-                    <div className="flex flex-col lg:flex-row gap-12 items-center mb-20 bg-gradient-to-br from-[#0c1220] to-[#070b14] rounded-3xl p-8 md:p-12 shadow-2xl relative overflow-hidden group" style={{ border: '1px solid #e8dada24 !important', padding: '25px' }}>
+                    <div className="flex flex-col lg:flex-row gap-12 items-center mb-12 bg-gradient-to-br from-[#0c1220] to-[#070b14] rounded-3xl p-6 md:p-10 shadow-2xl relative overflow-hidden group" style={{ border: '1px solid var(--color-border)' }}>
                         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZD0iTTQwIDB2NDBoLTRWMHoiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wMikiLz48cGF0aCBkPSJNMCA0MGg0MHYtNEgwaHoiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wMikiLz48L3N2Zz4=')] opacity-30 group-hover:opacity-50 transition-opacity duration-700 pointer-events-none"></div>
                         <div className="absolute -right-64 -top-64 w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[80px] group-hover:bg-cyan-500/20 transition-colors duration-700 pointer-events-none"></div>
 
                         <div className="flex-1 relative z-10">
-                            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-xs font-bold tracking-widest uppercase mb-6" style={{ padding: '10px', color: '#fff' }}>
+                            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 text-xs font-bold tracking-widest uppercase mb-6" style={{ color: '#fff' }}>
                                 <Activity size={14} className="animate-pulse" /> Intelligence in Motion
                             </div>
                             <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-6 leading-tight" style={{ paddingTop: '30px' }}>
@@ -523,7 +574,9 @@ const Enterprise = () => {
                                     <div className="video-wrapper">
                                         <video
                                             src={PhysicalAIVideo}
+                                aria-label="Physical AI preview"
                                             controls
+                                            preload="metadata"
                                             muted
                                             className="media-content rounded-xl shadow-2xl"
                                             style={{ border: '1px solid #ffffff63', borderRadius: '11px' }}
@@ -539,16 +592,16 @@ const Enterprise = () => {
                     {/* Capability Cards Grid */}
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8" style={{ marginTop: '40px' }}>
                         {physicalAICaps.map((col, i) => (
-                            <div key={i} className="bg-[#0c1220] rounded-2xl p-8 relative overflow-hidden group hover:-translate-y-2 transition-transform duration-300 shadow-xl hover:shadow-[0_20px_40px_rgba(0,210,255,0.1)]" style={{ padding: '20px', border: '1px solid rgb(255 255 255 / 28%) !important' }}>
+                            <div key={i} className="bg-[#0c1220] rounded-2xl p-6 relative overflow-hidden group hover:-translate-y-2 transition-transform duration-300 shadow-xl hover:shadow-[0_20px_40px_rgba(0,210,255,0.1)]" style={{ border: '1px solid var(--color-border-strong)' }}>
                                 <div className={`absolute top-0 right-0 w-32 h-32 blur-[50px] rounded-full pointer-events-none transition-opacity duration-500 opacity-20 group-hover:opacity-50 ${i === 0 ? 'bg-cyan-500' : i === 1 ? 'bg-emerald-500' : 'bg-blue-500'}`}></div>
 
                                 <div className={`w-14 h-14 rounded-xl flex items-center justify-center mb-6 border border-white/10 backdrop-blur-md shadow-inner relative z-10 ${i === 0 ? 'bg-cyan-500/10 text-cyan-400' : i === 1 ? 'bg-emerald-500/10 text-emerald-400' : 'bg-blue-500/10 text-blue-400'}`}>
                                     {i === 0 ? <Drone size={28} /> : i === 1 ? <Box size={28} /> : <Activity size={28} />}
                                 </div>
 
-                                <h4 className="text-xl font-bold text-white mb-6 relative z-10 transition-colors" style={{ paddingTop: '10px', paddingBottom: '10px' }}>
+                                <h3 className="text-xl font-bold text-white mb-6 relative z-10 transition-colors" style={{ paddingTop: '10px', paddingBottom: '10px' }}>
                                     {col.title}
-                                </h4>
+                                </h3>
 
                                 <ul className="space-y-4 relative z-10">
                                     {col.points.map((pt, idx) => (
@@ -567,7 +620,7 @@ const Enterprise = () => {
             </section>
 
             {/* 6. Agentic AI */}
-            <section id="agentic-ai" className="agentic-section reveal-fade-up py-32 bg-[#020408] relative overflow-hidden" style={{ margin: 'clamp(48px, 9vw, 90px) auto' }} ref={addToRefs}>
+            <section id="agentic-ai" className="agentic-section reveal-fade-up py-16 bg-[#020408] relative overflow-hidden" ref={addToRefs}>
                 <div className="absolute top-0 right-[20%] w-[600px] h-[600px] bg-purple-900/20 rounded-full blur-[120px] pointer-events-none"></div>
                 <div className="absolute bottom-0 left-[10%] w-[500px] h-[500px] bg-indigo-900/20 rounded-full blur-[100px] pointer-events-none"></div>
 
@@ -579,46 +632,48 @@ const Enterprise = () => {
                             <p className="desc text-gray-400 text-lg mb-10 leading-relaxed">Agentic AI systems go beyond conversation and dashboards - they reason across multiple steps, integrate with enterprise systems, and autonomously execute complex workflows end-to-end.</p>
 
                             <div className="space-y-6">
-                                <div className="flex gap-4 p-4 rounded-xl bg-white/5  hover:bg-white/10 transition-colors" style={{ margin: '20px auto', border: '1px solid rgba(255, 255, 255, 0.06) !important' }}>
+                                <div className="flex gap-4 p-4 rounded-xl bg-white/5  hover:bg-white/10 transition-colors" style={{ margin: '20px auto', border: '1px solid var(--color-border)' }}>
                                     <div className="w-12 h-12 rounded-lg bg-pink-500/10 flex items-center justify-center shrink-0"><Server size={24} className="text-pink-400" /></div>
                                     <div>
-                                        <h4 className="text-white font-bold mb-1">Multi-Step Reasoning</h4>
+                                        <h3 className="text-white font-bold mb-1">Multi-Step Reasoning</h3>
                                         <p className="text-sm text-gray-400">Agentic AI breaks down complex tasks into sequential reasoning steps.</p>
                                     </div>
                                 </div>
-                                <div className="flex gap-4 p-4 rounded-xl bg-white/5  hover:bg-white/10 transition-colors" style={{ margin: '20px auto', border: '1px solid rgba(255, 255, 255, 0.06) !important' }}>
+                                <div className="flex gap-4 p-4 rounded-xl bg-white/5  hover:bg-white/10 transition-colors" style={{ margin: '20px auto', border: '1px solid var(--color-border)' }}>
                                     <div className="w-12 h-12 rounded-lg bg-indigo-500/10 flex items-center justify-center shrink-0"><Database size={24} className="text-indigo-400" /></div>
                                     <div>
-                                        <h4 className="text-white font-bold mb-1">System Integrations</h4>
+                                        <h3 className="text-white font-bold mb-1">System Integrations</h3>
                                         <p className="text-sm text-gray-400">Connects with ERPs, CRMs, government portals, and data warehouses.</p>
                                     </div>
                                 </div>
-                                <div className="flex gap-4 p-4 rounded-xl bg-white/5   hover:bg-white/10 transition-colors" style={{ margin: '20px auto', border: '1px solid rgba(255, 255, 255, 0.06) !important' }}>
+                                <div className="flex gap-4 p-4 rounded-xl bg-white/5   hover:bg-white/10 transition-colors" style={{ margin: '20px auto', border: '1px solid var(--color-border)' }}>
                                     <div className="w-12 h-12 rounded-lg bg-purple-500/10 flex items-center justify-center shrink-0"><Zap size={24} className="text-purple-400" /></div>
                                     <div>
-                                        <h4 className="text-white font-bold mb-1">Workflow Orchestration</h4>
+                                        <h3 className="text-white font-bold mb-1">Workflow Orchestration</h3>
                                         <p className="text-sm text-gray-400">From RFP analysis to bill reconciliation without human intervention.</p>
                                     </div>
                                 </div>
                             </div>
 
-                            <Link to="/Contact#contact-us" className="inline-block mt-10 px-8 py-3 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white rounded-full font-bold shadow-[0_0_20px_rgba(236,72,153,0.3)] transition-all hover:scale-105" style={{ padding: '20px', borderRadius: '20px' }}>
+                            <Link to="/Contact#contact-us" className="inline-block mt-10 px-8 py-3 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white rounded-full font-bold shadow-[0_0_20px_rgba(236,72,153,0.3)] transition-all hover:scale-105">
                                 Explore Agentic AI
                             </Link>
                         </div>
 
                         {/* <div className="agentic-media relative">
                             <div className="absolute inset-0 bg-gradient-to-t from-[#020408] to-transparent z-10 h-32 bottom-0 top-auto"></div>
-                            <img src="/assets/images/agentic_workflow.png" alt="Agentic Workflow Diagram" className="rounded-2xl shadow-2xl relative z-0 border border-white/10 w-full" style={{ filter: 'drop-shadow(0 0 30px rgba(168, 85, 247, 0.2))', border: '1px solid #5e6062a8 !important' }} />
+                            <img src="/assets/images/agentic_workflow.png" alt="Agentic Workflow Diagram" className="rounded-2xl shadow-2xl relative z-0 border border-white/10 w-full" style={{ filter: 'drop-shadow(0 0 30px rgba(168, 85, 247, 0.2))' }} />
                         </div> */}
                         <div className="edge-media">
                             <div className="video-wrapper">
                                 <video
                                     src={AgenticAIVideo}
+                                aria-label="Agentic AI preview"
                                     controls
+                                    preload="metadata"
                                     muted
                                     className="media-content rounded-xl shadow-2xl"
-                                    style={{ border: '1px solid #ffffff63 !important', borderRadius: '11px !important' }}
+                                    style={{ border: '1px solid var(--color-border-strong)', borderRadius: '11px' }}
                                 />
 
 
@@ -628,95 +683,11 @@ const Enterprise = () => {
                 </div>
             </section>
 
-            <style>{`
-            .video-wrapper{
-                position:relative;
-                width:100%;
-                aspect-ratio:16/9;
-                overflow:hidden;
-                border-radius:16px;
-                border: 1px solid;
-                }
-
-                .media-content{
-                position:absolute;
-                top:0;
-                left:0;
-                width:100%;
-                height:100%;
-                object-fit:cover;
-                }
-
-                .play-btn{
-                position:absolute;
-                top:50%;
-                left:50%;
-                transform:translate(-50%,-50%);
-                width:70px;
-                height:70px;
-                border-radius:50%;
-                background:rgba(0,210,255,0.15);
-                border:2px solid rgba(0,210,255,0.4);
-                color:#00d2ff;
-                font-size:24px;
-                cursor:pointer;
-                }
-
-                .close-btn{
-                position:absolute;
-                top:10px;
-                right:10px;
-                width:36px;
-                height:36px;
-                border-radius:50%;
-                background:rgba(0,0,0,0.7);
-                color:#fff;
-                cursor:pointer;
-                }
-                .video-wrapper{
-                position:relative;
-                width:100%;
-                aspect-ratio:16/9;
-                overflow:hidden;
-                border-radius:16px;
-                }
-
-                .media-content{
-                position:absolute;
-                width:100%;
-                height:100%;
-                top:0;
-                left:0;
-                object-fit:cover;
-                }
-
-                .play-btn{
-                position:absolute;
-                top:50%;
-                left:50%;
-                transform:translate(-50%,-50%);
-                width:70px;
-                height:70px;
-                border-radius:50%;
-                background:rgba(0,210,255,0.2);
-                border:2px solid rgba(0,210,255,0.4);
-                color:#00d2ff;
-                font-size:26px;
-                cursor:pointer;
-                }
-
-                .close-btn{
-                position:absolute;
-                top:10px;
-                right:10px;
-                width:36px;
-                height:36px;
-                border-radius:50%;
-                background:rgba(0,0,0,0.7);
-                color:#fff;
-                cursor:pointer;
-                }
-                `}</style>
+            {/* The .video-wrapper / .media-content / .play-btn / .close-btn rules
+                that used to live here as a route-scoped <style> block (declared
+                twice over, verbatim) now live in index.css. Education.jsx uses the
+                same class names on five videos and was relying on this block being
+                mounted — which it never was on that route. */}
         </div>
     );
 };

@@ -7,7 +7,8 @@ import {
     Bot, Car, GitMerge, LayoutGrid, MonitorPlay, BookMarked, Eye
 } from 'lucide-react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Pagination, Autoplay } from 'swiper/modules';
+import { Pagination, Autoplay, A11y } from 'swiper/modules';
+import usePrefersReducedMotion from '../hooks/usePrefersReducedMotion';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import '../styles/education.css';
@@ -29,17 +30,61 @@ const useReveal = () => {
     };
 
     useEffect(() => {
+        const pending = new Set(revealRefs.current);
+
+        const reveal = (el) => {
+            el.classList.add('revealed');
+            observer.unobserve(el);
+            pending.delete(el);
+        };
+
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('revealed');
-                    observer.unobserve(entry.target);
-                }
+                if (entry.isIntersecting) reveal(entry.target);
             });
-        }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
+        }, {
+            /* threshold 0 + margin, not threshold 0.1: requiring 10% of a
+               section visible at once means a section taller than ~10 viewports
+               can NEVER reveal on a short screen. Edge-triggered reveal works
+               at any section height. */
+            threshold: 0,
+            rootMargin: "0px 0px -10% 0px",
+        });
+        pending.forEach(el => observer.observe(el));
 
-        revealRefs.current.forEach(ref => observer.observe(ref));
-        return () => observer.disconnect();
+        /* IntersectionObserver misses elements that pass entirely through the
+           viewport within one frame — fast flick-scrolls, the End key, and
+           full-page screenshot tools all do this. The enter and exit coalesce
+           into no notification and the section stays hidden forever. This
+           rAF-throttled scroll check reveals anything the observer skipped. */
+        let raf = null;
+        const onScroll = () => {
+            if (raf !== null) return;
+            raf = requestAnimationFrame(() => {
+                raf = null;
+                const limit = window.innerHeight;
+                pending.forEach(el => {
+                    if (el.getBoundingClientRect().top < limit) reveal(el);
+                });
+            });
+        };
+        window.addEventListener('scroll', onScroll, { passive: true });
+
+        /* Failsafe: nothing may stay hidden forever. Lenis owns the scroll
+           loop and overrides programmatic native jumps, which starves
+           IntersectionObserver under scroll-and-stitch capture tools, print,
+           and some assistive tech. Normal browsing reveals on approach long
+           before this fires; this guarantees content for everything else. */
+        const failsafe = setTimeout(() => {
+            pending.forEach(el => reveal(el));
+        }, 4000);
+
+        return () => {
+            observer.disconnect();
+            window.removeEventListener('scroll', onScroll);
+            if (raf !== null) cancelAnimationFrame(raf);
+            clearTimeout(failsafe);
+        };
     }, []);
 
     return addToRefs;
@@ -161,6 +206,19 @@ const AnimatedCounter = ({ endValue, suffix }) => {
 
 const Education = () => {
     const addToRefs = useReveal();
+    const reduceMotion = usePrefersReducedMotion();
+
+    /* "Watch Product Demo" / "Watch Lab Tour" were <Link to> the id of the
+       section they already sat inside — clicking scrolled to where the user
+       already was and nothing played. They now drive the section's own video. */
+    const playVideo = (id) => {
+        const video = document.querySelector(`#${id} video`);
+        if (!video) return;
+        video.scrollIntoView({ behavior: "smooth", block: "center" });
+        // muted playback is always allowed by autoplay policies; the controls
+        // are visible for sound.
+        video.play?.().catch(() => { /* user can press play manually */ });
+    };
 
     useEffect(() => {
         const handlePlay = (e) => {
@@ -203,9 +261,9 @@ const Education = () => {
                 <div className="stats-row">
                     {stats.map((s, i) => (
                         <div key={i} className="stat-block">
-                            <h3 className="gradient-text-teal">
+                            <h2 className="gradient-text-teal">
                                 <AnimatedCounter endValue={s.value} suffix={s.suffix} />
-                            </h3>
+                            </h2>
                             <p>{s.label}</p>
                         </div>
                     ))}
@@ -239,11 +297,13 @@ const Education = () => {
                         Super AIP's K-12 AI Learning Platform introduces students to Artificial Intelligence through hands-on learning,
                         coding, simulations, and real-world problem-solving.
                     </p>
-                    <div className="edge-media" style={{ margin: 'clamp(40px, 9vw, 90px) 0', borderRadius: '43px' }}>
+                    <div style={{ margin: 'clamp(24px, 4vw, 40px) 0', borderRadius: '43px' }}>
                         <div className="video-wrapper" style={{ borderRadius: '43px' }}>
                             <video
                                 src={K12LearningPlatformVideo}
+                                aria-label="K-12 Learning Platform preview"
                                 controls
+                                preload="metadata"
                                 muted
                                 className="media-content"
                                 style={{
@@ -267,7 +327,7 @@ const Education = () => {
                     {k12Capabilities.map((cap, i) => (
                         <div key={i} className="glass-card" style={{ padding: '2rem' }}>
                             <cap.icon size={36} color={cap.iconColor || "#00d2ff"} style={{ marginBottom: '1rem' }} />
-                            <h4 style={{ fontSize: '1.3rem', marginBottom: '0.8rem' }}>{cap.title}</h4>
+                            <h3 style={{ fontSize: '1.3rem', marginBottom: '0.8rem' }}>{cap.title}</h3>
                             <p style={{ color: '#94a3b8', lineHeight: 1.6 }}>{cap.desc}</p>
                         </div>
                     ))}
@@ -278,9 +338,9 @@ const Education = () => {
                 </div>
 
                 <div className="section-cta" style={{ marginTop: '3rem' }}>
-                    <Link to="/Education#k12" className="btn-primary" style={{ background: 'linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%)', color: '#fff' }}>
+                    <button type="button" onClick={() => playVideo("k12")} className="btn-primary" style={{ background: 'linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%)', color: '#fff' }}>
                         <PlayCircle size={18} /> Watch Product Demo
-                    </Link>
+                    </button>
                     <Link to="/Contact#request-demo" className="btn-outline">Request a School Demo</Link>
                 </div>
             </section>
@@ -293,11 +353,13 @@ const Education = () => {
                         <p className="section-tagline gradient-text-teal" style={{ margin: 0 }}>Bridging the gap</p>
                         <h2 style={{ fontSize: '1.72rem', margin: '0.5rem 0 1rem' }}>Higher Education AI Skill Development</h2>
                         <p style={{ color: '#94a3b8' }}>Modules purpose-built for colleges and universities — delivering industry-integrated AI skills for BCA, B.Sc, B.Tech, BBA, and MBA programs.</p>
-                        <div className="edge-media" style={{ margin: '10px 0px', borderRadius: '43px' }}>
+                        <div style={{ margin: '10px 0px', borderRadius: '43px' }}>
                             <div className="video-wrapper" style={{ borderRadius: '43px' }}>
                                 <video
                                     src={HigherEducationVideo}
+                                aria-label="Higher Education AI preview"
                                     controls
+                                    preload="metadata"
                                     muted
                                     className="media-content"
                                     style={{
@@ -312,7 +374,7 @@ const Education = () => {
                                 <div key={idx} className="split-feature">
                                     <feat.icon size={24} color={feat.iconColor || "#3a7bd5"} className={feat.iconColor ? "" : "icon-blue"} />
                                     <div>
-                                        <h5>{feat.title}</h5>
+                                        <h3>{feat.title}</h3>
                                         <p>{feat.desc}</p>
                                     </div>
                                 </div>
@@ -330,11 +392,13 @@ const Education = () => {
                         <p className="section-tagline gradient-text-gold" style={{ margin: 0 }}>Empowering educators</p>
                         <h2 style={{ fontSize: '1.72rem', margin: '0.5rem 0 1rem' }}>AI Teacher Training</h2>
                         <p style={{ color: '#94a3b8' }}>Super AIP equips teachers with the skills, tools, and confidence to integrate AI meaningfully into their teaching practice.</p>
-                        <div className="edge-media" style={{ margin: '10px 0px', borderRadius: '43px' }}>
+                        <div style={{ margin: '10px 0px', borderRadius: '43px' }}>
                             <div className="video-wrapper" style={{ borderRadius: '43px' }}>
                                 <video
                                     src={AITeacherTrainingVideo}
+                                aria-label="AI Teacher Training preview"
                                     controls
+                                    preload="metadata"
                                     muted
                                     className="media-content"
                                     style={{ borderRadius: '43px' }}
@@ -346,7 +410,7 @@ const Education = () => {
                                 <div key={idx} className="split-feature">
                                     <feat.icon size={24} color={feat.iconColor || "#f6d365"} className={feat.iconColor ? "" : "icon-gold"} />
                                     <div>
-                                        <h5>{feat.title}</h5>
+                                        <h3>{feat.title}</h3>
                                         <p>{feat.desc}</p>
                                     </div>
                                 </div>
@@ -373,11 +437,13 @@ const Education = () => {
                     alt="Super AI Educational Lab"
                     className="labs-hero-image"
                 /> */}
-                <div className="edge-media" style={{ margin: 'clamp(40px, 9vw, 90px) 0', borderRadius: '43px' }}>
+                <div style={{ margin: 'clamp(24px, 4vw, 40px) 0', borderRadius: '43px' }}>
                     <div className="video-wrapper" style={{ borderRadius: '43px' }}>
                         <video
                             src={EndToEndLabsVideo}
+                                aria-label="End-to-end AI Labs preview"
                             controls
+                            preload="metadata"
                             muted
                             className="media-content"
                             style={{ borderRadius: '43px' }}
@@ -389,16 +455,16 @@ const Education = () => {
                     {equipmentList.map((eq, idx) => (
                         <div key={idx} className="equipment-card glass-card">
                             <eq.icon size={40} color={eq.iconColor || "#00d2ff"} />
-                            <h4>{eq.title}</h4>
+                            <h3>{eq.title}</h3>
                             <p>{eq.desc}</p>
                         </div>
                     ))}
                 </div>
 
                 <div className="section-cta">
-                    <Link to="/Education#ai-labs" className="btn-primary" style={{ background: 'linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%)', color: '#fff' }}>
+                    <button type="button" onClick={() => playVideo("ai-labs")} className="btn-primary" style={{ background: 'linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%)', color: '#fff' }}>
                         <PlayCircle size={18} /> Watch Lab Tour
-                    </Link>
+                    </button>
                     <Link to="/Contact#contact-us" className="btn-outline">Request Lab Setup</Link>
                 </div>
             </section>
@@ -408,14 +474,16 @@ const Education = () => {
                 <div style={{ textAlign: 'center' }}>
                     <p className="section-tagline" style={{ color: '#f6d365' }}>Every concept. Every class.</p>
                     <h2 style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>AI & Robotics Books (Class 1–12)</h2>
-                    <p className="section-intro" style={{ margin: 'clamp(40px, 9vw, 90px) auto' }}>
+                    <p className="section-intro" style={{ margin: 'clamp(24px, 4vw, 40px) auto' }}>
                         Super AI Polaris publishes a complete series of AI & Robotics textbooks aligned with CBSE, ICSE, and NEP 2020.
                     </p>
-                    <div className="edge-media" style={{ margin: '10px 0px', borderRadius: '43px' }}>
+                    <div style={{ margin: '10px 0px', borderRadius: '43px' }}>
                         <div className="video-wrapper" style={{ borderRadius: '43px' }}>
                             <video
                                 src={AIRoboticsBooksVideo}
+                                aria-label="AI & Robotics Books preview"
                                 controls
+                                preload="metadata"
                                 muted
                                 className="media-content"
                                 style={{ borderRadius: '43px' }}
@@ -426,11 +494,11 @@ const Education = () => {
 
                 <div className="bookshelf-swiper-container" style={{ padding: '2rem 0 4rem', marginTop: '2rem' }}>
                     <Swiper
-                        modules={[Pagination, Autoplay]}
+                        modules={[Pagination, Autoplay, A11y]}
                         spaceBetween={30}
                         slidesPerView={1}
                         pagination={{ clickable: true }}
-                        autoplay={{ delay: 3500, disableOnInteraction: false }}
+                        autoplay={reduceMotion ? false : { delay: 3500, disableOnInteraction: false }}
                         breakpoints={{
                             1024: { slidesPerView: 2, spaceBetween: 40 }
                         }}
@@ -441,14 +509,14 @@ const Education = () => {
                             <SwiperSlide key={idx}>
                                 <div className="book-card" style={{ height: '100%' }}>
                                     <div className="book-cover">
-                                        <img src={book.image} alt={book.title} />
+                                        <img src={book.image} alt="" />
                                     </div>
                                     <div className="book-info">
                                         <h3>{book.title}</h3>
                                         <div className="boards">Board: CBSE · ICSE · NEP 2020 Aligned</div>
                                         <p>{book.desc}</p>
                                         <div className="book-topics">
-                                            <h5>What Students Learn:</h5>
+                                            <h4>What Students Learn:</h4>
                                             <ul>
                                                 {book.topics.map((t, i) => <li key={i}>{t}</li>)}
                                             </ul>
@@ -468,7 +536,7 @@ const Education = () => {
                     {gradeTimeline.map((step, idx) => (
                         <div key={idx} className="timeline-step">
                             <div className="step-dot">{idx + 1}</div>
-                            <h5>{step.range} - {step.title}</h5>
+                            <h3>{step.range} - {step.title}</h3>
                             <p>{step.desc}</p>
                         </div>
                     ))}

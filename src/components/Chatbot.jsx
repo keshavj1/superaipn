@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { Send, User, Loader2, X, Sparkles } from 'lucide-react';
 import superAipLogo from '../assets/super_aip_logo.png';
 
@@ -17,6 +18,29 @@ const REQUEST_TIMEOUT_MS = 20_000;
 
 const SUGGESTIONS = ['What is Super AIP?', 'What do you do?', 'Explore products'];
 
+/* Locally answered prompts — no backend round-trip. The product roster is
+   static site content; answering it instantly (and even with the backend
+   down) beats a 5-second RAG query that returns the same list. */
+const LOCAL_REPLIES = {
+  'explore products': {
+    text: [
+      'Here are our AI products:',
+      '',
+      '• NeuraEdge — Sovereign LLM platform for enterprise & government',
+      '• NeuraEaglei — Vision intelligence & analytics',
+      '• NeuraBOT — Conversational AI for citizen & customer service',
+      '• NeuraEduBOT — Cognitive education AI: adaptive learning, teacher-first design, curriculum alignment',
+      '• Physical AI — AI + robotics integration, sensor & IoT fusion, and NeuraSphere robotics',
+      '• NeuraLabs (AI Labs) — Turn-key AI & robotics labs with 500+ experiments for schools, universities & corporate training',
+      '',
+      'Serving education, government, smart infrastructure, healthcare, and logistics.',
+      '',
+      'For details, write to info@superaip.com.',
+    ].join('\n'),
+    link: { to: '/Products', label: 'Open the Products page →' },
+  },
+};
+
 const Chatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState('');
@@ -30,23 +54,63 @@ const Chatbot = () => {
   ]);
 
   const messagesEndRef = useRef(null);
+  const chatScrollRef = useRef(null);
   const inputRef = useRef(null);
+  const panelRef = useRef(null);
+  const fabRef = useRef(null);
+  // Tracks whether the panel was open, so focus is only pulled back to the
+  // launcher on an actual close — never on first mount.
+  const wasOpenRef = useRef(false);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    // Scroll the messages pane only — scrollIntoView walks every scrollable
+    // ancestor, so it also dragged the page behind the widget.
+    const el = chatScrollRef.current;
+    if (el) el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' });
   };
 
   useEffect(() => {
     if (isOpen) scrollToBottom();
   }, [messages, isLoading, isOpen]);
 
-  // Focus the input as soon as the panel opens.
+  // Focus the input when the panel opens; return focus to the launcher when it
+  // closes, so a keyboard user is never dropped at the top of the page.
   useEffect(() => {
     if (isOpen) {
+      wasOpenRef.current = true;
       const t = setTimeout(() => inputRef.current?.focus(), 350);
       return () => clearTimeout(t);
     }
+    if (wasOpenRef.current) {
+      wasOpenRef.current = false;
+      fabRef.current?.focus();
+    }
   }, [isOpen]);
+
+  /* Modal-dialog keyboard contract: Escape closes, and Tab is trapped inside
+     the panel so focus can't wander onto the page behind it while it's open. */
+  const handlePanelKeyDown = (e) => {
+    if (e.key === 'Escape') {
+      setIsOpen(false);
+      return;
+    }
+    if (e.key !== 'Tab' || !panelRef.current) return;
+    const focusable = Array.from(
+      panelRef.current.querySelectorAll(
+        'button, [href], input, textarea, select, [tabindex]:not([tabindex="-1"])'
+      )
+    ).filter((el) => !el.disabled && el.offsetParent !== null);
+    if (focusable.length === 0) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
+    }
+  };
 
   /* Lets anything on the page open the assistant without prop-drilling
      through the route tree — e.g. Contact's "Start a Chat" button:
@@ -64,6 +128,22 @@ const Chatbot = () => {
 
     setMessages((prev) => [...prev, { text: userMessage, sender: 'user', time: currentTime }]);
     setInput('');
+
+    /* Canned answers resolve instantly and never touch the backend. */
+    const local = LOCAL_REPLIES[userMessage.toLowerCase()];
+    if (local) {
+      setMessages((prev) => [
+        ...prev,
+        {
+          text: local.text,
+          link: local.link,
+          sender: 'bot',
+          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        },
+      ]);
+      return;
+    }
+
     setIsLoading(true);
 
     const stamp = () =>
@@ -106,8 +186,11 @@ const Chatbot = () => {
       const data = await response.json();
       reply(data.text || "Sorry, I couldn't process that.");
     } catch (error) {
-      // User-facing copy stays non-technical; details go to the console.
-      console.error('Error fetching from chatbot backend:', error);
+      // User-facing copy stays non-technical; details go to the console in
+      // development only — production builds shouldn't log to end users.
+      if (import.meta.env.DEV) {
+        console.error('Error fetching from chatbot backend:', error);
+      }
       reply(
         error.name === 'AbortError'
           ? 'That took too long to answer. Please try again.'
@@ -123,9 +206,19 @@ const Chatbot = () => {
     /* chatbot-root is the hook theme-light.css uses. This widget renders
        outside <main>, so the site-wide "main .text-white" light-mode rule
        never reached it — its text stayed white while its panel turned white. */
-    <div className="chatbot-root fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-[9999] flex flex-col items-end font-sans">
+    <div className="chatbot-root fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-[var(--z-overlay)] flex flex-col items-end font-sans">
       {/* ===== Chat Window ===== */}
       <div
+        ref={panelRef}
+        id="chatbot-panel"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Super AIP assistant"
+        /* inert removes the whole panel from the tab order AND the accessibility
+           tree while closed — pointer-events-none only blocked the mouse, so a
+           keyboard user was tabbing into invisible controls on every page. */
+        inert={!isOpen}
+        onKeyDown={handlePanelKeyDown}
         className={`mb-4 flex flex-col overflow-hidden rounded-3xl border border-white/10 bg-[#0b0c16]/95 backdrop-blur-xl shadow-[0_24px_60px_-15px_rgba(99,102,241,0.45)] transition-all duration-500 origin-bottom-right ${
           isOpen
             ? 'h-[600px] sm:h-[640px] w-[calc(100vw-2rem)] sm:w-[400px] max-h-[85vh] opacity-100 scale-100 translate-y-0'
@@ -167,8 +260,17 @@ const Chatbot = () => {
           </button>
         </div>
 
-        {/* Messages */}
-        <div className="chat-scroll flex-1 space-y-4 overflow-y-auto bg-[#070810] px-4 py-5">
+        {/* Messages — role="log" + aria-live so a screen reader announces each
+            new bot reply as it arrives. */}
+        <div
+          ref={chatScrollRef}
+          data-lenis-prevent
+          className="chat-scroll flex-1 space-y-4 overflow-y-auto overscroll-contain bg-[#070810] px-4 py-5"
+          role="log"
+          aria-live="polite"
+          aria-relevant="additions"
+          aria-label="Conversation"
+        >
           {messages.map((msg, index) => {
             const isUser = msg.sender === 'user';
             return (
@@ -203,6 +305,15 @@ const Chatbot = () => {
                       }`}
                     >
                       {msg.text}
+                      {msg.link && (
+                        <Link
+                          to={msg.link.to}
+                          onClick={() => setIsOpen(false)}
+                          className="mt-2.5 inline-flex items-center gap-1 rounded-lg border border-violet-500/40 bg-violet-500/15 px-3 py-1.5 text-[12px] font-semibold text-violet-200 transition-colors hover:bg-violet-500/30 hover:text-white"
+                        >
+                          {msg.link.label}
+                        </Link>
+                      )}
                     </div>
                     <span className="mt-1 px-1 text-[10px] font-medium text-slate-500">{msg.time}</span>
                   </div>
@@ -234,7 +345,7 @@ const Chatbot = () => {
         {/* Input area */}
         <div className="shrink-0 border-t border-white/10 bg-[#0b0c16] p-3.5">
           {/* Quick actions */}
-          <div className="mb-2.5 flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <div data-lenis-prevent className="mb-2.5 flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {SUGGESTIONS.map((q) => (
               <button
                 key={q}
@@ -252,6 +363,7 @@ const Chatbot = () => {
               ref={inputRef}
               type="text"
               placeholder="Ask me anything..."
+              aria-label="Type your message"
               className="min-w-0 flex-1 bg-transparent px-3 py-2 text-sm text-slate-100 outline-none placeholder:text-slate-500"
               value={input}
               onChange={(e) => setInput(e.target.value)}
@@ -284,9 +396,13 @@ const Chatbot = () => {
 
       {/* ===== Floating Action Button ===== */}
       <button
+        ref={fabRef}
         className="group relative flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 via-violet-500 to-purple-600 shadow-xl shadow-purple-500/30 transition-all duration-500 hover:-translate-y-1 hover:shadow-purple-500/50 active:scale-95"
         onClick={() => setIsOpen((v) => !v)}
         aria-label={isOpen ? 'Close chat' : 'Open chat'}
+        aria-haspopup="dialog"
+        aria-expanded={isOpen}
+        aria-controls="chatbot-panel"
       >
         {/* Glow */}
         <span className="absolute inset-0 -z-10 rounded-full bg-violet-500 opacity-50 blur-xl transition-opacity duration-500 group-hover:opacity-80" />

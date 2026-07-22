@@ -14,6 +14,7 @@
 .gradient-text {
     background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
     display: inline-block;
 }
@@ -21,16 +22,13 @@
 .gradient-text-purple {
     background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
     display: inline-block;
 }
 
+/* base moved to index.css (shared with Education) — colour stays local */
 .section-tagline {
-    font-size: 1.1rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    margin-bottom: 1rem;
     color: #ffffff;
 }
 
@@ -43,6 +41,7 @@
 
 .glass-card {
     background: rgba(16, 21, 35, 0.4);
+    -webkit-backdrop-filter: blur(12px);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border: 1px solid rgba(255, 255, 255, 0.05);
@@ -59,7 +58,7 @@
 /* ================= HERO SECTION ================= */
 .products-hero {
     position: relative;
-    padding: 180px 5% 100px;
+    padding: clamp(120px, 18vw, 160px) var(--gutter) var(--space-section);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -83,7 +82,7 @@
     align-items: center;
     justify-content: center;
     text-align: center;
-    padding: 160px 24px 100px;
+    padding: clamp(120px, 18vw, 160px) var(--gutter) var(--space-section);
     overflow: hidden;
     background: linear-gradient(180deg, #05060a 0%, #0a0920 50%, #05060a 100%);
     background-color: #050d12;
@@ -102,15 +101,15 @@
 }
 
 .products-hero h1 {
-    font-size: clamp(36px, 6vw, 58px) !important;
-    font-weight: 600 !important;
+    font-size: clamp(32px, 6vw, 58px);
+    font-weight: 600;
     line-height: 1.1;
     margin-bottom: 20px;
     letter-spacing: -0.02em;
 }
 
 .products-hero p {
-    font-size: 1.3rem;
+    font-size: clamp(1rem, 2.2vw, 1.3rem);
     color: #9cb3c9;
     margin-bottom: 3rem;
 }
@@ -120,7 +119,7 @@
     grid-template-columns: repeat(4, 1fr);
     gap: 1.5rem;
     width: 100%;
-    max-width: 1200px;
+    max-width: var(--container);
     position: relative;
     z-index: 2;
     margin-top: 2rem;
@@ -156,7 +155,7 @@
     box-shadow: 0 0 20px rgba(79, 172, 254, 0.4);
 }
 
-.category-card h3 {
+.category-card h2 {
     font-size: 1.25rem;
     font-weight: 600;
     margin-bottom: 0.5rem;
@@ -170,7 +169,7 @@
 
 /* ================= AI PLATFORMS SECTION ================= */
 .ai-platforms-section {
-    padding: 100px 5%;
+    padding: var(--space-section) var(--gutter);
     position: relative;
 }
 
@@ -180,7 +179,7 @@
 }
 
 .tabs-container {
-    max-width: 1200px;
+    max-width: var(--container);
     margin: 0 auto;
 }
 
@@ -216,10 +215,10 @@
 }
 
 .tab-content {
-    background: rgba(16, 21, 35, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: var(--surface-1);
+    border: 1px solid var(--color-border);
     border-radius: 24px;
-    padding: 4rem;
+    padding: clamp(1.5rem, 4vw, 4rem);
     display: none;
     animation: fadeIn 0.5s ease forwards;
 }
@@ -253,7 +252,7 @@
 }
 
 .platform-details h3 {
-    font-size: 2.5rem;
+    font-size: clamp(1.6rem, 3.5vw, 2.5rem);
     margin-bottom: 0.5rem;
 }
 
@@ -301,7 +300,7 @@
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 2rem;
-    max-width: 1200px;
+    max-width: var(--container);
     margin: 4rem auto 0;
 }
 
@@ -325,14 +324,14 @@
 
 /* ================= AUTOMATION SECTION ================= */
 .automation-section {
-    padding: 100px 5%;
+    padding: var(--space-section) var(--gutter);
     background: linear-gradient(180deg, #080b12 0%, #0d121c 100%);
     position: relative;
 }
 
 .workflow-image {
     width: 100%;
-    max-width: 1200px;
+    max-width: var(--container);
     height: auto;
     border-radius: 20px;
     margin: 0 auto 4rem;
@@ -345,7 +344,7 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 2rem;
-    max-width: 1200px;
+    max-width: var(--container);
     margin: 0 auto 4rem;
 }
 
@@ -354,7 +353,7 @@
     height: 100%;
 }
 
-.capability-card h4 {
+.capability-card h3 {
     font-size: 1.5rem;
     margin: 1.5rem 0 1rem;
     color: #fff;
@@ -366,12 +365,12 @@
 }
 
 .use-cases-block {
-    max-width: 1200px;
+    max-width: var(--container);
     margin: 0 auto;
-    background: rgba(16, 21, 35, 0.5);
+    background: var(--surface-1);
     border-radius: 24px;
-    padding: 4rem;
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: clamp(1.5rem, 4vw, 4rem);
+    border: 1px solid var(--color-border);
 }
 
 .use-cases-grid {
@@ -381,7 +380,7 @@
     margin-top: 2rem;
 }
 
-.use-case-col h5 {
+.use-case-col h4 {
     color: #4facfe;
     font-size: 1.1rem;
     margin-bottom: 1.5rem;
@@ -411,9 +410,8 @@
 
 /* ================= ROBOTICS SECTION ================= */
 .robotics-section {
-    padding: 120px 5%;
-    background-color: #030407;
-    /* Very dark */
+    padding: var(--space-section-lg) var(--gutter);
+    background-color: var(--surface-0);
     color: #fff;
     position: relative;
     overflow: hidden;
@@ -434,7 +432,7 @@
 .robotics-content {
     position: relative;
     z-index: 2;
-    max-width: 1200px;
+    max-width: var(--container);
     margin: 0 auto;
 }
 
@@ -460,7 +458,8 @@
 }
 
 .panel-visual {
-    height: 250px;
+    /* was 250px — a quarter-screen band holding a 40px icon */
+    height: 120px;
     background: #0a0e17;
     display: flex;
     justify-content: center;
@@ -487,10 +486,10 @@
 }
 
 .panel-body {
-    padding: 2.5rem 2rem;
+    padding: 1.75rem 2rem 2rem;
 }
 
-.panel-body h4 {
+.panel-body h3 {
     font-size: 1.4rem;
     margin-bottom: 1rem;
     color: #fbc2eb;
@@ -504,7 +503,7 @@
 
 /* ================= DEV TOOLS SECTION ================= */
 .dev-tools-section {
-    padding: 100px 5%;
+    padding: var(--space-section) var(--gutter);
     background: #0d121c;
 }
 
@@ -545,6 +544,11 @@
 }
 
 .terminal-body {
+    /* Code lines run to ~74 monospace chars. Without pre/overflow they wrapped
+       at arbitrary spaces and read as broken prose below ~700px. */
+    white-space: pre;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
     padding: 1.5rem;
     font-family: 'Fira Code', 'Courier New', monospace;
     color: #a78bfa;
@@ -558,7 +562,7 @@
 }
 
 .term-comment {
-    color: #6b7280;
+    color: var(--color-text-muted);
 }
 
 .term-keyword {
@@ -577,7 +581,7 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 2rem;
-    max-width: 1200px;
+    max-width: var(--container);
     margin: 4rem auto;
 }
 
@@ -591,7 +595,7 @@
     border-bottom: 1px solid rgba(255, 255, 255, 0.02);
 }
 
-.tool-card h4 {
+.tool-card h3 {
     color: #e0e7ff;
     margin-bottom: 1rem;
     font-size: 1.2rem;
@@ -609,7 +613,7 @@
     margin: 5rem auto 0;
 }
 
-.integrations-box h5 {
+.integrations-box h3 {
     color: #94a3b8;
     text-transform: uppercase;
     letter-spacing: 2px;
@@ -640,60 +644,24 @@
 }
 
 /* ================= CTA BLOCKS ================= */
-.section-cta {
-    display: flex;
-    justify-content: center;
-    gap: 1.5rem;
-    margin-top: 4rem;
-    text-align: center;
-}
+/* .section-cta moved to index.css — Education.jsx uses it three times
+   without importing this stylesheet, so its CTA rows rendered as unstyled
+   left-aligned blocks unless the visitor had loaded /Products first. */
 
-.btn-primary {
-    background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
-    color: #000;
-    font-weight: 600;
-    padding: 1rem 2.5rem;
-    border-radius: 30px;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    border: none;
-    cursor: pointer;
-    font-size: 1.05rem;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 20px rgba(0, 242, 254, 0.3);
-}
-
-.btn-outline {
-    background: transparent;
-    color: #fff;
-    font-weight: 600;
-    padding: 1rem 2.5rem;
-    border-radius: 30px;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    cursor: pointer;
-    font-size: 1.05rem;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.btn-outline:hover {
-    border-color: #fff;
-    background: rgba(255, 255, 255, 0.05);
-}
+/* .btn-primary / .btn-outline moved to index.css — Education.jsx uses both
+   nine times but does not import this stylesheet, so every one of those CTAs
+   rendered as bare 20px-tall text. Shared primitives belong in the global
+   sheet, not in a page stylesheet. */
 
 /* ================= RESPONSIVE ================= */
 @media (max-width: 1024px) {
     .product-categories {
         grid-template-columns: repeat(2, 1fr);
+    }
+
+    .use-cases-block,
+    .tab-content {
+        padding: 2rem;
     }
 
     .platform-details {
@@ -732,6 +700,12 @@
         font-size: 2.5rem;
     }
 
+    .highlights-grid,
+    .use-cases-grid,
+    .tools-grid {
+        grid-template-columns: 1fr;
+    }
+
     .product-categories {
         grid-template-columns: 1fr;
     }
@@ -748,9 +722,6 @@
         grid-template-columns: 1fr;
     }
 
-    .section-cta {
-        flex-direction: column;
-    }
 }
 
 /* .category-card is now a <button> for keyboard access — reset UA styling

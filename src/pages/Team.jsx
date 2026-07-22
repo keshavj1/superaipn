@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import { Sparkles } from "lucide-react";
 import PersonCard from "../components/PersonCard";
 import MeetTheBrains from "../components/MeetTheBrains";
@@ -119,7 +120,7 @@ export default function Team() {
           <p className="tp-cta-text">
             We hire for ownership and curiosity across engineering, research, and operations.
           </p>
-          <a href="/Careers" className="tp-cta-btn">View open roles</a>
+          <Link to="/Careers" className="tp-cta-btn">View open roles</Link>
         </div>
       </section>
     </div>

@@ -10,7 +10,7 @@
     align-items: center;
     justify-content: center;
     text-align: center;
-    padding: 160px 24px 100px;
+    padding: clamp(120px, 18vw, 160px) var(--gutter) var(--space-section);
     overflow: hidden;
     background: linear-gradient(180deg, #05060a 0%, #0a0920 50%, #05060a 100%);
     position: relative;
@@ -19,7 +19,7 @@
     align-items: center;
     justify-content: center;
     text-align: center;
-    padding: 160px 24px 100px;
+    padding: clamp(120px, 18vw, 160px) var(--gutter) var(--space-section);
     overflow: hidden;
     background: linear-gradient(180deg, #05060a 0%, #0a0920 50%, #05060a 100%);
     background-color: #050d12;
@@ -53,7 +53,7 @@
 .partners-hero-content {
     position: relative;
     z-index: 2;
-    max-width: 880px;
+    max-width: var(--container-narrow);
     margin: 0 auto;
 }
 
@@ -153,7 +153,7 @@
 /* ── Shared Section Styles ── */
 .partners-section {
     position: relative;
-    padding: 100px 24px;
+    padding: var(--space-section) var(--gutter);
     overflow: hidden;
 }
 
@@ -166,7 +166,7 @@
 }
 
 .partners-section-inner {
-    max-width: 1160px;
+    max-width: var(--container);
     margin: 0 auto;
     position: relative;
     z-index: 2;
@@ -260,7 +260,7 @@
     transform: scale(1.12);
 }
 
-.partners-track-card h4 {
+.partners-track-card h3 {
     font-size: 18px !important;
     font-weight: 700 !important;
     color: #fff;
@@ -275,6 +275,10 @@
 }
 
 .track-explore-link {
+    /* was ~21px tall */
+    display: inline-flex;
+    align-items: center;
+    min-height: 40px;
     /* margin-top:auto pins this to the card bottom regardless of how long
        the description above it runs. align-self keeps it from stretching
        to the full card width. */
@@ -363,7 +367,7 @@
     background: rgba(255, 255, 255, 0.035);
 }
 
-.academic-benefits-card h5 {
+.academic-benefits-card h3 {
     font-size: 15px !important;
     font-weight: 700 !important;
     color: #e9e5ff;
@@ -403,7 +407,7 @@
     margin-bottom: 28px;
 }
 
-.academic-associations h5 {
+.academic-associations h3 {
     font-size: 13px !important;
     font-weight: 700 !important;
     letter-spacing: 0.12em;
@@ -552,7 +556,7 @@
     transform: scale(1.1);
 }
 
-.industry-card h4 {
+.industry-card h3 {
     font-size: 16px !important;
     font-weight: 700 !important;
     color: #fff;
@@ -612,7 +616,7 @@
     margin-bottom: 36px;
 }
 
-.world-map-title h4 {
+.world-map-title h3 {
     font-size: 20px !important;
     font-weight: 700 !important;
     color: #fff;
@@ -792,7 +796,7 @@
     box-shadow: 0 0 30px rgba(6, 182, 212, 0.2);
 }
 
-.stepper-step h4 {
+.stepper-step h3 {
     font-size: 16px !important;
     font-weight: 700 !important;
     color: #fff;
@@ -854,7 +858,7 @@
     transform: scale(1.12);
 }
 
-.training-card h4 {
+.training-card h3 {
     font-size: 16px !important;
     font-weight: 700 !important;
     color: #fff;

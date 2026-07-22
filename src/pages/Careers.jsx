@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { ArrowRight, Upload } from "lucide-react";
 import "../styles/careers-page.css";
 
@@ -62,7 +62,26 @@ const CAREERS_EMAIL = "careers@superaip.com";
 
 export default function Careers() {
     const [filter, setFilter] = useState("All");
-    const [form, setForm] = useState({ name: "", email: "", role: "" });
+
+    /* Every role card linked to the same bare "/Careers#apply", so clicking
+       "Robotics Perception Engineer" scrolled to a form that had no idea which
+       job you had picked — all six cards behaved identically. The cards now
+       pass the role in router state, which seeds the select below.
+       Lazy initial state covers arriving from another page; the effect below
+       covers clicking a role card while ALREADY on /Careers (no remount, so
+       initial state never re-runs — that gap was the bug the tests caught). */
+    const { state: navState } = useLocation();
+    const [form, setForm] = useState(() => ({
+        name: "",
+        email: "",
+        role: navState?.role || "",
+    }));
+
+    useEffect(() => {
+        if (!navState?.role) return;
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setForm((f) => (f.role === navState.role ? f : { ...f, role: navState.role }));
+    }, [navState?.role]);
     const [file, setFile] = useState(null);
     const [dragActive, setDragActive] = useState(false);
     const [error, setError] = useState("");
@@ -206,6 +225,7 @@ export default function Careers() {
                             <button
                                 key={f}
                                 type="button"
+                                aria-pressed={filter === f}
                                 className={`cp-filter ${filter === f ? "is-active" : ""}`}
                                 onClick={() => setFilter(f)}
                             >
@@ -217,7 +237,7 @@ export default function Careers() {
 
                 <div className="cp-roles">
                     {shown.map((p) => (
-                        <Link to="/Careers#apply" className="cp-role" key={p.title}>
+                        <Link to="/Careers#apply" state={{ role: p.title }} className="cp-role" key={p.title}>
                             <div className="cp-role-main">
                                 <h3 className="cp-role-title">{p.title}</h3>
                                 <span className="cp-role-team">{p.team}</span>

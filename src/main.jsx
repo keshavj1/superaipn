@@ -3,10 +3,14 @@ import { BrowserRouter } from 'react-router-dom'
 import { createRoot } from 'react-dom/client'
 import Lenis from 'lenis'
 import 'lenis/dist/lenis.css'
-// Vendor CSS first — bootstrap's reboot sets `body { background-color: var(--bs-body-bg) }`,
-// which would otherwise override our dark background in index.css.
-import 'bootstrap/dist/css/bootstrap.min.css'
-import 'bootstrap/dist/js/bootstrap.bundle.min.js'
+/* Bootstrap removed entirely. Nothing imported it on purpose anymore (its
+   only consumers — the Bootstrap carousel and Collapse examples — were deleted),
+   but its stylesheet was still loaded globally and, being unlayered CSS with
+   !important utilities, it silently overrode Tailwind across the site:
+   `.mb-5` became 3rem!important instead of 20px (the icon-to-title gap on every
+   home card), bare h3s inflated to 28px, and p/heading margins were Bootstrap's,
+   not ours. Removing it restores the spacing the JSX actually declares and
+   drops ~300KB of dead CSS+JS from every page load. */
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import './index.css'

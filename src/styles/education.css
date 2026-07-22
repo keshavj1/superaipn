@@ -28,6 +28,7 @@
 
 .glass-card {
     background: rgba(20, 26, 38, 0.4);
+    -webkit-backdrop-filter: blur(12px);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border: 1px solid rgba(255, 255, 255, 0.05);
@@ -43,7 +44,7 @@
 
 /* ================= HERO & MAP SECTION ================= */
 .edu-hero {
-    padding: 180px 5% 80px;
+    padding: clamp(120px, 18vw, 160px) var(--gutter) var(--space-section-sm);
     text-align: center;
     position: relative;
     background: radial-gradient(circle at top, rgba(16, 30, 60, 0.8) 0%, #0b111a 60%);
@@ -59,7 +60,7 @@
 }
 
 .edu-hero .section-intro {
-    font-size: 1.3rem;
+    font-size: clamp(1rem, 2.2vw, 1.3rem);
     line-height: 1.6;
     color: #aebcd0;
     max-width: 900px;
@@ -73,8 +74,8 @@
     margin-top: 4rem;
 }
 
-.stat-block h3 {
-    font-size: 3.5rem;
+.stat-block h2 {
+    font-size: clamp(2.2rem, 6vw, 3.5rem);
     font-weight: 800;
     margin-bottom: 0.5rem;
 }
@@ -145,7 +146,7 @@
 
 /* ================= K-12 SECTION (BRIGHT) ================= */
 .k12-section {
-    padding: 100px 5%;
+    padding: var(--space-section) var(--gutter);
     /* background: linear-gradient(135deg, #102a43 0%, #061224 100%); */
     background: #090d14 !important;
     position: relative;
@@ -167,6 +168,7 @@
 
 .badge {
     background: rgba(255, 255, 255, 0.1);
+    -webkit-backdrop-filter: blur(5px);
     backdrop-filter: blur(5px);
     padding: 0.5rem 1.2rem;
     border-radius: 30px;
@@ -186,19 +188,14 @@
     margin: 3rem 0;
 }
 
+/* Informational grade-band chips. They were styled as a selector — pointer
+   cursor, hover scale, one "active" — but nothing is wired to them and no
+   per-grade content exists, so they read as buttons that ignore clicks. */
 .age-sel {
     display: flex;
     flex-direction: column;
     align-items: center;
-    opacity: 0.6;
-    transition: all 0.3s;
-    cursor: pointer;
-}
-
-.age-sel:hover,
-.age-sel.active {
     opacity: 1;
-    transform: scale(1.05);
 }
 
 .age-sel .icon-wrap {
@@ -218,7 +215,7 @@
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 2rem;
-    max-width: 1200px;
+    max-width: var(--container);
     margin: 0 auto 3rem;
 }
 
@@ -240,14 +237,14 @@
 
 /* ================= HIGHER ED & TEACHER SPLIT ================= */
 .higher-ed-section {
-    padding: 100px 5%;
+    padding: var(--space-section) var(--gutter);
 }
 
 .split-layout {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 3rem;
-    max-width: 1400px;
+    max-width: var(--container);
     margin: 0 auto;
 }
 
@@ -311,7 +308,7 @@
     color: #f6d365;
 }
 
-.split-feature h5 {
+.split-feature h3 {
     font-size: 1.15rem;
     margin-bottom: 0.4rem;
     color: #fff;
@@ -325,7 +322,7 @@
 
 /* ================= LABS SECTION (DARK & RICH) ================= */
 .labs-section {
-    padding: 120px 5%;
+    padding: var(--space-section-lg) var(--gutter);
     background: #05080c;
     /* Deepest dark */
     position: relative;
@@ -348,7 +345,7 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 2rem;
-    max-width: 1200px;
+    max-width: var(--container);
     margin: 4rem auto;
 }
 
@@ -358,7 +355,7 @@
     background: rgba(20, 25, 30, 0.6);
 }
 
-.equipment-card h4 {
+.equipment-card h3 {
     font-size: 1.3rem;
     margin: 1.5rem 0 1rem;
     color: #e2e8f0;
@@ -372,7 +369,7 @@
 
 /* ================= BOOKS SECTION (CAROUSEL) ================= */
 .books-section {
-    padding: 100px 5%;
+    padding: var(--space-section) var(--gutter);
     background: #0b111a;
 }
 
@@ -394,7 +391,7 @@
 }
 
 .book-cover {
-    flex: 0 0 250px;
+    flex: 0 1 clamp(120px, 30%, 250px);
     height: 350px;
     border-radius: 8px;
     overflow: hidden;
@@ -438,7 +435,7 @@
     margin-bottom: 1.5rem;
 }
 
-.book-topics h5 {
+.book-topics h4 {
     color: #e2e8f0;
     margin-bottom: 0.8rem;
     font-size: 1rem;
@@ -504,14 +501,14 @@
     color: #fff;
 }
 
-.timeline-step h5 {
+.timeline-step h3 {
     color: #bfdbfe;
     font-size: 0.95rem;
     margin-bottom: 0.5rem;
 }
 
 .timeline-step p {
-    color: #64748b;
+    color: var(--color-text-muted);
     font-size: 0.8rem;
     line-height: 1.4;
 }
@@ -568,4 +565,15 @@
     .timeline-step {
         width: 45%;
     }
+}
+/* Swiper pagination bullets default to an 8×8 tap target. Now that the A11y
+   module makes them keyboard-focusable, they're real controls and need a
+   larger hit area (WCAG 2.5.8). content-box + padding grows the element to
+   24×24 while background-clip keeps the painted dot 8px in the centre. */
+.swiper-pagination-bullet {
+    box-sizing: content-box;
+    width: 8px;
+    height: 8px;
+    padding: 8px;
+    background-clip: content-box;
 }

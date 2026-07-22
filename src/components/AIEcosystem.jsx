@@ -73,7 +73,9 @@ function ProductCard({ product, index, visible }) {
         <div
             ref={cardRef}
             onMouseMove={handleMouseMove}
-            className="divcardsec group relative rounded-2xl p-6 transition-all duration-700 hover:border-white/[0.12] overflow-hidden"
+            /* w-full so the card fills the grid cell it is wrapped in, rather
+               than shrink-wrapping and leaving cards in a row unequal. */
+            className="divcardsec group relative w-full rounded-2xl p-6 transition-all duration-700 hover:border-white/[0.12] overflow-hidden"
             style={{
                 background: "rgba(255,255,255,0.02)",
                 opacity: visible ? 1 : 0,
@@ -140,14 +142,14 @@ export default function AIEcosystem() {
     }, []);
 
     return (
-        <section ref={sectionRef} className="relative py-28 overflow-hidden topaiechosystem" style={{ background: "var(--surface-section)" }}>
+        <section ref={sectionRef} className="relative py-16 overflow-hidden topaiechosystem" style={{ background: "var(--surface-section)" }}>
             {/* Ambient glow */}
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[500px] bg-purple-900/[0.06] blur-[120px] rounded-full pointer-events-none" />
 
             <div className="max-w-6xl mx-auto px-6 relative z-10">
                 {/* Header */}
                 <div
-                    className="text-center mb-16 max-w-3xl mx-auto"
+                    className="text-center mb-10 max-w-3xl mx-auto"
                     style={{
                         opacity: visible ? 1 : 0,
                         transform: visible ? "translateY(0)" : "translateY(20px)",
@@ -166,14 +168,19 @@ export default function AIEcosystem() {
                 </div>
 
                 {/* Products grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 productgrid">
-                    {products.slice(0, 3).map((p, i) => (
-                        <ProductCard key={p.name} product={p} index={i} visible={visible} />
-                    ))}
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-6 max-w-4xl mx-auto productgrid1">
-                    {products.slice(3).map((p, i) => (
-                        <ProductCard key={p.name} product={p} index={i + 3} visible={visible} />
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-6 productgrid">
+                    {products.map((p, i) => (
+                        <div
+                            key={p.name}
+                            /* 5 products in a 6-column track: the first three take two
+                               columns each, the last two take three each, so both rows
+                               span the same total width and their card edges line up.
+                               Emitting exactly one col-span class — two conflicting ones
+                               would resolve by stylesheet order, not by string order. */
+                            className={`flex ${i < 3 ? "lg:col-span-2" : "lg:col-span-3"}`}
+                        >
+                            <ProductCard product={p} index={i} visible={visible} />
+                        </div>
                     ))}
                 </div>
             </div>

@@ -1,23 +1,43 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "../styles/hero.css";
+import usePrefersReducedMotion from "../hooks/usePrefersReducedMotion";
 // Served from public/videos — not bundled, so large media never enters the build.
 // Restore alongside the commented-out <video> element below.
 // const heroVideo = "/videos/superaipvideo.mp4";
 
 export default function HeroSection() {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const reduceMotion = usePrefersReducedMotion();
 
   useEffect(() => {
+    // Parallax is decorative; skip it entirely when motion is reduced.
+    if (reduceMotion) return;
+
+    /* setState fired on every raw mousemove re-rendered the whole hero subtree
+       at pointer-event rate. Coalescing into one rAF caps it at one render per
+       frame, which is all the transform can paint anyway. */
+    let frame = null;
+    let latest = { x: 0, y: 0 };
+
     const handleMouseMove = (e) => {
-      const { clientX, clientY } = e;
-      const x = (clientX / window.innerWidth - 0.5) * 20;
-      const y = (clientY / window.innerHeight - 0.5) * 20;
-      setMousePos({ x, y });
+      latest = {
+        x: (e.clientX / window.innerWidth - 0.5) * 20,
+        y: (e.clientY / window.innerHeight - 0.5) * 20,
+      };
+      if (frame !== null) return;
+      frame = requestAnimationFrame(() => {
+        frame = null;
+        setMousePos(latest);
+      });
     };
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, []);
+
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      if (frame !== null) cancelAnimationFrame(frame);
+    };
+  }, [reduceMotion]);
 
   return (
     <section className="hero" id="hero">

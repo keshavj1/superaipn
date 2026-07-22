@@ -13,7 +13,7 @@
 }
 
 .cp-container {
-    max-width: 1200px;
+    max-width: var(--container);
     margin: 0 auto;
     padding: 0 24px;
 }
@@ -94,7 +94,7 @@
 .cp-hero {
     position: relative;
     overflow: hidden;
-    padding: 90px 0 20px;
+    padding: var(--space-section) 0 20px;
     text-align: center;
 }
 
@@ -358,6 +358,9 @@
 }
 
 .cp-apply-mail {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
     font-size: 16px;
     font-weight: 700;
     color: #8b5cf6;

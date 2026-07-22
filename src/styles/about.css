@@ -10,7 +10,7 @@
     align-items: center;
     justify-content: center;
     text-align: center;
-    padding: 160px 24px 100px;
+    padding: clamp(120px, 18vw, 160px) var(--gutter) var(--space-section);
     overflow: hidden;
     background: linear-gradient(180deg, #05060a 0%, #0a0920 50%, #05060a 100%);
     background-color: #050d12;
@@ -44,7 +44,7 @@
 .about-hero-content {
     position: relative;
     z-index: 2;
-    max-width: 820px;
+    max-width: var(--container-narrow);
     margin: 0 auto;
 }
 
@@ -97,7 +97,7 @@
 /* ── Section Wrapper ── */
 .about-section {
     position: relative;
-    padding: 100px 24px;
+    padding: var(--space-section) var(--gutter);
     overflow: hidden;
 }
 
@@ -110,7 +110,7 @@
 }
 
 .about-section-inner {
-    max-width: 1140px;
+    max-width: var(--container);
     margin: 0 auto;
     position: relative;
     z-index: 2;
@@ -216,7 +216,7 @@
     transform: scale(1.12);
 }
 
-.about-product-card h4 {
+.about-product-card h3 {
     font-size: 16px !important;
     font-weight: 700 !important;
     color: #fff;
@@ -242,6 +242,7 @@
     border-radius: 24px;
     border: 1px solid rgba(255, 255, 255, 0.07);
     background: linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.012));
+    -webkit-backdrop-filter: blur(6px);
     backdrop-filter: blur(6px);
     text-align: center;
     overflow: hidden;
@@ -403,6 +404,7 @@
     border-radius: 24px;
     border: 1px solid rgba(255, 255, 255, 0.06);
     background: rgba(255, 255, 255, 0.02);
+    -webkit-backdrop-filter: blur(20px);
     backdrop-filter: blur(20px);
     transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     overflow: hidden;
@@ -509,7 +511,7 @@
     font-weight: 700 !important;
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: #64748b;
+    color: var(--color-text-muted);
     margin-bottom: 10px;
     padding-left: 16px;
 }
@@ -549,7 +551,7 @@
     box-shadow: 0 4px 20px -8px rgba(139, 92, 246, 0.2);
 }
 
-.leadership-hover-card h4 {
+.leadership-hover-card h3 {
     font-size: 15px !important;
     font-weight: 700 !important;
     color: #fff;
@@ -562,7 +564,7 @@
     margin: 0;
 }
 
-.leadership-hover-card.active h4 {
+.leadership-hover-card.active h3 {
     color: #e9e5ff;
 }
 
@@ -578,6 +580,7 @@
     border-radius: 24px;
     border: 1px solid rgba(255, 255, 255, 0.08);
     background: rgba(255, 255, 255, 0.02);
+    -webkit-backdrop-filter: blur(24px);
     backdrop-filter: blur(24px);
     overflow: hidden;
     transition: border-color 0.4s ease;
@@ -691,7 +694,7 @@
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.12em;
-    color: #64748b;
+    color: var(--color-text-muted);
     margin-bottom: 12px;
 }
 
@@ -851,7 +854,7 @@
     font-size: 20px;
 }
 
-.about-assoc-card h4 {
+.about-assoc-card h3 {
     font-size: 15px !important;
     font-weight: 700 !important;
     color: #fff;
@@ -867,7 +870,7 @@
 /* ── CTA Section ── */
 .about-cta {
     position: relative;
-    padding: 120px 24px;
+    padding: var(--space-section-lg) var(--gutter);
     text-align: center;
     overflow: hidden;
     background: linear-gradient(180deg, #05060a, #0a0920, #05060a);
@@ -962,7 +965,9 @@ a.about-cta-btn:hover {
     }
 
     .about-products-grid {
-        grid-template-columns: 1fr 1fr;
+        /* was `1fr 1fr`, which overrode the auto-fit rule and held two columns
+           all the way down to 320px */
+        grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
     }
 
     .about-team-grid {

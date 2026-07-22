@@ -5,21 +5,36 @@
 <head>
   <meta charset="UTF-8" />
   <script>
-    // Apply saved theme before paint to avoid a flash of the wrong theme
+    /* Apply the theme before first paint so there is no flash of the wrong one.
+
+       The site is currently locked to dark (SHOW_THEME_TOGGLE = false in
+       Navbar.jsx). This script used to read localStorage regardless, so a
+       visitor who had saved "light" before the toggle was removed got a white
+       #f4f5fa background painted here — then a jarring correction to dark once
+       React mounted and forced the theme back. Reading the saved value only
+       matters when the toggle actually exists; flip both together. */
     (function () {
+      var THEME_TOGGLE_ENABLED = false;
+      var t = 'dark';
       try {
-        var t = localStorage.getItem('theme') || 'dark';
-        document.documentElement.setAttribute('data-theme', t);
-        document.documentElement.style.backgroundColor = t === 'light' ? '#f4f5fa' : '#05060a';
-      } catch (e) {
-        document.documentElement.setAttribute('data-theme', 'dark');
-      }
+        if (THEME_TOGGLE_ENABLED) t = localStorage.getItem('theme') || 'dark';
+      } catch (e) { /* private mode / blocked storage — keep the default */ }
+      document.documentElement.setAttribute('data-theme', t);
+      document.documentElement.style.backgroundColor = t === 'light' ? '#f4f5fa' : '#05060a';
+      /* Scroll-reveal CSS hides sections only under html.js, so content is
+         never invisible for visitors (or crawlers) without JavaScript. */
+      document.documentElement.classList.add('js');
     })();
   </script>
   <!-- Local, not https://superaip.com/img/... — an external favicon is a
        cross-origin request that breaks in dev and if that host is down. -->
   <link rel="icon" type="image/png" href="/assets/super_aip_logo.png" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Colours the mobile browser chrome to match the locked dark UI. -->
+  <meta name="theme-color" content="#05060a" />
+  <!-- Explicit default for non-JS crawlers; PageMeta re-asserts per route (and
+       sets noindex on 404s) for JS-capable ones. -->
+  <meta name="robots" content="index, follow" />
   <meta name="description"
     content="Super AI Polaris — Sovereign AI platforms for education, enterprises, and governments. Powering the future with artificial intelligence." />
   <link rel="canonical" href="https://superaip.com/" />
@@ -49,6 +64,37 @@
   <!-- Font Awesome removed: grep for "fa-" across src/ returned zero matches,
        so this was a render-blocking stylesheet for icons never used. -->
   <title>Super AI Polaris — Sovereign AI Platform</title>
+
+  <!-- Organization + WebSite structured data. Static in the HTML (not injected
+       by React) so crawlers that don't run JS still get it. This is the one
+       piece of SEO metadata that reaches non-JS bots regardless of the SPA. -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://superaip.com/#organization",
+        "name": "Super AI Polaris",
+        "alternateName": "Super AIP",
+        "url": "https://superaip.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://superaip.com/assets/super_aip_logo.png"
+        },
+        "description": "Sovereign AI platforms for education, enterprises, and governments. Built in India, deployable on-premise or air-gapped."
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://superaip.com/#website",
+        "url": "https://superaip.com/",
+        "name": "Super AI Polaris",
+        "publisher": { "@id": "https://superaip.com/#organization" },
+        "inLanguage": "en"
+      }
+    ]
+  }
+  </script>
 </head>
 
 <body>

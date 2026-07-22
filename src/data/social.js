@@ -8,10 +8,10 @@
 
    e.g. linkedin: "https://www.linkedin.com/company/superaip", */
 export const SOCIAL_URLS = {
-  linkedin: null,
+  linkedin: "https://www.linkedin.com/company/super-ai/",
   x: null,
   youtube: null,
-  instagram: null,
+  instagram: "https://www.instagram.com/super.aip/",
   github: null,
 };
 

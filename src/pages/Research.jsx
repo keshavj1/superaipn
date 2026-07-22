@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import "../styles/research.css";
 import {
     Brain, Cpu, GitBranch, Database, Layers, BarChart3, FlaskConical,
@@ -26,10 +27,14 @@ function useReveal(threshold = 0.12) {
 }
 
 /* ─── Data ─── */
+/* Router links, not bare fragment anchors: a native "#id" anchor fires
+   hashchange rather than popstate, so useLocation() never updates, ScrollToTop's
+   navbar-offset compensation never runs, and Lenis overrides the browser's own
+   jump on the next frame. */
 const navPills = [
-    { label: "AI Research", href: "#ai-research" },
-    { label: "Publications", href: "#publications" },
-    { label: "Innovation Labs — IP", href: "#innovation-labs" },
+    { label: "AI Research", to: "/Research#ai-research" },
+    { label: "Publications", to: "/Research#publications" },
+    { label: "Innovation Labs — IP", to: "/Research#innovation-labs" },
 ];
 
 const pipelineNodes = [
@@ -138,13 +143,13 @@ export default function Research() {
 
                     <div className="research-nav-pills">
                         {navPills.map((p, i) => (
-                            <a key={i} href={p.href} className="research-nav-pill" style={{
+                            <Link key={p.label} to={p.to} className="research-nav-pill" style={{
                                 opacity: heroVis ? 1 : 0,
                                 transform: heroVis ? "translateY(0)" : "translateY(10px)",
                                 transition: `all 0.6s cubic-bezier(0.16,1,0.3,1) ${(i + 2) * 100}ms`,
                             }}>
                                 {p.label}
-                            </a>
+                            </Link>
                         ))}
                     </div>
                 </div>
@@ -188,10 +193,10 @@ export default function Research() {
                             Super AIP's AI engine serves as the core execution system of an intelligent assembly line. It orchestrates the breakdown of incoming data into manageable subtasks, ensures each is accurately labeled, and seamlessly recombines outputs into unified, meaningful results. The engine also leverages processed outputs as training data — continuously improving its machine learning models through an evolving, self-refining labeling mechanism.
                         </p>
 
-                        <h5 className="sub-section-title">
+                        <h4 className="sub-section-title">
                             <span className="title-dot" style={{ background: "#8b5cf6" }} />
                             How It Works
-                        </h5>
+                        </h4>
                         <div className="how-it-works-grid">
                             {hiwSteps.map((s, i) => (
                                 <div className="hiw-step" key={i}>
@@ -241,10 +246,10 @@ export default function Research() {
                         </div>
 
                         {/* Input Data Types */}
-                        <h5 className="sub-section-title">
+                        <h4 className="sub-section-title">
                             <span className="title-dot" style={{ background: "#06b6d4" }} />
                             Input Data Types
-                        </h5>
+                        </h4>
                         <div className="data-tags">
                             {inputDataTypes.map((d, i) => (
                                 <div className="data-tag" key={i}>
@@ -255,10 +260,10 @@ export default function Research() {
                         </div>
 
                         {/* Architecture Pipeline */}
-                        <h5 className="sub-section-title">
+                        <h4 className="sub-section-title">
                             <span className="title-dot" style={{ background: "#10b981" }} />
                             System Architecture
-                        </h5>
+                        </h4>
                         <div className="pipeline-diagram">
                             {educationPipelineNodes.map((n, i) => (
                                 <React.Fragment key={i}>
@@ -271,10 +276,10 @@ export default function Research() {
                         </div>
 
                         {/* AI & ML Modules */}
-                        <h5 className="sub-section-title">
+                        <h4 className="sub-section-title">
                             <span className="title-dot" style={{ background: "#8b5cf6" }} />
                             AI & ML Modules
-                        </h5>
+                        </h4>
                         <div className="module-grid">
                             {archModules.map((m, i) => (
                                 <div className="module-card" key={i}>
@@ -341,19 +346,19 @@ export default function Research() {
                         </p>
 
                         {/* LLM Advantage */}
-                        <h5 className="sub-section-title">
+                        <h4 className="sub-section-title">
                             <span className="title-dot" style={{ background: "#06b6d4" }} />
                             From Plain Language to Powerful AI
-                        </h5>
+                        </h4>
                         <p style={{ fontSize: 14, color: "#94a3b8", lineHeight: 1.8, marginBottom: 24 }}>
                             LLMs are revolutionizing how users interact with AI — enabling organizations to train and guide systems using natural language, without deep technical expertise. NeuraDesk (an offline, OCR-enabled LLM platform) and NeuraEdge (a cloud-powered, mobile-accessible small language model platform) empower enterprises and government departments to harness LLMs for secure, scalable, and context-aware document processing.
                         </p>
 
                         {/* Comparison */}
-                        <h5 className="sub-section-title">
+                        <h4 className="sub-section-title">
                             <span className="title-dot" style={{ background: "#ec4899" }} />
                             Bridging the Enterprise Gap
-                        </h5>
+                        </h4>
                         <div className="comparison-grid">
                             <div className="comparison-card" style={{ background: "rgba(239,68,68,0.03)", borderColor: "rgba(239,68,68,0.12)" }}>
                                 <h4 style={{ color: "#f87171" }}>
@@ -384,10 +389,10 @@ export default function Research() {
 
                     {/* Key Capabilities */}
                     <div ref={capRef}>
-                        <h5 className="sub-section-title" style={{ justifyContent: "center", fontSize: 20 }}>
+                        <h4 className="sub-section-title" style={{ justifyContent: "center", fontSize: 20 }}>
                             <span className="title-dot" style={{ background: "#06b6d4" }} />
                             Transforming Document Intelligence
-                        </h5>
+                        </h4>
                         <div className="capability-grid" style={{
                             opacity: capVis ? 1 : 0,
                             transform: capVis ? "translateY(0)" : "translateY(15px)",
@@ -409,10 +414,10 @@ export default function Research() {
                         </div>
 
                         {/* Trusted Sectors */}
-                        <h5 className="sub-section-title" style={{ justifyContent: "center", fontSize: 20, marginTop: 40 }}>
+                        <h4 className="sub-section-title" style={{ justifyContent: "center", fontSize: 20, marginTop: 40 }}>
                             <span className="title-dot" style={{ background: "#8b5cf6" }} />
                             Trusted Across Critical Sectors
-                        </h5>
+                        </h4>
                         <div className="sector-grid" style={{ justifyContent: "center" }}>
                             {sectors.map((s, i) => (
                                 <div className="sector-tag" key={i}>
@@ -496,10 +501,10 @@ export default function Research() {
                             A system and method for automating the analysis of educational outcomes by identifying and testing latent factors in both student and institutional data. The system uses factor analysis to uncover hidden variables driving academic performance — integrating AI, statistical techniques, and adaptive learning into a single scalable architecture.
                         </p>
 
-                        <h5 className="sub-section-title">
+                        <h4 className="sub-section-title">
                             <span className="title-dot" style={{ background: "#ec4899" }} />
                             Claims Summary
-                        </h5>
+                        </h4>
                         <div className="claims-list">
                             {ipClaims.map((claim, i) => (
                                 <div className="claim-item" key={i} style={{
@@ -519,10 +524,10 @@ export default function Research() {
                         </div>
 
                         {/* Architecture Pipeline (same as Focus 2 but with claim annotations) */}
-                        <h5 className="sub-section-title" style={{ marginTop: 28 }}>
+                        <h4 className="sub-section-title" style={{ marginTop: 28 }}>
                             <span className="title-dot" style={{ background: "#8b5cf6" }} />
                             IP System Architecture
-                        </h5>
+                        </h4>
                         <div className="pipeline-diagram">
                             {educationPipelineNodes.map((n, i) => (
                                 <React.Fragment key={i}>
@@ -539,12 +544,12 @@ export default function Research() {
                     <div className="research-cta-block">
                         <h3>Explore Our Research & Partnership Opportunities</h3>
                         <div className="research-cta-buttons">
-                            <a href="/Contact" className="rcta-btn-pri">
+                            <Link to="/Contact#contact-us" className="rcta-btn-pri">
                                 Collaborate With Us <ArrowRight size={16} />
-                            </a>
-                            <a href="/Partners" className="rcta-btn-sec">
+                            </Link>
+                            <Link to="/Partners" className="rcta-btn-sec">
                                 Partner Programs <ChevronRight size={16} />
-                            </a>
+                            </Link>
                         </div>
                     </div>
                 </div>

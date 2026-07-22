@@ -25,12 +25,37 @@
    ============================================ */
 
 :root {
+    /* Tells the UA to render native chrome — scrollbars, <select> popups, form
+       controls, spinners — dark. Without it those paint light on a dark page,
+       which is the single most visible "unfinished dark mode" tell. */
+    color-scheme: dark;
+
     --color-bg: #05060a;
     --color-bg-card: #0a0b10;
     --color-bg-card-hover: #0f1018;
-    --color-border: rgba(255, 255, 255, 0.08);
-    --color-border-hover: rgba(255, 255, 255, 0.15);
-    --color-text-primary: #ffffff;
+
+    /* Three elevation levels, replacing the 18 ad-hoc surface hexes that had
+       accumulated across the page stylesheets. Anything raised above the page
+       picks one of these; nothing paints its own near-black. */
+    --surface-0: #05060a;
+    /* page */
+    --surface-1: #0b0d14;
+    /* cards, panels */
+    --surface-2: #12151f;
+    /* hover, popovers, inputs */
+
+    /* 0.08 white composites to #191a1d — 1.28:1 against the page, i.e. an
+       invisible card outline. 0.14 is the decorative separator; -strong is for
+       real UI boundaries (inputs, buttons, focusable cards) and clears the
+       3:1 WCAG 1.4.11 non-text minimum. */
+    --color-border: rgba(255, 255, 255, 0.14);
+    --color-border-hover: rgba(255, 255, 255, 0.24);
+    --color-border-strong: rgba(255, 255, 255, 0.28);
+
+    /* Pure #fff is 20.6:1 on --color-bg — over-contrast, and it haloes on OLED
+       and high-brightness panels. #e8eaf0 is ~16.4:1: still comfortably above
+       AA, without the glare. */
+    --color-text-primary: #e8eaf0;
     --color-text-secondary: #a0aec0;
     /* Was #64748b — 4.26:1 on --color-bg, below the 4.5:1 WCAG AA minimum for
        normal text, and it is used for form placeholders and 11px labels.
@@ -68,8 +93,10 @@
        -webkit-text-fill-color: transparent, so a  override cannot
        fix them in light mode — the GRADIENT itself has to change. */
     --gradient-text-start: #ffffff;
-    --gradient-teal-a: #ffffff;
-    --gradient-teal-b: #ffffff;
+    /* Both stops were #ffffff, so the "teal" gradient rendered as a flat white
+       fill in dark mode while light mode got a real teal ramp. */
+    --gradient-teal-a: #5eead4;
+    --gradient-teal-b: #2dd4bf;
     --galaxy-label-a: #c4b5fd;
     --galaxy-label-b: #a78bfa;
     --hero-title-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
@@ -85,6 +112,36 @@
     --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-normal: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-slow: 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* ── Layout scale ────────────────────────────────────────────────
+       Content width was spread across 18 values (1140 / 1152 / 1160 / 1200 /
+       1280 …). Differences that small don't read as "different", they read as
+       misaligned, and scrolling the homepage crossed nine of them. One token
+       now drives every page container. */
+    --container: 1200px;
+    --container-narrow: 900px;
+    /* hero copy, centred blocks */
+    --container-prose: 780px;
+    /* legal / long-form text: measure-limited on purpose */
+
+    /* Fluid gutter: 20px on a small phone, 32px from ~640px up. Replaces the
+       mix of fixed 24px and fluid 5% that made the gutter jump 72px between
+       routes on a wide screen. */
+    --gutter: clamp(20px, 5vw, 32px);
+
+    /* Vertical rhythm. Was 11 distinct section paddings; these are the two
+       that survive, plus a compact step for dense sections. */
+    --space-section: clamp(40px, 5vw, 64px);
+    --space-section-lg: clamp(48px, 6vw, 72px);
+    --space-section-sm: clamp(32px, 4vw, 44px);
+
+    /* Stacking order. Was 14 unscaled values including 100, 999, 9999 and
+       10000, with a galaxy tooltip at z-100 painting over the z-50 navbar. */
+    --z-base: 1;
+    --z-dropdown: 100;
+    --z-sticky: 200;
+    --z-overlay: 300;
+    --z-skip: 400;
 }
 
 /* ============================================
@@ -115,13 +172,14 @@
 
 /* ============================================
    BASE RESET
+   The universal `* { margin: 0; padding: 0; box-sizing: border-box }` that
+   lived here has been deleted, and it must not come back: as UNLAYERED CSS it
+   beat everything in Tailwind's @layer utilities, so every spacing utility in
+   the JSX — p-6 on cards, py-28 on sections, mb-5 under icons — silently
+   computed to 0. Bootstrap's !important utilities had been papering over it;
+   removing Bootstrap exposed it. Tailwind's preflight already applies this
+   exact reset correctly inside @layer base, where utilities can override it.
    ============================================ */
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
 
 html {
     scroll-behavior: smooth;
@@ -300,11 +358,23 @@ img {
    SCROLL-REVEAL ANIMATION CLASSES
    ============================================ */
 
-.reveal {
+/* Scroll reveals.
+   - Scoped behind html.js (stamped by the inline script in index.html): the
+     hidden initial state must only exist when the JS that un-hides it is
+     actually running. Unscoped, a no-JS visitor — or any crawler that doesn't
+     execute scripts — got a page of permanently invisible sections.
+   - opacity/transform only, never `all`: `all` animated padding and caused
+     visible layout jumps on reveal.
+   - 0.5s, down from 0.8s: long reveals read as lag, and slow full-page
+     screenshot/print captures caught sections mid-fade. */
+:where(html.js) .reveal {
     opacity: 0;
-    transform: translateY(40px);
-    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
-        transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    transform: translateY(32px);
+}
+
+.reveal {
+    transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .reveal.revealed {
@@ -312,16 +382,36 @@ img {
     transform: translateY(0);
 }
 
-.reveal-scale {
+:where(html.js) .reveal-scale {
     opacity: 0;
-    transform: scale(0.9);
-    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
-        transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    transform: scale(0.94);
+}
+
+.reveal-scale {
+    transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .reveal-scale.revealed {
     opacity: 1;
     transform: scale(1);
+}
+
+/* Shared by Education, Products and Enterprise sections. Global on purpose —
+   it used to live in enterprise.css only, so the other two pages' reveals
+   worked or broke depending on which route the visitor had loaded first. */
+:where(html.js) .reveal-fade-up {
+    opacity: 0;
+    transform: translateY(32px);
+}
+
+.reveal-fade-up {
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+}
+
+.reveal-fade-up.revealed {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 /* Stagger delays */
@@ -369,6 +459,7 @@ img {
 /* Glassmorphic Card */
 .glass-card {
     background: rgba(255, 255, 255, 0.03);
+    -webkit-backdrop-filter: blur(20px);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border: 1px solid var(--color-border);
@@ -485,6 +576,7 @@ img {
     border-radius: 50px;
     padding: 6px 16px;
     background: rgba(255, 255, 255, 0.03);
+    -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
 }
 
@@ -502,17 +594,20 @@ img {
 }
 
 .section_sects {
-    margin: 90px auto;
+    /* was margin: 90px auto — stacked 90px above AND below the section header
+       on top of the section's own padding */
+    margin: 0 auto;
 }
 
 .section_sectsbtns {
     padding: 10px;
 }
 
+/* Vertical padding removed — the section carries `py-28` in the JSX, and
+   this unlayered 90px-top / 20px-bottom override is what made the rhythm
+   between home sections look arbitrary. */
 .section_sectss {
-    padding: 20px;
     margin: 0px auto;
-    padding-top: 90px;
 }
 
 .section_sectsshed {
@@ -520,17 +615,19 @@ img {
 }
 
 .cardssectionb {
-    padding-top: 35px;
+    padding-top: 8px;
 }
 
+/* padding removed: the element carries Tailwind `p-6`, and this unlayered
+   rule beat it (unlayered CSS always wins over @layer utilities), leaving
+   stat cards with 5px of horizontal padding. */
 .cartssect1se {
-    padding: 35px 5px;
-    border: 1px solid #dee2e638 !important;
+    border: 1px solid var(--color-border);
 }
 
+/* padding-top removed — same reason as .section_sectss above. */
 .topaiechosystem {
     margin: 0px 0px;
-    padding-top: 90px;
 }
 
 
@@ -542,19 +639,17 @@ img {
     padding: 10px;
 }
 
+/* padding removed — shadowed the `p-6` utility on AIEcosystem cards. */
 .divcardsec {
-    margin: 20px 0px;
-    padding: 20px;
-    border: 1px solid #dee2e638 !important;
+    border: 1px solid var(--color-border);
 }
 
+/* padding removed — shadowed the `p-7` utility on VideoShowcase cards. */
 .secondsect_one {
     position: relative;
-    padding: 20px;
     background-color: #12111159 !important;
     border-radius: 4px;
-    transition: all .6s ease;
-    margin-bottom: 30px;
+    transition: background-color var(--transition-normal), box-shadow var(--transition-normal), border-color var(--transition-normal);
     box-shadow: rgba(0, 0, 0, 0.09) 0px 3px 12px;
     border: 1px solid #323131b0;
     border-radius: 10px;
@@ -604,7 +699,7 @@ img {
 
 .clients-section {
     position: relative;
-    padding: 100px 0;
+    padding: var(--space-section) 0;
     background: var(--color-bg);
     overflow: hidden;
 }
@@ -630,7 +725,7 @@ img {
     background: var(--color-bg-card);
     margin: 10px;
     transition: all var(--transition-normal);
-    border: 1px solid #dee2e638 !important;
+    border: 1px solid var(--color-border);
 }
 
 .testimonial-card:hover {
@@ -699,9 +794,26 @@ blockquote.testimonial-text {
     padding: 10px;
 }
 
+/* Slick's default dot is a 20x20 button — under the 44px minimum, and these
+   are the carousel's only pagination control on touch. Grow the hit area
+   without changing how big the dot looks. */
+.slick-dots li {
+    width: 32px;
+    height: 32px;
+}
+
+.slick-dots li button {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+}
+
 .slick-dots li button:before {
     color: rgba(255, 255, 255, 0.3) !important;
     font-size: 10px !important;
+    width: 32px !important;
+    height: 32px !important;
+    line-height: 32px !important;
 }
 
 .slick-dots li.slick-active button:before {
@@ -719,7 +831,7 @@ blockquote.testimonial-text {
    ============================================ */
 
 .faq-section {
-    padding: 100px 0;
+    padding: var(--space-section) 0;
     background: var(--color-bg);
     color: var(--color-text-primary);
     position: relative;
@@ -771,6 +883,8 @@ blockquote.testimonial-text {
     font-size: 16px;
     font-weight: 600;
     transition: color var(--transition-fast);
+    -webkit-user-select: none;
+    -moz-user-select: none;
     user-select: none;
     /* Now rendered as a <button> for keyboard access — reset the UA styles so
        it is visually identical to the <div> it replaced. */
@@ -827,7 +941,7 @@ blockquote.testimonial-text {
 
 .sectionsthtree {
     background: url('/dotted_bg.png') center/cover no-repeat;
-    padding: 60px 0px;
+    /* padding removed — the section's py-16 utility governs */
     background-color: var(--surface-section);
     position: relative;
     top: 0;
@@ -865,7 +979,8 @@ blockquote.testimonial-text {
 }
 
 .topfootersection {
-    margin: 130px auto;
+    /* No own margin — the section's padding is the spacing authority. */
+    margin: 0 auto;
 }
 
 .topfootersection button {
@@ -887,10 +1002,10 @@ blockquote.testimonial-text {
     padding: 10px 0px;
 }
 
+/* padding removed — shadowed the `p-6` utility on WhySuperAIP cards. */
 .card2 {
-    padding: 20px 20px;
     border-radius: 20px;
-    border: 1px solid #dee2e638 !important;
+    border: 1px solid var(--color-border);
 }
 
 .card2 h3 {
@@ -902,33 +1017,37 @@ blockquote.testimonial-text {
 }
 
 .titlesection {
-    padding: 0.512rem;
+    /* was 0.512rem (8.19px) — off every scale */
+    padding: 8px;
 }
 
 .aiSovereign {
-    margin-top: 114px;
+    /* No own margin — the section's padding is the spacing authority. */
+    margin-top: 0;
 }
 
 .firstsec {
-    margin: 70px auto;
+    /* was margin: 70px auto — every timeline row carried 140px of extra
+       vertical margin on top of the container's space-y-6 */
+    margin: 0 auto;
 }
 
 .card1sect2 {
     padding: 20px;
-    border: 1px solid #dee2e638 !important;
+    border: 1px solid var(--color-border);
 }
 
 .testimonial_card11 {
-    border: 1px solid #dee2e638 !important;
+    border: 1px solid var(--color-border);
 }
 
 .restborder {
-    border: 1px solid #dee2e638 !important;
+    border: 1px solid var(--color-border);
     padding: 10px 0px;
 }
 
 .btnshead {
-    border: 1px solid #dee2e638 !important;
+    border: 1px solid var(--color-border);
     padding: 10px 25px;
     border-radius: 20px;
 }
@@ -946,7 +1065,7 @@ blockquote.testimonial-text {
 
     .testimonial-card {
         padding: 24px;
-        border: 1px solid #dee2e638 !important;
+        border: 1px solid var(--color-border);
     }
 
     .section-padding {
@@ -978,12 +1097,19 @@ blockquote.testimonial-text {
    ============================================ */
 
 
-svg {
-    fill: rgb(255 255 255 / 43%);
-    color: rgb(255 255 255);
-    width: 1.5em;
-    height: 1.2em;
-}
+/* There was an unscoped `svg { fill: 43% white; width: 1.5em; height: 1.2em }`
+   here. It caused three bugs on every icon in the app:
+     1. Lucide sets width/height as PRESENTATION attributes, which CSS always
+        beats — so `<Mail size={22} />` silently rendered at 1.5em/1.2em.
+        36 call sites pass `size` and none of them were honoured.
+     2. 1.5em × 1.2em is not square, so every icon was stretched 25% wide.
+     3. Lucide outline icons set fill="none"; forcing a fill turned them into
+        solid blobs — a mail icon rendered as a filled rectangle.
+   No global rule replaces it. Every hand-written SVG in src/ already declares
+   its own fill ("currentColor" in Footer, "none" in Navbar) or draws with
+   <line>/stroke, so there is nothing left for a blanket rule to do — and any
+   value it set would re-break (3) by overriding Lucide's fill attribute.
+   Icon size and colour belong at the call site. */
 
 /* ── Skip link (WCAG 2.4.1 Bypass Blocks) ───────────────────────────
    Off-screen until focused, then pinned to the top-left. Rendered as the
@@ -992,7 +1118,7 @@ svg {
     position: absolute;
     left: -9999px;
     top: 0;
-    z-index: 10000;
+    z-index: var(--z-skip);
     padding: 12px 20px;
     background: #8b5cf6;
     color: #fff;
@@ -1061,4 +1187,373 @@ textarea:focus-visible,
 .nav-drop-link:hover {
     background: var(--nav-dropdown-hover) !important;
     color: var(--nav-dropdown-text) !important;
+}
+
+
+/* ============================================
+   DARK-MODE PRIMITIVES
+   The pieces the browser paints for us, which stay light unless told
+   otherwise. Each of these was flashing or rendering white on a #05060a page.
+   ============================================ */
+
+/* Chrome overrides autofilled fields with an unsuppressible near-white
+   background (background-color has no effect — only an inset shadow does).
+   Without this the Contact and Careers forms flash a white box the moment the
+   browser fills them. The 9999s transition delays the UA's own re-paint. */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+    -webkit-text-fill-color: var(--color-text-primary);
+    -webkit-box-shadow: 0 0 0 1000px var(--surface-2) inset;
+    caret-color: var(--color-text-primary);
+    transition: background-color 9999s ease-in-out 0s;
+}
+
+/* Unstyled, ::selection falls back to the OS highlight — on Windows a pale
+   blue plate that renders light text almost invisible. */
+::selection {
+    background: rgba(139, 92, 246, 0.4);
+    color: #ffffff;
+}
+
+/* The document scrollbar was unstyled; only two inner panels had custom
+   scrollbars, so the page's own bar was the brightest thing on screen. */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
+}
+
+*::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+*::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.16);
+    border-radius: 8px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.28);
+    background-clip: content-box;
+}
+
+
+/* ============================================
+   LAYOUT PRIMITIVES
+   ============================================ */
+
+/* The single content container. Page stylesheets should use this instead of
+   declaring their own max-width, which is how 18 different widths appeared. */
+.container-page {
+    width: 100%;
+    max-width: var(--container);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+}
+
+.container-page--narrow {
+    max-width: var(--container-narrow);
+}
+
+.container-page--prose {
+    max-width: var(--container-prose);
+}
+
+/* Nothing may exceed the viewport width. Guards against the fixed-width and
+   negative-margin patterns that cause horizontal scroll on phones — a defect
+   that is invisible on desktop and ruins every mobile page. */
+html,
+body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+/* <video> is a replaced element: the `img { max-width: 100% }` reset does not
+   cover it, so an intrinsically 1280px-wide video overflowed on mobile. */
+img,
+video,
+canvas,
+iframe,
+svg {
+    max-width: 100%;
+}
+
+
+/* ============================================
+   MEDIA / VIDEO
+   These were declared inside a route-scoped <style> block in Enterprise.jsx —
+   and duplicated verbatim twice inside it. Education.jsx uses the same class
+   names on five videos, so on /Education the rules had already unmounted with
+   the Enterprise route and those videos rendered at intrinsic size, overflowing
+   a container whose overflow-x:hidden then silently cropped them.
+   ============================================ */
+
+.video-wrapper {
+    position: relative;
+    width: 100%;
+    /* Standalone videos (Education's K-12 / labs / books sections) sit directly
+       inside the page gutter, so width:100% ran them nearly edge-to-edge on a
+       1920px screen. Capping at the container width and centring aligns their
+       edges with the content grids around them. Videos inside cards or grid
+       columns are unaffected — those parents are already narrower than the cap. */
+    max-width: var(--container);
+    margin-inline: auto;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border-radius: 16px;
+    border: 1px solid var(--color-border);
+    background: var(--surface-1);
+}
+
+.media-content {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.play-btn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /* 70px visual size, but never below the 44px WCAG 2.5.8 target. */
+    width: clamp(56px, 12vw, 70px);
+    height: clamp(56px, 12vw, 70px);
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: rgba(0, 210, 255, 0.15);
+    border: 2px solid rgba(0, 210, 255, 0.4);
+    color: #00d2ff;
+    font-size: clamp(20px, 4vw, 24px);
+    cursor: pointer;
+    transition: background var(--transition-fast), transform var(--transition-fast);
+}
+
+.play-btn:hover {
+    background: rgba(0, 210, 255, 0.3);
+    transform: translate(-50%, -50%) scale(1.06);
+}
+
+.play-btn:active {
+    transform: translate(-50%, -50%) scale(0.96);
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    /* Was 36px — under the 44px minimum touch target. */
+    width: 44px;
+    height: 44px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.7);
+    border: 1px solid var(--color-border);
+    color: #fff;
+    cursor: pointer;
+    transition: background var(--transition-fast);
+}
+
+.close-btn:hover {
+    background: rgba(0, 0, 0, 0.85);
+}
+
+
+/* ============================================
+   TOUCH TARGETS (WCAG 2.5.8)
+   Icon-only controls were 34–40px across the navbar, footer, team and partner
+   cards. The visual size is preserved; the hit area is padded out to 44px.
+   ============================================ */
+
+@media (pointer: coarse) {
+
+    .nav-drop-link,
+    .footer-link,
+    .social-link,
+    button,
+    [role="button"] {
+        min-height: 44px;
+    }
+}
+
+
+/* ============================================
+   INTERACTIVE STATES
+   A grep for ":active" across all 14 page stylesheets returned zero matches:
+   no button, CTA, filter, or card on the site gave any pressed feedback. On
+   touch — where there is no hover to fall back on — that reads as an
+   unresponsive control, and users tap again.
+   ============================================ */
+
+.hero-btn:active,
+.cta-btn-pri:active,
+.cta-btn-sec:active,
+.form-submit-btn:active,
+.cp-btn:active,
+.cp-filter:active,
+.about-cta-btn:active,
+.rcta-btn-pri:active,
+.rcta-btn-sec:active,
+.partners-hero-cta:active,
+.partners-pill:active,
+.research-nav-pill:active,
+.tp-cta-btn:active,
+.btn-glow:active,
+.btn-ghost:active {
+    transform: translateY(1px) scale(0.985);
+    /* Snappier than the hover transition — a press should feel immediate. */
+    transition-duration: 60ms;
+}
+
+/* Disabled controls must not look pressable. */
+button:disabled,
+.form-submit-btn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+
+/* ============================================
+   SHARED BUTTON PRIMITIVES
+   These previously lived in products.css. Education.jsx uses .btn-primary and
+   .btn-outline nine times between them and never imports that stylesheet, so
+   all nine CTAs on /Education rendered as unstyled inline text — 20px tall,
+   no background, no padding, and well under the 44px touch minimum.
+   A class used by more than one page belongs here.
+   ============================================ */
+
+.btn-primary,
+.btn-outline {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    /* Fluid so the label never overflows a 320px screen, and min-height keeps
+       it a valid touch target (WCAG 2.5.8). */
+    padding: 0.9rem clamp(1.25rem, 4vw, 2.5rem);
+    min-height: 44px;
+    border-radius: 30px;
+    font-size: clamp(0.95rem, 2vw, 1.05rem);
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    text-align: center;
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast),
+        border-color var(--transition-fast), background var(--transition-fast);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+    /* Black on this cyan ramp measures ~14:1 — the correct choice here. */
+    color: #000;
+    border: none;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0, 242, 254, 0.3);
+}
+
+.btn-outline {
+    background: transparent;
+    color: var(--color-text-primary);
+    border: 1px solid var(--color-border-strong);
+}
+
+.btn-outline:hover {
+    border-color: #fff;
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.btn-primary:active,
+.btn-outline:active {
+    transform: translateY(1px) scale(0.985);
+    transition-duration: 60ms;
+}
+
+/* Lays out the .btn-primary/.btn-outline pairs above. Shared by Products and
+   Education — it lived in products.css while Education also used it, so
+   Education's CTA rows were unstyled (flush-left) on a fresh load and only
+   centred if /Products had leaked its stylesheet in first. Anything used by
+   more than one page belongs here. */
+.section-cta {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin-top: 4rem;
+    text-align: center;
+}
+
+@media (max-width: 480px) {
+    .section-cta {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
+
+/* ── Shared hero-badge primitives ────────────────────────────────────
+   These pills and their pulse dot are used across pages (Enterprise renders
+   .about-hero-badge, Products renders .research-badge) while their rules
+   lived in single-page stylesheets — so they rendered unstyled on a fresh
+   load and only worked if the "owning" page's CSS had leaked in first.
+   Page stylesheets keep their colour variants; the base lives here.
+   @keyframes pulse-glow is already defined above. */
+.about-hero-badge,
+.research-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 20px;
+    border-radius: 999px;
+    border: 1px solid rgba(139, 92, 246, 0.25);
+    background: rgba(139, 92, 246, 0.06);
+    color: #c4b5fd;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+}
+
+.pulse-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #a78bfa;
+    animation: pulse-glow 2s infinite;
+}
+
+/* Uppercase section kicker, e.g. "Where students build the future. Today."
+   Was in products.css while Education uses it too. */
+.section-tagline {
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 1rem;
+}
+
+
+/* Footer link rows: compact on desktop; the pointer:coarse rule above lifts
+   them back to 44px on touch devices for WCAG 2.5.8. */
+.footer-link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 28px;
 }

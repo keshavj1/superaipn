@@ -99,7 +99,7 @@ export default function VideoShowcase() {
     return (
         <section
             ref={sectionRef}
-            className="relative py-24 md:py-32 overflow-hidden sectionsthtree"
+            className="relative py-16 md:py-20 overflow-hidden sectionsthtree"
             /* Shorthand (not background-color) on purpose: it also clears the
                dotted_bg.png that .sectionsthtree sets, matching the shipped design. */
             style={{ background: "var(--surface-section)" }}
@@ -124,7 +124,7 @@ export default function VideoShowcase() {
 
                 {/* ─── Header ─── */}
                 <div
-                    className="text-center mb-20 max-w-3xl mx-auto"
+                    className="text-center mb-10 max-w-3xl mx-auto"
                     style={{
                         opacity: visible ? 1 : 0,
                         transform: visible ? "translateY(0)" : "translateY(30px)",
@@ -139,20 +139,7 @@ export default function VideoShowcase() {
                         {/* The phrase was rendered twice — a bare text node followed
                             by a span repeating it, so users saw it duplicated. */}
                         <span className="text-heading">Built for Real-World Impact</span>
-                        <span className="relative inline-block">
-                            <span
-                                style={{
-                                    background: "linear-gradient(135deg, #8b5cf6 0%, #06b6d4 50%, #ec4899 100%)",
-                                    WebkitBackgroundClip: "text",
-                                    WebkitTextFillColor: "transparent",
-                                    backgroundSize: "200% auto",
-                                    animation: "shimmer 4s linear infinite",
-                                }}
-                            >
 
-                            </span>
-                            <div className="absolute -bottom-2 left-0 right-0 h-[3px] rounded-full bg-gradient-to-r from-purple-500/0 via-purple-500/50 to-purple-500/0" />
-                        </span>
                     </h2>
                     <p className="text-gray-400 text-lg leading-relaxed max-w-2xl mx-auto">
                         From sovereign infrastructure to education AI - every capability is designed
@@ -190,9 +177,15 @@ export default function VideoShowcase() {
                             />
 
                             <div className="relative z-10">
-                                <div className="text-4xl mb-5 ">
-                                    {cap.icon}
-                                    <img src={cap.image} alt="" />
+                                <div className="mb-5">
+                                    <img
+                                        src={cap.image}
+                                        alt=""
+                                        width={40}
+                                        height={40}
+                                        loading="lazy"
+                                        className="w-10 h-10 object-contain"
+                                    />
                                 </div>
 
                                 <h3 className="text-xl font-bold text-heading mb-2.5 transition-colors group-hover:text-purple-300">
@@ -206,45 +199,9 @@ export default function VideoShowcase() {
                     ))}
                 </div>
 
-                {/* ─── Impact Numbers ─── */}
-                <div
-                    className="mt-20 relative"
-                    style={{
-                        opacity: visible ? 1 : 0,
-                        transform: visible ? "translateY(0)" : "translateY(25px)",
-                        transition: "all 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.5s",
-                    }}
-                >
-                    {/* Divider */}
-                    <div className="w-full h-px bg-gradient-to-r from-transparent via-white/[0.08] to-transparent mb-16" />
-
-                    {/* <div className="grid grid-cols-2 md:grid-cols-4 gap-10">
-                        {[
-                            { value: "30", suffix: "L+", label: "Students Powered", color: "#8b5cf6" },
-                            { value: "15", suffix: "+", label: "Countries Active", color: "#06b6d4" },
-                            { value: "8350", suffix: "+", label: "Careers Launched", color: "#ec4899" },
-                            { value: "95", suffix: "%", label: "Client Satisfaction", color: "#10b981" },
-                        ].map((stat, i) => (
-                            <div key={i} className="group text-center cursor-default">
-                                <div
-                                    className="text-4xl md:text-5xl font-black mb-2 tracking-tight transition-transform duration-500 group-hover:scale-110"
-                                    style={{
-                                        // Tokenised start stop: a literal white washed
-                                        // these stat numbers out on a light background.
-                                        background: `linear-gradient(135deg, var(--gradient-text-start) 30%, ${stat.color} 100%)`,
-                                        WebkitBackgroundClip: "text",
-                                        WebkitTextFillColor: "transparent",
-                                    }}
-                                >
-                                    <AnimatedNumber target={stat.value} suffix={stat.suffix} visible={visible} />
-                                </div>
-                                <div className="text-gray-600 text-xs font-medium tracking-[0.15em] uppercase transition-colors duration-300 group-hover:text-gray-400">
-                                    {stat.label}
-                                </div>
-                            </div>
-                        ))}
-                    </div> */}
-                </div>
+                {/* Impact-numbers block removed: it contained only a divider
+                    and a commented-out stats grid — ~80px of empty space at the
+                    section tail. Restore from git history alongside real data. */}
             </div>
         </section>
     );

@@ -3,13 +3,15 @@
    ============================================ */
 
 .hero {
-    min-height: 100vh;
+    /* min-height removed: forcing a full-viewport hero distributed ~300px of
+       empty flex-centering space above and below content whose natural height
+       is ~500px. Padding now defines the hero's height. */
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
     color: var(--color-text-primary);
-    padding: 120px 20px 80px;
+    padding: clamp(88px, 12vw, 112px) var(--gutter) var(--space-section-sm);
     position: relative;
     overflow: hidden;
     background: transparent;
@@ -69,6 +71,7 @@
     font-weight: 500;
     letter-spacing: 0.5px;
     animation: fadeInDown 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2), inset 0 0 20px rgba(139, 92, 246, 0.1);
     position: relative;
@@ -76,32 +79,30 @@
 }
 
 /* Title */
+/* The declaration block was pasted three times here. Beyond the duplication,
+   the later copies carried `!important` on font-size, which silently killed
+   the mobile override in the max-width:768px block below — so the hero title
+   never shrank on a phone. Nothing competes with this selector, so there is
+   no reason for !important at all. */
 .hero-title {
-    font-size: clamp(42px, 6vw, 67px);
+    font-size: clamp(32px, 6vw, 58px);
     font-weight: 600;
     line-height: 1.1;
-    letter-spacing: -0.03em;
+    letter-spacing: -0.02em;
     color: var(--color-text-primary);
-    margin-bottom: 24px;
+    margin-bottom: 20px;
     opacity: 0;
     animation: fadeInUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
     text-shadow: var(--hero-title-shadow);
-    font-size: clamp(36px, 6vw, 58px) !important;
-    font-weight: 600 !important;
-    line-height: 1.1;
-    margin-bottom: 20px;
-    letter-spacing: -0.02em;
-    font-size: clamp(36px, 6vw, 58px) !important;
-    font-weight: 600 !important;
-    line-height: 1.1;
-    margin-bottom: 20px;
-    letter-spacing: -0.02em;
 }
 
 .contact-hero-title {
-    font-size: clamp(42px, 6vw, 67px);
+    font-size: clamp(32px, 6vw, 58px);
     font-weight: 600;
-    line-height: 0.61;
+    /* Was 0.61 — a line box shorter than the glyphs, so a title that wraps to
+       two lines overlaps itself. It only looked fine because a
+       higher-specificity rule in contact.css happened to override it. */
+    line-height: 1.1;
     letter-spacing: -0.03em;
     color: var(--color-text-primary);
     margin-bottom: 24px;
@@ -118,14 +119,18 @@
     background-clip: text;
     animation: gradient-shift 6s linear infinite;
     display: inline-block;
-    line-height: 61px;
+    /* Was a fixed 61px. The heading it sits in is clamp(32px…58px), so on a
+       phone the text was ~32px while the line box still reserved 61px,
+       leaving a large dead gap under the highlighted line. Used across 9
+       page heroes. */
+    line-height: 1.1;
 }
 
 /* Subtitle */
 .hero-subtitle {
     font-size: clamp(16px, 2vw, 19px);
     color: var(--color-text-secondary);
-    margin-bottom: 48px;
+    margin-bottom: 28px;
     line-height: 1.8;
     max-width: 680px;
     margin-left: auto;
@@ -181,6 +186,7 @@
     background: var(--btn-secondary-bg);
     color: var(--btn-secondary-text);
     border: 1px solid var(--btn-secondary-border);
+    -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
@@ -358,11 +364,12 @@
         gap: 16px;
     }
 
+    /* `width` was declared twice; the 70% won, so the mobile CTA rendered at
+       70% of an already max-320px anchor (~224px) instead of filling it. */
     .hero-btn {
         width: 100%;
         margin: 0 auto;
         display: block;
-        width: 70%;
     }
 
     .bth_section a {
@@ -404,13 +411,13 @@
     }
 
     .aiSovereign {
-        margin-top: 114px;
+        margin-top: var(--space-section-sm);
         padding: 0 20px;
     }
 
     .card1sect2 {
         padding: 18px;
-        border: 1px solid #dee2e638 !important;
+        border: 1px solid var(--color-border);
         margin: 0 17px;
     }
 
