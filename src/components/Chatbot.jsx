@@ -26,9 +26,6 @@ const LOCAL_REPLIES = {
     text: [
       'Here are our AI products:',
       '',
-      '• NeuraEdge — Sovereign LLM platform for enterprise & government',
-      '• NeuraEaglei — Vision intelligence & analytics',
-      '• NeuraBOT — Conversational AI for citizen & customer service',
       '• NeuraEduBOT — Cognitive education AI: adaptive learning, teacher-first design, curriculum alignment',
       '• Physical AI — AI + robotics integration, sensor & IoT fusion, and NeuraSphere robotics',
       '• NeuraLabs (AI Labs) — Turn-key AI & robotics labs with 500+ experiments for schools, universities & corporate training',
