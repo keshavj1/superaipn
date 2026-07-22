@@ -188,6 +188,15 @@ export default function Contact() {
     setContactSending(true);
     try {
       await sendViaRelay(subject, {
+        /* Reply-To = the visitor, so hitting Reply in the inbox answers them
+           directly instead of the relay. */
+        _replyto: email,
+        /* Branded confirmation the visitor receives from the Super AIP side. */
+        _autoresponse:
+          "Thank you for contacting Super AI Polaris (Super AIP). We have received your message and our team will get back to you shortly.
+
+— Team Super AIP
+superaip.com",
         Name: fullName,
         "Designation / Role": get("role"),
         Organization: get("organization"),
@@ -262,6 +271,12 @@ export default function Contact() {
     setDemoSending(true);
     try {
       await sendViaRelay(subject, {
+        _replyto: email,
+        _autoresponse:
+          "Thank you — your demo request has reached Super AI Polaris (Super AIP). Our team will contact you to schedule it.
+
+— Team Super AIP
+superaip.com",
         Name: fullName,
         "Designation / Role": get("role"),
         Organization: get("organization"),
