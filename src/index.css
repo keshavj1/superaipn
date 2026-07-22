@@ -227,9 +227,14 @@ a:hover {
     color: var(--color-text-primary);
 }
 
-img {
-    max-width: 100%;
-    height: auto;
+/* In @layer base so height/width utilities (h-10, h-[90px]…) can override:
+   unlayered, this element rule beat every Tailwind sizing utility on every
+   image — a bare `h-*` class on an <img> silently did nothing. */
+@layer base {
+    img {
+        max-width: 100%;
+        height: auto;
+    }
 }
 
 /* ============================================
