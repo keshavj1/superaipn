@@ -14,6 +14,24 @@ import {
    dot, without rejecting the valid-but-unusual addresses a strict regex does. */
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+/* FormSubmit relay: delivers submissions straight to the inbox with no
+   backend and no API key. NOTE — the FIRST submission triggers a one-time
+   activation email to this address; until its link is clicked, nothing is
+   delivered. On any network/service failure the forms fall back to the old
+   mailto: hand-off, so a submission is never silently lost. */
+const FORM_RELAY = "https://formsubmit.co/ajax/keshav.j@superaip.com";
+
+async function sendViaRelay(subject, fields) {
+  const res = await fetch(FORM_RELAY, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    body: JSON.stringify({ _subject: subject, _template: "table", ...fields }),
+  });
+  if (!res.ok) throw new Error("relay " + res.status);
+  const data = await res.json();
+  if (!(data.success === "true" || data.success === true)) throw new Error("relay rejected");
+}
+
 /* An error must not look like a confirmation. role="alert" also makes a
    screen reader announce failures immediately rather than politely. */
 function FormStatus({ status }) {
@@ -133,7 +151,9 @@ export default function Contact() {
      identical cyan, so users could not tell them apart. */
   const [contactStatus, setContactStatus] = useState(null);
 
-  const handleContactSubmit = (e) => {
+  const [contactSending, setContactSending] = useState(false);
+
+  const handleContactSubmit = async (e) => {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
     const get = (k) => (fd.get(k) || "").toString().trim();
@@ -165,18 +185,43 @@ export default function Contact() {
       message,
     ].join("\n");
 
-    window.location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    setContactStatus({
-      type: "success",
-      message: `Opening your email app to send to ${CONTACT_EMAIL}… If nothing opens, email us directly there.`,
-    });
+    setContactSending(true);
+    try {
+      await sendViaRelay(subject, {
+        Name: fullName,
+        "Designation / Role": get("role"),
+        Organization: get("organization"),
+        "Work Email": email,
+        Phone: get("phone"),
+        Country: get("country"),
+        "I am a": get("iam"),
+        Subject: get("subject"),
+        Message: message,
+      });
+      setContactStatus({
+        type: "success",
+        message: "Thank you — your message has been sent. We'll get back to you shortly.",
+      });
+      e.target.reset();
+    } catch {
+      // Relay unreachable — fall back to the visitor's own mail client.
+      window.location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      setContactStatus({
+        type: "success",
+        message: `Opening your email app to send to ${CONTACT_EMAIL}… If nothing opens, email us directly there.`,
+      });
+    } finally {
+      setContactSending(false);
+    }
   };
 
   /* Demo request → same mailto hand-off as the contact form above. The 13
      inputs now carry name attributes so FormData can read them. */
   const [demoStatus, setDemoStatus] = useState(null);
 
-  const handleDemoSubmit = (e) => {
+  const [demoSending, setDemoSending] = useState(false);
+
+  const handleDemoSubmit = async (e) => {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
     const get = (k) => (fd.get(k) || "").toString().trim();
@@ -214,11 +259,39 @@ export default function Contact() {
       get("specific"),
     ].join("\n");
 
-    window.location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    setDemoStatus({
-      type: "success",
-      message: `Opening your email app to send to ${CONTACT_EMAIL}… If nothing opens, email us directly there.`,
-    });
+    setDemoSending(true);
+    try {
+      await sendViaRelay(subject, {
+        Name: fullName,
+        "Designation / Role": get("role"),
+        Organization: get("organization"),
+        "Work Email": email,
+        Phone: get("phone"),
+        Country: get("country"),
+        Industry: get("industry"),
+        "Products of interest": selectedProducts.length ? selectedProducts.join(", ") : "Not specified",
+        "Preferred format": get("format"),
+        "Team size": get("teamSize"),
+        "Preferred date": get("date"),
+        "Preferred time": get("time"),
+        "Primary use case": get("useCase"),
+        "Anything specific": get("specific"),
+      });
+      setDemoStatus({
+        type: "success",
+        message: "Thank you — your demo request has been sent. Our team will reach out to schedule it.",
+      });
+      e.target.reset();
+      setSelectedProducts([]);
+    } catch {
+      window.location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      setDemoStatus({
+        type: "success",
+        message: `Opening your email app to send to ${CONTACT_EMAIL}… If nothing opens, email us directly there.`,
+      });
+    } finally {
+      setDemoSending(false);
+    }
   };
 
   return (
@@ -348,8 +421,8 @@ export default function Contact() {
                 {/* Centred to match the demo form's submit block below — the two
                     forms sit on the same page and previously disagreed. */}
                 <div style={{ textAlign: "center", marginTop: 24 }}>
-                  <button type="submit" className="form-submit-btn" id="submit-enquiry">
-                    Submit Enquiry <Send size={16} />
+                  <button type="submit" className="form-submit-btn" id="submit-enquiry" disabled={contactSending}>
+                    {contactSending ? "Sending…" : "Submit Enquiry"} <Send size={16} />
                   </button>
                   <FormStatus status={contactStatus} />
                 </div>
@@ -642,8 +715,8 @@ export default function Contact() {
                 </div>
               </div>
               <div style={{ textAlign: "center", marginTop: 24 }}>
-                <button type="submit" className="form-submit-btn" id="request-demo-btn">
-                  Request My Demo <Rocket size={16} />
+                <button type="submit" className="form-submit-btn" id="request-demo-btn" disabled={demoSending}>
+                  {demoSending ? "Sending…" : "Request My Demo"} <Rocket size={16} />
                 </button>
                 <FormStatus status={demoStatus} />
               </div>
