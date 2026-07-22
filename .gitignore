@@ -13,8 +13,8 @@ dist-ssr/
 *.env
 
 # large media (host on a CDN, not in the repo)
-public/videos/
-*.mp4
+# Videos ship with the site: Vercel builds from this repo, so ignoring them
+# deployed a site with every <video> empty. All are individually <100MB.
 
 # logs
 npm-debug.log*
