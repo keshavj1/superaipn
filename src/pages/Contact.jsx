@@ -193,10 +193,7 @@ export default function Contact() {
         _replyto: email,
         /* Branded confirmation the visitor receives from the Super AIP side. */
         _autoresponse:
-          "Thank you for contacting Super AI Polaris (Super AIP). We have received your message and our team will get back to you shortly.
-
-— Team Super AIP
-superaip.com",
+          "Thank you for contacting Super AI Polaris (Super AIP). We have received your message and our team will get back to you shortly.\n\n— Team Super AIP\nsuperaip.com",
         Name: fullName,
         "Designation / Role": get("role"),
         Organization: get("organization"),
@@ -273,10 +270,7 @@ superaip.com",
       await sendViaRelay(subject, {
         _replyto: email,
         _autoresponse:
-          "Thank you — your demo request has reached Super AI Polaris (Super AIP). Our team will contact you to schedule it.
-
-— Team Super AIP
-superaip.com",
+          "Thank you — your demo request has reached Super AI Polaris (Super AIP). Our team will contact you to schedule it.\n\n— Team Super AIP\nsuperaip.com",
         Name: fullName,
         "Designation / Role": get("role"),
         Organization: get("organization"),
