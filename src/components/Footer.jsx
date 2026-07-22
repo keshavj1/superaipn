@@ -108,7 +108,7 @@ export default function Footer() {
                     {/* Brand */}
                     <div className="lg:col-span-4 flex flex-col items-start pr-0 lg:pr-12">
                         <Link to="/" className="flex items-center gap-3 mb-6">
-                            <img src={logo} alt="Super AIP Logo" className="h-10 w-auto" />
+                            <img src={logo} alt="Super AIP Logo" className="h-[90px] w-auto py-2.5" />
                         </Link>
                         <p className="text-gray-500 text-sm leading-relaxed mb-8">
                             Superizing artificial intelligence for enterprise operations,
