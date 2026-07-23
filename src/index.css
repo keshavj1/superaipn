@@ -1562,3 +1562,81 @@ button:disabled,
     align-items: center;
     min-height: 28px;
 }
+
+
+/* ============================================
+   CSS-ONLY GALAXY FALLBACK
+   Shown by GalaxyEffect1 when a WebGL context is refused (GPU pressure,
+   policy, old hardware) so the section never renders as an empty void.
+   ============================================ */
+.galaxy-fallback-nebula {
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(ellipse 52% 42% at 50% 50%, rgba(139, 92, 246, 0.28), transparent 70%),
+        radial-gradient(ellipse 30% 24% at 62% 40%, rgba(6, 182, 212, 0.14), transparent 70%),
+        radial-gradient(ellipse 26% 20% at 38% 62%, rgba(196, 181, 253, 0.12), transparent 70%);
+}
+
+.galaxy-fallback-stars {
+    position: absolute;
+    inset: 0;
+    background-image: url('/dotted_bg.png');
+    background-size: 420px;
+    opacity: 0.35;
+    -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, #000, transparent 75%);
+    mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, #000, transparent 75%);
+}
+
+.galaxy-fallback-ring {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    border-radius: 9999px;
+    border: 1px solid rgba(139, 92, 246, 0.25);
+    transform: translate(-50%, -50%);
+}
+
+.galaxy-fallback-ring-a {
+    width: 52vmin;
+    height: 52vmin;
+    animation: galaxy-ring-spin 46s linear infinite;
+    border-style: dashed;
+}
+
+.galaxy-fallback-ring-b {
+    width: 32vmin;
+    height: 32vmin;
+    border-color: rgba(6, 182, 212, 0.2);
+    animation: galaxy-ring-spin 30s linear infinite reverse;
+}
+
+.galaxy-fallback-core {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 14vmin;
+    height: 14vmin;
+    border-radius: 9999px;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle, rgba(196, 181, 253, 0.9), rgba(139, 92, 246, 0.45) 45%, transparent 70%);
+    filter: blur(2px);
+    animation: galaxy-core-pulse 5s ease-in-out infinite;
+}
+
+@keyframes galaxy-ring-spin {
+    to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+@keyframes galaxy-core-pulse {
+    0%, 100% { opacity: 0.75; transform: translate(-50%, -50%) scale(1); }
+    50% { opacity: 1; transform: translate(-50%, -50%) scale(1.12); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .galaxy-fallback-ring-a,
+    .galaxy-fallback-ring-b,
+    .galaxy-fallback-core {
+        animation: none;
+    }
+}

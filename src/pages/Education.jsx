@@ -521,7 +521,7 @@ const Education = () => {
                                                 {book.topics.map((t, i) => <li key={i}>{t}</li>)}
                                             </ul>
                                         </div>
-                                        <div style={{ display: 'flex', gap: '1rem', marginTop: '2rem' }}>
+                                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', marginTop: '2rem' }}>
                                             <Link to="/Contact#contact-us" className="btn-outline" style={{ padding: '0.6rem 1.5rem', fontSize: '0.9rem' }}>Preview</Link>
                                             <Link to="/Contact#contact-us" className="btn-primary" style={{ padding: '0.6rem 1.5rem', fontSize: '0.9rem', background: '#3b82f6', color: '#fff' }}>Enquire Order</Link>
                                         </div>

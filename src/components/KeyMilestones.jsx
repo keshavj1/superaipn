@@ -84,7 +84,7 @@ export default function KeyMilestones() {
                     {/* Vertical center line */}
                     <div className="absolute left-6 md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-purple-500/20 to-transparent" />
 
-                    <div className="space-y-6">
+                    <div className="space-y-8">
                         {milestones.map((m, i) => {
                             const isLeft = i % 2 === 0;
                             return (
@@ -103,7 +103,7 @@ export default function KeyMilestones() {
                                     }}
                                 >
                                     {/* Content */}
-                                    <div className={`flex-1 ${isLeft ? "md:text-right" : "md:text-left"} pl-14 md:pl-0`}>
+                                    <div className={`flex-1 ${isLeft ? "md:text-right md:pr-10" : "md:text-left md:pl-10"} pl-14 md:pl-0`}>
                                         <div
                                             className="card1sect2 block w-full rounded-xl p-6 hover:border-amber-500/40 transition-all duration-500 group-hover:-translate-y-1.5 group-hover:scale-[1.02] group-hover:shadow-[0_10px_30px_-10px_rgba(245,158,11,0.2)] bg-white/[0.02]"
                                         >

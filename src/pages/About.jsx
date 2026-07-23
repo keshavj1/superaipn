@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import "../styles/about.css";
 import FinalCTA from "../components/FinalCTA";
-import ClientsSection from "../components/ClientsSection";
 // Used only by the hidden "Meet the People" section — restore alongside it.
 // import PersonCard from "../components/PersonCard";
 // `employees` is still exported from data/team.js — re-add it here to restore
@@ -649,10 +648,8 @@ export default function About() {
         </div>
       </section> */}
 
-        {/* Partner testimonials — sits after Associations & Recognitions so the
-            credibility story runs network → proof → CTA. */}
-        <ClientsSection />
-
+        {/* Testimonials intentionally omitted here — the slider lives on the
+            Home page; About ends on the recognitions + CTA beat instead. */}
         <FinalCTA />
       </div>
     </>

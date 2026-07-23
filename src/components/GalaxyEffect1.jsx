@@ -1,10 +1,13 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 function GalaxyEffect1() {
   const containerRef = useRef(null);
   const tooltipRef = useRef(null);
+  /* WebGL can be refused (GPU under pressure, policy, old hardware). When it
+     is, a CSS-only galaxy renders instead so the section never looks empty. */
+  const [webglFailed, setWebglFailed] = useState(false);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -29,8 +32,9 @@ function GalaxyEffect1() {
     let renderer;
     try {
       renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      if (!renderer.getContext()) throw new Error("no context");
     } catch {
-      // The section keeps its CSS gradient background; only the 3D layer is lost.
+      setWebglFailed(true);
       return;
     }
     renderer.setSize(container.clientWidth, container.clientHeight);
@@ -267,6 +271,17 @@ function GalaxyEffect1() {
 
           {/* Three.js container */}
           <div ref={containerRef} className="absolute inset-0 z-0" />
+
+          {/* CSS fallback galaxy — only when WebGL is unavailable */}
+          {webglFailed && (
+            <div className="galaxy-fallback absolute inset-0 z-0 pointer-events-none" aria-hidden="true">
+              <div className="galaxy-fallback-nebula" />
+              <div className="galaxy-fallback-stars" />
+              <div className="galaxy-fallback-ring galaxy-fallback-ring-a" />
+              <div className="galaxy-fallback-ring galaxy-fallback-ring-b" />
+              <div className="galaxy-fallback-core" />
+            </div>
+          )}
         </div>
       </div>
     </section>

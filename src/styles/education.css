@@ -391,8 +391,13 @@
 }
 
 .book-cover {
-    flex: 0 1 clamp(120px, 30%, 250px);
-    height: 350px;
+    /* flex-shrink 0 + aspect-ratio: the old `0 1 …` basis let each card's
+       text length squeeze its cover to a different width, so covers were
+       visibly inconsistent between slides. */
+    flex: 0 0 clamp(140px, 28%, 230px);
+    aspect-ratio: 3 / 4;
+    height: auto;
+    align-self: center;
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.5);
@@ -417,7 +422,7 @@
 }
 
 .book-info h3 {
-    font-size: 1.6rem;
+    font-size: clamp(1.15rem, 1.1rem + 0.8vw, 1.6rem);
     margin-bottom: 0.5rem;
     color: #fff;
 }
@@ -550,11 +555,15 @@
 
     .book-card {
         flex-direction: column;
+        padding: 1.25rem;
+        gap: 1.25rem;
     }
 
     .book-cover {
-        width: 200px;
-        height: 280px;
+        flex: none;
+        width: min(200px, 70%);
+        height: auto;
+        aspect-ratio: 3 / 4;
         margin: 0 auto;
     }
 
