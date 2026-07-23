@@ -1156,6 +1156,14 @@ textarea:focus-visible,
     border-radius: 4px;
 }
 
+/* The chatbot input already shows focus through its wrapper's focus-within
+   border, so the global violet outline above stacked a second ring inside it
+   ("border inside border"). Suppress it there only — higher specificity than
+   the rule above, and keyboard focus everywhere else is untouched. */
+#chatbot-panel input:focus-visible {
+    outline: none;
+}
+
 /* ── Reduced motion (WCAG 2.3.3) ────────────────────────────────────
    Previously honoured only under the light theme and in two component
    stylesheets. This is the global guard; JS-driven reveals still need a
