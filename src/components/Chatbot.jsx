@@ -353,7 +353,7 @@ const Chatbot = () => {
             ))}
           </div>
 
-          <div className="flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.04] px-2 py-1.5 transition-all focus-within:border-violet-500/50 focus-within:bg-white/[0.07] focus-within:ring-4 focus-within:ring-violet-500/10">
+          <div className="flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.04] px-2 py-1.5 transition-colors focus-within:border-white/20 focus-within:bg-white/[0.06]">
             <input
               ref={inputRef}
               type="text"

@@ -11,7 +11,7 @@
     justify-content: center;
     text-align: center;
     color: var(--color-text-primary);
-    padding: clamp(88px, 12vw, 112px) var(--gutter) var(--space-section-sm);
+    padding: clamp(112px, 14vw, 140px) var(--gutter) var(--space-section-sm);
     position: relative;
     overflow: hidden;
     background: transparent;
