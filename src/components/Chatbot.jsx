@@ -353,13 +353,16 @@ const Chatbot = () => {
             ))}
           </div>
 
-          <div className="flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.04] px-2 py-1.5 transition-colors focus-within:border-white/20 focus-within:bg-white/[0.06]">
+          <div className="flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.04] px-2 py-1.5 transition-colors focus-within:border-violet-400/40 focus-within:bg-white/[0.06]">
             <input
               ref={inputRef}
               type="text"
               placeholder="Ask me anything..."
               aria-label="Type your message"
-              className="min-w-0 flex-1 bg-transparent px-3 py-2 text-sm text-slate-100 outline-none placeholder:text-slate-500"
+              /* The wrapper's focus-within border is the focus indicator, so
+                 suppress the global :focus-visible outline here — it stacked a
+                 second violet ring inside the wrapper ("border inside border"). */
+              className="min-w-0 flex-1 bg-transparent px-3 py-2 text-sm text-slate-100 outline-none focus:outline-none focus-visible:outline-none placeholder:text-slate-500"
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSend()}
