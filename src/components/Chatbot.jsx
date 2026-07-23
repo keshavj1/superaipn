@@ -3,14 +3,16 @@ import { Link } from 'react-router-dom';
 import { Send, User, Loader2, X, Sparkles } from 'lucide-react';
 import superAipLogo from '../assets/super_aip_logo.png';
 
-/* Backend base URL. Vite inlines this AT BUILD TIME, so if VITE_API_URL is not
-   set in the deploy environment the bundle previously shipped a hardcoded
-   http://localhost:5000 — which fails for every visitor and is additionally
-   blocked as mixed content on an HTTPS page. The localhost fallback is now
-   restricted to dev builds; a production build without the variable disables
-   the widget instead of failing silently. See .env.example. */
+/* Backend base URL, inlined by Vite AT BUILD TIME.
+   - Production default is '' → the widget calls the RELATIVE path `/chat`, which
+     is same-origin no matter whether the visitor is on www or the apex domain.
+     The backend is reverse-proxied under the same host, so this needs no CORS
+     and never triggers mixed content. Hardcoding an absolute origin here would
+     break the other domain (www vs apex are different origins → CORS preflight).
+   - Dev falls back to the separate backend port.
+   - VITE_API_URL overrides both when the backend lives on another host. */
 const API_URL =
-  import.meta.env.VITE_API_URL ||
+  import.meta.env.VITE_API_URL ??
   (import.meta.env.DEV ? 'http://localhost:5000' : '');
 
 // How long to wait before giving up, so a hung backend cannot spin forever.
@@ -149,18 +151,14 @@ const Chatbot = () => {
     const reply = (text) =>
       setMessages((prev) => [...prev, { text, sender: 'bot', time: stamp() }]);
 
-    if (!API_URL) {
-      reply("The assistant isn't available right now. Please use the contact form and we'll get back to you.");
-      setIsLoading(false);
-      return;
-    }
-
     // AbortController bounds the wait; without it a hung backend left the
     // typing indicator spinning and the input disabled indefinitely.
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
 
     try {
+      // API_URL is '' in production → same-origin `/chat`. If the backend is
+      // unreachable the catch below shows the graceful fallback message.
       const response = await fetch(`${API_URL}/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
