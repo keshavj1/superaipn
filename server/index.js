@@ -8,6 +8,13 @@ require('dotenv').config();
 
 const app = express();
 
+/* Behind the OpenLiteSpeed reverse proxy every request arrives from 127.0.0.1,
+   so without this the per-IP rate limit below counted ALL visitors as one
+   client and blocked the whole site's chatbot after a handful of messages.
+   Trusting the loopback proxy makes req.ip the real client IP from
+   X-Forwarded-For, so the limit applies per person. */
+app.set('trust proxy', 'loopback');
+
 /* `cors()` with no options allowed ANY origin to call /chat, which spends
    Groq, Gemini and Pinecone quota on every request — an open cost-abuse
    vector. Set ALLOWED_ORIGINS (comma-separated) in the environment. */
@@ -35,7 +42,7 @@ app.use(express.json({ limit: '10kb' }));
 /* Minimal in-memory rate limit — no dependency required. Swap for
    express-rate-limit with a shared store if you run more than one instance. */
 const RATE_LIMIT_WINDOW_MS = 60_000;
-const RATE_LIMIT_MAX = 15;
+const RATE_LIMIT_MAX = 30;
 const hits = new Map();
 
 app.use('/chat', (req, res, next) => {
