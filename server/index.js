@@ -19,7 +19,12 @@ const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || 'http://localhost:5173')
 app.use(cors({
   origin(origin, cb) {
     // Allow same-origin/server-to-server calls, which send no Origin header.
-    if (!origin || ALLOWED_ORIGINS.includes(origin)) return cb(null, true);
+    if (!origin) return cb(null, true);
+    /* A reverse proxy (OpenLiteSpeed here) can forward the Origin header
+       duplicated, so it arrives comma-joined ("https://x, https://x"). Match
+       on the first value rather than the raw string. */
+    const first = origin.split(',')[0].trim();
+    if (ALLOWED_ORIGINS.includes(first)) return cb(null, true);
     return cb(new Error('Not allowed by CORS'));
   },
 }));
