@@ -27,6 +27,19 @@
 .cert-missing h1 { color: #e2e8f0; font-size: 1.6rem; margin: 0; }
 .cert-missing p { line-height: 1.6; margin: 0; }
 
+/* The actual certificate image (the official designed document). */
+.cert-image-wrap {
+    width: min(1000px, 100%);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 24px 60px -20px rgba(0, 0, 0, 0.7);
+}
+.cert-image {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
 /* Unobtrusive download/print action under the certificate */
 .cert-download {
     display: inline-flex;

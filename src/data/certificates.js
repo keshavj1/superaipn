@@ -12,8 +12,8 @@
 const BATCH = {
   type: 'Certificate of Completion',
   institute: 'Institute of Management Studies, Noida',
-  program: 'FDP: AI Innovation and Digital Skills',
-  date: '10 August 2026',
+  program: 'Five-Day Faculty Development Program in AI Innovation and Digital Skills (via Microsoft Learn)',
+  date: '03 July 2026',
   validity: '10 Years',
   signatory: 'Jaydev Rath',
   signatoryTitle: 'CEO, Super AI Polaris',
