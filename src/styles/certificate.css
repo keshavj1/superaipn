@@ -174,10 +174,11 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 4px;
+    gap: 0.7cqw;
+    padding: 0 1cqw;
 }
 .cert-qr svg { width: 11cqw; height: 11cqw; }
-.cert-qr small { font-size: 1.15cqw; color: #94a3b8; }
+.cert-qr small { font-size: 1.2cqw; color: #94a3b8; margin-top: 0.2cqw; letter-spacing: 0.02em; }
 .cert-sign { text-align: center; }
 .cert-sign-line {
     width: 15cqw;
@@ -273,11 +274,28 @@
     .cert-watermark { font-size: 15rem; }
 }
 
-/* Print: show only the certificate, full-bleed. */
+/* Print / Save-as-PDF: the certificate fills its own landscape A4 page with
+   all colours intact. The 1.414 ratio matches A4 landscape exactly, so there
+   is no wasted blank space. */
+@page { size: A4 landscape; margin: 0; }
+
 @media print {
     body { background: #fff; }
     .cert-page > *:not(.certificate),
     nav, footer, .chatbot-root { display: none !important; }
-    .cert-page { padding: 0; }
-    .certificate { box-shadow: none; width: 100%; }
+    .cert-page { padding: 0; min-height: 0; background: #fff; gap: 0; }
+    .certificate {
+        box-shadow: none;
+        border-radius: 0;
+        width: 100%;
+        max-width: none;
+        aspect-ratio: 1.414 / 1;   /* stay landscape even when printed from a phone */
+    }
+    /* Browsers strip background colours in print by default — that dropped the
+       Microsoft 4-square mark and the corner accents from the PDF. Force them. */
+    .certificate,
+    .certificate * {
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+    }
 }

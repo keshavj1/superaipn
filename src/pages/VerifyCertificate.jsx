@@ -43,9 +43,8 @@ function CertificateView({ cert }) {
         <p className="cert-topic">{cert.program}</p>
 
         <div className="cert-footer">
-          <div>
+          <div className="cert-meta">
             <p className="cert-date">Date: {cert.date}</p>
-            <p className="cert-no">{cert.id}</p>
           </div>
 
           <div className="cert-qr">
