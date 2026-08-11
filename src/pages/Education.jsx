@@ -172,6 +172,22 @@ const gradeTimeline = [
     { range: "Class 11–12", title: "Mastery", desc: "Full AI/ML projects and LLM exploration." }
 ];
 
+// Microsoft certification pathways Super AI Polaris prepares learners for.
+const microsoftCerts = [
+    { code: "AI-900", title: "Azure AI Fundamentals", desc: "Core AI & machine-learning concepts on Microsoft Azure.", icon: BrainCircuit },
+    { code: "AZ-900", title: "Azure Fundamentals", desc: "Cloud concepts, core Azure services, security and pricing.", icon: Globe2 },
+    { code: "MS-900", title: "Microsoft 365 Fundamentals", desc: "Productivity, collaboration and security across Microsoft 365.", icon: LayoutGrid },
+    { code: "PL-900", title: "Power Platform Fundamentals", desc: "Low-code apps, automation and analytics with Power Platform.", icon: Code },
+    { code: "MOS", title: "Microsoft Office Specialist", desc: "Industry-standard proficiency in Word, Excel and PowerPoint.", icon: BookMarked },
+    { code: "MCE", title: "Microsoft Certified Educator", desc: "Technology-enabled teaching skills for modern classrooms.", icon: UserCircle },
+];
+
+const certBenefits = [
+    "Globally recognized credentials",
+    "Industry-aligned curriculum",
+    "Exam-ready, instructor-led training",
+];
+
 const AnimatedCounter = ({ endValue, suffix }) => {
     const [count, setCount] = useState(0);
     const counterRef = useRef(null);
@@ -544,6 +560,54 @@ const Education = () => {
 
                 <div className="section-cta" style={{ marginTop: '2rem', paddingBottom: '4rem' }}>
                     <Link to="/Contact#contact-us" className="btn-primary" style={{ background: '#3b82f6', color: '#fff' }}>Explore Completed Series <ArrowRight size={18} /></Link>
+                </div>
+            </section>
+
+            {/* 6. MICROSOFT CERTIFICATION */}
+            <section id="microsoft-certification" className="ms-cert-section reveal-fade-up" ref={addToRefs}>
+                <div style={{ textAlign: 'center' }}>
+                    <div className="ms-logo" aria-hidden="true">
+                        <span style={{ background: '#F25022' }} />
+                        <span style={{ background: '#7FBA00' }} />
+                        <span style={{ background: '#00A4EF' }} />
+                        <span style={{ background: '#FFB900' }} />
+                    </div>
+                    <p className="section-tagline" style={{ color: '#00A4EF' }}>In partnership with Microsoft</p>
+                    <h2 style={{ fontSize: 'clamp(1.9rem, 4vw, 3rem)', margin: '0.5rem 0 1rem' }}>
+                        Microsoft Certification Pathways
+                    </h2>
+                    <p className="section-intro" style={{ margin: '0 auto 1.5rem' }}>
+                        Super AI Polaris prepares students and educators for globally recognized Microsoft
+                        certifications — validating real, industry-ready skills in AI, cloud, and productivity.
+                    </p>
+
+                    <div className="ms-benefits">
+                        {certBenefits.map((b) => (
+                            <span key={b} className="ms-benefit">
+                                <CheckCircle2 size={16} /> {b}
+                            </span>
+                        ))}
+                    </div>
+                </div>
+
+                <div className="ms-cert-grid">
+                    {microsoftCerts.map((c) => (
+                        <div key={c.code} className="ms-cert-card glass-card">
+                            <div className="ms-cert-head">
+                                <span className="ms-cert-icon"><c.icon size={26} /></span>
+                                <span className="ms-cert-code">{c.code}</span>
+                            </div>
+                            <h3>{c.title}</h3>
+                            <p>{c.desc}</p>
+                        </div>
+                    ))}
+                </div>
+
+                <div className="section-cta" style={{ marginTop: '2.5rem', paddingBottom: '1rem' }}>
+                    <Link to="/Contact#contact-us" className="btn-primary" style={{ background: '#00A4EF', color: '#fff' }}>
+                        Enroll for Certification <ArrowRight size={18} />
+                    </Link>
+                    <Link to="/Contact#contact-us" className="btn-outline">Become a Certified Partner</Link>
                 </div>
             </section>
 

@@ -25,6 +25,7 @@ const Research = lazy(() => import('./pages/Research'));
 const Products = lazy(() => import('./pages/Products'));
 const Education = lazy(() => import('./pages/Education'));
 const Enterprise = lazy(() => import('./pages/Enterprise'));
+const NeuraEaglei = lazy(() => import('./pages/NeuraEaglei'));
 const Careers = lazy(() => import('./pages/Careers'));
 const Team = lazy(() => import('./pages/Team'));
 const Legal = lazy(() => import('./pages/Legal'));
@@ -72,6 +73,7 @@ function App() {
                 <Route path="/Products" element={<Products />} />
                 <Route path="/Education" element={<Education />} />
                 <Route path="/Enterprise" element={<Enterprise />} />
+                <Route path="/NeuraEaglei" element={<NeuraEaglei />} />
                 <Route path="/Careers" element={<Careers />} />
                 <Route path="/Team" element={<Team />} />
                 <Route path="/privacy" element={<Legal doc="privacy" />} />

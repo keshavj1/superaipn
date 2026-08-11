@@ -39,6 +39,11 @@ const META = {
     description:
       "Sovereign LLM deployment, vision analytics, conversational AI, and physical AI for enterprise and government operations.",
   },
+  "/neuraeaglei": {
+    title: `NeuraEaglei — AI CCTV Intelligence — ${SITE}`,
+    description:
+      "Turn existing CCTV cameras into AI-powered enterprise intelligence. Detect safety, security, and compliance events in real time — on-premise, no new hardware.",
+  },
   "/education": {
     title: `Education AI Solutions — ${SITE}`,
     description:

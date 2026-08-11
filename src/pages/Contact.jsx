@@ -19,7 +19,7 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
    activation email to this address; until its link is clicked, nothing is
    delivered. On any network/service failure the forms fall back to the old
    mailto: hand-off, so a submission is never silently lost. */
-const FORM_RELAY = "https://formsubmit.co/ajax/keshav.j@superaip.com";
+const FORM_RELAY = "https://formsubmit.co/ajax/info@superaip.com";
 
 async function sendViaRelay(subject, fields) {
   const res = await fetch(FORM_RELAY, {
@@ -82,9 +82,11 @@ const quickCards = [
 const contactDetails = [
   { icon: <MapPin size={18} />, title: "Registered Office", value: "Super AI Polaris (Super AIP), India", color: "#8b5cf6" },
   { icon: <Mail size={18} />, title: "General Enquiries", value: "info@superaip.com", link: "mailto:info@superaip.com", color: "#06b6d4" },
+  /* Hidden on request (2026-08-07) — restore by uncommenting:
   { icon: <Handshake size={18} />, title: "Partnership & Alliances", value: "partners@superaip.com", link: "mailto:partners@superaip.com", color: "#10b981" },
   { icon: <Newspaper size={18} />, title: "Media & Press", value: "media@superaip.com", link: "mailto:media@superaip.com", color: "#f59e0b" },
   { icon: <Briefcase size={18} />, title: "Careers", value: "careers@superaip.com", link: "mailto:careers@superaip.com", color: "#ec4899" },
+  */
 ];
 
 const responseCommitments = [
@@ -145,7 +147,7 @@ export default function Contact() {
   };
 
   /* ─── Contact form → email submission ─── */
-  const CONTACT_EMAIL = "keshav.j@superaip.com";
+  const CONTACT_EMAIL = "info@superaip.com";
   /* { type: "error" | "success", message } rather than a bare string: a
      validation failure and a successful hand-off previously rendered in the
      identical cyan, so users could not tell them apart. */

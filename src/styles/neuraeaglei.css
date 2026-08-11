@@ -1,0 +1,853 @@
+/* =========================================
+   NEURAEAGLEI LANDING PAGE (Super AI Polaris)
+   Inherits the site design system (index.css tokens); the product's
+   incumbent emerald accent — established by the NeuraEaglei section on
+   /Enterprise — carries the page identity. All colours route through
+   tokens or the --ne-* variables below so the page follows [data-theme].
+   ========================================= */
+
+.neuraeaglei-page {
+    --ne-accent: #8b5cf6;
+    --ne-accent-bright: #a78bfa;
+    --ne-accent-soft: rgba(139, 92, 246, 0.1);
+    --ne-accent-border: rgba(139, 92, 246, 0.28);
+    --ne-danger: #f87171;
+    --ne-danger-soft: rgba(248, 113, 113, 0.08);
+    --ne-danger-border: rgba(248, 113, 113, 0.22);
+
+    background-color: var(--surface-0);
+    color: var(--color-text-primary);
+    overflow-x: hidden;
+}
+
+.neuraeaglei-page section {
+    padding: var(--space-section) var(--gutter);
+}
+
+.ne-container {
+    max-width: var(--container);
+    margin: 0 auto;
+}
+
+/* ── 1. HERO ─────────────────────────────────────────────────────── */
+
+.ne-hero {
+    /* Clear the fixed navbar; radial wash matches the site's page intros. */
+    padding-top: clamp(110px, 16vw, 150px) !important;
+    background:
+        radial-gradient(ellipse 70% 50% at 50% -10%, rgba(139, 92, 246, 0.09), transparent 70%),
+        radial-gradient(ellipse 40% 35% at 85% 20%, rgba(139, 92, 246, 0.07), transparent 70%);
+}
+
+.ne-hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    gap: clamp(32px, 5vw, 64px);
+    align-items: center;
+    max-width: var(--container);
+    margin: 0 auto;
+}
+
+.ne-hero-badge .pulse-dot {
+    background: var(--ne-accent-bright);
+}
+
+/* Emerald variant of the shared hero badge. */
+.neuraeaglei-page .ne-hero-badge {
+    border-color: var(--ne-accent-border);
+    background: var(--ne-accent-soft);
+    color: var(--ne-accent-bright);
+}
+
+.ne-hero-title {
+    font-size: clamp(2rem, 4.6vw, 3.4rem);
+    font-weight: 800;
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+    color: var(--color-text-primary);
+    margin-bottom: 20px;
+    text-wrap: balance;
+}
+
+.ne-hero-highlight {
+    /* Site-standard heading highlight (matches the About-page hero):
+       violet-to-blue gradient text. */
+    background: linear-gradient(90deg, #8b5cf6, #3b82f6);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.ne-hero-sub {
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+    max-width: 34rem;
+    margin-bottom: 28px;
+}
+
+.ne-hero-ctas {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 28px;
+}
+
+/* Primary CTA — emerald rendition of the site's glow button. */
+.ne-btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px 30px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #7c3aed, #8b5cf6);
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 15px;
+    cursor: pointer;
+    transition: transform var(--transition-normal), box-shadow var(--transition-normal), filter var(--transition-normal);
+    box-shadow: 0 4px 24px rgba(139, 92, 246, 0.25);
+}
+
+.ne-btn-primary:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.08);
+    box-shadow: 0 8px 34px rgba(139, 92, 246, 0.4);
+    color: #ffffff;
+}
+
+.ne-btn-primary:focus-visible,
+.ne-btn-secondary:focus-visible {
+    outline: 2px solid var(--ne-accent-bright);
+    outline-offset: 3px;
+}
+
+.ne-btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px 28px;
+    border-radius: 12px;
+    border: 1px solid var(--btn-secondary-border);
+    background: var(--btn-secondary-bg);
+    color: var(--btn-secondary-text);
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    transition: border-color var(--transition-normal), background var(--transition-normal), transform var(--transition-normal);
+}
+
+.ne-btn-secondary:hover {
+    border-color: var(--btn-secondary-border-hover);
+    background: rgba(255, 255, 255, 0.06);
+    transform: translateY(-2px);
+    color: var(--btn-secondary-text);
+}
+
+.ne-trust-points {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 22px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.ne-trust-points li {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 0.86rem;
+    color: var(--color-text-secondary);
+}
+
+.ne-trust-points svg {
+    color: var(--ne-accent-bright);
+    flex-shrink: 0;
+}
+
+/* Monitoring console — the hero's proof: the demo reel framed as the
+   product's own live console. */
+.ne-console {
+    border: 1px solid var(--color-border-strong);
+    border-radius: 16px;
+    background: var(--surface-1);
+    overflow: hidden;
+    box-shadow: 0 24px 70px -30px rgba(0, 0, 0, 0.9), 0 0 60px -20px rgba(139, 92, 246, 0.15);
+}
+
+.ne-console-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--color-border);
+    background: var(--surface-2);
+}
+
+.ne-console-dots {
+    display: inline-flex;
+    gap: 5px;
+}
+
+.ne-console-dots span {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.14);
+}
+
+.ne-console-title {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ne-console-live {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--ne-accent-bright);
+    border: 1px solid var(--ne-accent-border);
+    background: var(--ne-accent-soft);
+    border-radius: 999px;
+    padding: 3px 10px;
+    white-space: nowrap;
+}
+
+.ne-live-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--ne-accent-bright);
+    animation: pulse-glow 2s infinite;
+}
+
+.ne-console-body {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    background: #000;
+}
+
+.ne-console-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Detection chips: decorative demo-state overlays; never block the
+   video's native controls. */
+.ne-console-chips {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    pointer-events: none;
+}
+
+.ne-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(4, 8, 6, 0.72);
+    border: 1px solid var(--ne-accent-border);
+    color: var(--ne-accent-bright);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+}
+
+.ne-chip svg {
+    flex-shrink: 0;
+}
+
+/* ── 2. TRUST STRIP ──────────────────────────────────────────────── */
+
+.ne-trust-strip {
+    padding-top: 0 !important;
+}
+
+.ne-strip {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    border: 1px solid var(--color-border);
+    border-radius: 18px;
+    background: var(--surface-1);
+    overflow: hidden;
+}
+
+.ne-strip-cell {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    text-align: center;
+    padding: 26px 14px;
+    border-right: 1px solid var(--color-border);
+}
+
+.ne-strip-cell:last-child {
+    border-right: none;
+}
+
+.ne-strip-value {
+    font-size: clamp(1.5rem, 2.6vw, 2rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--ne-accent-bright);
+    line-height: 1;
+}
+
+.ne-strip-cell svg {
+    color: var(--ne-accent-bright);
+}
+
+.ne-strip-label {
+    font-size: 0.8rem;
+    color: var(--color-text-secondary);
+    line-height: 1.35;
+}
+
+/* ── 3. CHALLENGES → OUTCOMES ────────────────────────────────────── */
+
+.ne-versus {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    gap: clamp(16px, 3vw, 28px);
+    align-items: stretch;
+    margin-top: clamp(32px, 5vw, 48px);
+}
+
+.ne-versus-panel {
+    border-radius: 20px;
+    padding: clamp(22px, 3vw, 34px);
+    border: 1px solid var(--color-border);
+    background: var(--surface-1);
+}
+
+.ne-versus-panel.is-problem {
+    border-color: var(--ne-danger-border);
+    background: linear-gradient(180deg, var(--ne-danger-soft), transparent 60%), var(--surface-1);
+}
+
+.ne-versus-panel.is-solution {
+    border-color: var(--ne-accent-border);
+    background: linear-gradient(180deg, var(--ne-accent-soft), transparent 60%), var(--surface-1);
+}
+
+.ne-versus-panel h3 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    margin-bottom: 20px;
+}
+
+.ne-versus-panel.is-problem h3 { color: var(--ne-danger); }
+.ne-versus-panel.is-solution h3 { color: var(--ne-accent-bright); }
+
+.ne-versus-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.ne-versus-list li {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+}
+
+.ne-versus-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border: 1px solid var(--color-border);
+    background: var(--surface-2);
+}
+
+.is-problem .ne-versus-icon { color: var(--ne-danger); border-color: var(--ne-danger-border); }
+.is-solution .ne-versus-icon { color: var(--ne-accent-bright); border-color: var(--ne-accent-border); }
+
+.ne-versus-list strong {
+    display: block;
+    font-size: 0.98rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-bottom: 2px;
+}
+
+.ne-versus-list p {
+    font-size: 0.88rem;
+    color: var(--color-text-secondary);
+    line-height: 1.55;
+    margin: 0;
+}
+
+.ne-versus-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ne-accent-bright);
+}
+
+.ne-versus-arrow-badge {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--ne-accent-border);
+    background: var(--surface-2);
+    box-shadow: 0 0 24px rgba(139, 92, 246, 0.2);
+}
+
+/* ── 4. CAPABILITIES ─────────────────────────────────────────────── */
+
+.ne-caps-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin-top: clamp(32px, 5vw, 48px);
+}
+
+.ne-cap-card {
+    border: 1px solid var(--color-border);
+    border-radius: 16px;
+    background: var(--surface-1);
+    padding: 24px 20px;
+    transition: border-color var(--transition-normal), background var(--transition-normal), transform var(--transition-normal);
+}
+
+.ne-cap-card:hover {
+    border-color: var(--ne-accent-border);
+    background: var(--color-bg-card-hover);
+    transform: translateY(-4px);
+}
+
+.ne-cap-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ne-accent-bright);
+    background: var(--ne-accent-soft);
+    border: 1px solid var(--ne-accent-border);
+    margin-bottom: 16px;
+}
+
+.ne-cap-card h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: var(--color-text-primary);
+}
+
+.ne-cap-card p {
+    font-size: 0.86rem;
+    color: var(--color-text-secondary);
+    line-height: 1.55;
+    margin: 0;
+}
+
+/* ── 5. INDUSTRIES ───────────────────────────────────────────────── */
+
+.ne-industries {
+    background: var(--surface-band-cool);
+}
+
+.ne-ind-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin-top: clamp(32px, 5vw, 48px);
+}
+
+.ne-ind-card {
+    border: 1px solid var(--color-border);
+    border-radius: 18px;
+    background: var(--surface-1);
+    padding: 26px 22px;
+    transition: border-color var(--transition-normal), transform var(--transition-normal);
+}
+
+.ne-ind-card:hover {
+    border-color: var(--color-border-hover);
+    transform: translateY(-4px);
+}
+
+.ne-ind-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.ne-ind-head svg {
+    color: var(--ne-accent-bright);
+    flex-shrink: 0;
+}
+
+.ne-ind-head h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin: 0;
+    color: var(--color-text-primary);
+}
+
+.ne-ind-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.ne-ind-tags li {
+    font-size: 0.78rem;
+    color: var(--color-text-secondary);
+    border: 1px solid var(--color-border);
+    background: var(--surface-2);
+    border-radius: 999px;
+    padding: 5px 12px;
+}
+
+/* ── 6. WHY CHOOSE — divider grid, deliberately not another card wall ── */
+
+.ne-why-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin-top: clamp(32px, 5vw, 48px);
+    border-top: 1px solid var(--color-border);
+    border-left: 1px solid var(--color-border);
+}
+
+.ne-why-cell {
+    padding: clamp(24px, 3vw, 34px);
+    border-right: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.ne-why-cell svg {
+    color: var(--ne-accent-bright);
+    margin-bottom: 14px;
+}
+
+.ne-why-cell h3 {
+    font-size: 1.02rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: var(--color-text-primary);
+}
+
+.ne-why-cell p {
+    font-size: 0.88rem;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* ── 7. FINAL CTA + DEMO FORM ────────────────────────────────────── */
+
+.ne-cta {
+    background: var(--surface-band-violet);
+}
+
+.ne-cta-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(32px, 5vw, 64px);
+    align-items: center;
+    max-width: var(--container);
+    margin: 0 auto;
+}
+
+.ne-cta-title {
+    font-size: clamp(1.9rem, 4vw, 2.9rem);
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin-bottom: 16px;
+    text-wrap: balance;
+}
+
+.ne-cta-title em {
+    font-style: normal;
+    color: var(--ne-accent-bright);
+}
+
+.ne-cta-text {
+    font-size: 1.05rem;
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+    margin-bottom: 28px;
+    max-width: 30rem;
+}
+
+.ne-cta-points {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.ne-cta-points li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.92rem;
+    color: var(--color-text-secondary);
+}
+
+.ne-cta-points svg {
+    color: var(--ne-accent-bright);
+    flex-shrink: 0;
+}
+
+.ne-form-card {
+    border: 1px solid var(--color-border-strong);
+    border-radius: 20px;
+    background: var(--surface-1);
+    padding: clamp(24px, 3.5vw, 38px);
+    box-shadow: 0 30px 80px -40px rgba(0, 0, 0, 0.9);
+}
+
+.ne-form-card h3 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.ne-form-intro {
+    font-size: 0.88rem;
+    color: var(--color-text-muted);
+    margin-bottom: 22px;
+}
+
+.ne-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.ne-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.ne-field.full {
+    grid-column: 1 / -1;
+}
+
+.ne-field label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+}
+
+.ne-field input,
+.ne-field select {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 1px solid var(--color-border-strong);
+    background: var(--surface-2);
+    color: var(--color-text-primary);
+    font-size: 0.95rem;
+    font-family: var(--font-family);
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.ne-field input::placeholder {
+    color: var(--color-text-muted);
+}
+
+.ne-field input:focus-visible,
+.ne-field select:focus-visible {
+    outline: none;
+    border-color: var(--ne-accent);
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.18);
+}
+
+.ne-field select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%238b98ab' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 40px;
+    cursor: pointer;
+}
+
+.ne-field select option {
+    background: var(--surface-2);
+    color: var(--color-text-primary);
+}
+
+.ne-form-submit {
+    width: 100%;
+    margin-top: 22px;
+}
+
+.ne-form-submit:disabled {
+    opacity: 0.6;
+    cursor: wait;
+    transform: none;
+}
+
+.ne-form-note {
+    margin-top: 12px;
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    text-align: center;
+}
+
+/* ── MOTION ──────────────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+    .ne-live-dot {
+        animation: none;
+    }
+
+    .ne-btn-primary,
+    .ne-btn-secondary,
+    .ne-cap-card,
+    .ne-ind-card {
+        transition: none;
+    }
+}
+
+/* ── RESPONSIVE ──────────────────────────────────────────────────── */
+
+@media (max-width: 1023px) {
+    .ne-hero-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .ne-strip {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .ne-strip-cell {
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    .ne-strip-cell:nth-child(3n) {
+        border-right: none;
+    }
+
+    .ne-strip-cell:nth-last-child(-n + 3) {
+        border-bottom: none;
+    }
+
+    .ne-versus {
+        grid-template-columns: 1fr;
+    }
+
+    .ne-versus-arrow {
+        transform: rotate(90deg);
+    }
+
+    .ne-caps-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .ne-ind-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .ne-why-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .ne-cta-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 640px) {
+    .ne-strip {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    /* Re-derive the divider pattern for the 2-column strip. */
+    .ne-strip-cell,
+    .ne-strip-cell:nth-child(3n) {
+        border-right: 1px solid var(--color-border);
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    .ne-strip-cell:nth-child(2n) {
+        border-right: none;
+    }
+
+    .ne-strip-cell:nth-last-child(-n + 2) {
+        border-bottom: none;
+    }
+
+    .ne-ind-grid,
+    .ne-why-grid,
+    .ne-form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .ne-console-title {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .ne-caps-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .ne-hero-ctas {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .ne-hero-ctas .ne-btn-primary,
+    .ne-hero-ctas .ne-btn-secondary {
+        width: 100%;
+    }
+}

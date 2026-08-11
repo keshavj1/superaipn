@@ -52,6 +52,10 @@ const navItems = [
         children: [
             { title: "Enterprise AI Solutions", href: "/Enterprise" },
             { title: "Education AI Solutions", href: "/Education" },
+            { title: "NeuraEaglei — Vision AI", href: "/NeuraEaglei" },
+            /* Standalone landing page served from a real /Neurabot/ directory,
+               not an SPA route — must be a hard <a> navigation. */
+            { title: "NeuraBOT — Conversational AI", href: "/Neurabot/", external: true },
         ],
     },
     { title: "Products", href: "/Products" },
@@ -146,17 +150,27 @@ function NavbarItem({ item, pathname }) {
                     >
                         {item.children.map((child, i) => {
                             const isChildActive = pathname.toLowerCase() === child.href.toLowerCase();
-                            return (
+                            const childStyle = {
+                                background: isChildActive ? "var(--nav-dropdown-active)" : "transparent",
+                                color: "var(--nav-dropdown-text)",
+                            };
+                            return child.external ? (
+                                <a
+                                    key={i}
+                                    href={child.href}
+                                    onClick={() => setOpen(false)}
+                                    className="nav-drop-link"
+                                    style={childStyle}>
+                                    {child.title}
+                                </a>
+                            ) : (
                                 <Link
                                     key={i}
                                     to={child.href}
                                     aria-current={isChildActive ? "page" : undefined}
                                     onClick={() => setOpen(false)}
                                     className="nav-drop-link"
-                                    style={{
-                                        background: isChildActive ? "var(--nav-dropdown-active)" : "transparent",
-                                        color: "var(--nav-dropdown-text)",
-                                    }}>
+                                    style={childStyle}>
                                     {child.title}
                                 </Link>
                             );
@@ -377,16 +391,27 @@ export default function Navbar() {
                                 >
                                     <div className="overflow-hidden">
                                         <div className="pb-1 border-l border-white/10 ml-1">
-                                            {item.children.map((child) => (
-                                                <Link
-                                                    key={child.title}
-                                                    to={child.href}
-                                                    className="flex items-center pl-4 py-2.5 min-h-[44px] text-gray-400 text-sm hover:text-white transition-colors"
-                                                    onClick={() => setMobileMenuOpen(false)}
-                                                >
-                                                    {child.title}
-                                                </Link>
-                                            ))}
+                                            {item.children.map((child) =>
+                                                child.external ? (
+                                                    <a
+                                                        key={child.title}
+                                                        href={child.href}
+                                                        className="flex items-center pl-4 py-2.5 min-h-[44px] text-gray-400 text-sm hover:text-white transition-colors"
+                                                        onClick={() => setMobileMenuOpen(false)}
+                                                    >
+                                                        {child.title}
+                                                    </a>
+                                                ) : (
+                                                    <Link
+                                                        key={child.title}
+                                                        to={child.href}
+                                                        className="flex items-center pl-4 py-2.5 min-h-[44px] text-gray-400 text-sm hover:text-white transition-colors"
+                                                        onClick={() => setMobileMenuOpen(false)}
+                                                    >
+                                                        {child.title}
+                                                    </Link>
+                                                )
+                                            )}
                                         </div>
                                     </div>
                                 </div>
