@@ -152,6 +152,8 @@
     letter-spacing: 0.02em;
     margin: 0.2cqw 0;
 }
+.cert-for { font-size: 1.7cqw; color: #4a5a7a; font-style: italic; margin: 1cqw 0 0.2cqw; }
+.cert-topic { font-size: 2.6cqw; color: #2f4a86; font-weight: 700; margin: 0.1cqw 0; }
 
 .cert-footer {
     margin-top: auto;
@@ -251,6 +253,8 @@
     .cert-dept { font-size: 0.9rem; }
     .cert-of { font-size: 0.78rem; margin: 0.35rem 0; }
     .cert-institute { font-size: 1.05rem; margin: 0.15rem 0; }
+    .cert-for { font-size: 0.78rem; margin: 0.6rem 0 0.1rem; }
+    .cert-topic { font-size: 0.98rem; margin: 0.1rem 0; }
 
     .cert-footer {
         flex-direction: column;

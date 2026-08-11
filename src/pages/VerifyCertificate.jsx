@@ -39,6 +39,8 @@ function CertificateView({ cert }) {
         <p className="cert-dept">{cert.department}</p>
         <p className="cert-of">of</p>
         <p className="cert-institute">{cert.institute}</p>
+        <p className="cert-for">for successfully completing</p>
+        <p className="cert-topic">{cert.program}</p>
 
         <div className="cert-footer">
           <div>
@@ -90,9 +92,11 @@ export default function VerifyCertificate() {
         <div className="cert-detail-row"><span className="k">Certificate No.</span><span className="v">{cert.id}</span></div>
         <div className="cert-detail-row"><span className="k">Status</span><span className="v" style={{ color: '#6ee7b7' }}>Valid &amp; Verified</span></div>
         <div className="cert-detail-row"><span className="k">Recipient</span><span className="v">{cert.name}</span></div>
+        <div className="cert-detail-row"><span className="k">Designation</span><span className="v">{cert.department}</span></div>
         <div className="cert-detail-row"><span className="k">Institution</span><span className="v">{cert.institute}</span></div>
         <div className="cert-detail-row"><span className="k">Program</span><span className="v">{cert.program}</span></div>
         <div className="cert-detail-row"><span className="k">Issue Date</span><span className="v">{cert.date}</span></div>
+        <div className="cert-detail-row"><span className="k">Validity</span><span className="v">{cert.validity}</span></div>
       </div>
 
       <button type="button" className="cert-download" onClick={() => window.print()}>

@@ -1,35 +1,34 @@
 /* ────────────────────────────────────────────────────────────────────────
    CERTIFICATE REGISTRY
-   Each entry powers the public verification page at  /verify?id=<number>
+   Each entry powers the certificate page at  /certificate?id=<number>
    A QR printed on the physical certificate encodes that URL, so scanning it
    opens the matching record here.
 
-   TO ADD / EDIT A CERTIFICATE: copy a block below, keep the certificate number
-   as the key, and fill in the recipient's real details. Records /002–/009 use
-   placeholder names ("Faculty Name 0X") — REPLACE them with the real names.
+   TO EDIT: keep the certificate number as the key and change the person's
+   details. Fields shared by the whole batch live in BATCH below.
    ──────────────────────────────────────────────────────────────────────── */
 
-// Fields shared by this Teacher-Training batch (edit once if the batch changes).
+// Fields shared by this Faculty Development Program batch.
 const BATCH = {
   type: 'Certificate of Completion',
-  department: 'School of Management',
   institute: 'Institute of Management Studies, Noida',
-  program: 'Microsoft AI Teacher Training Program',
-  date: '03 July 2026',
+  program: 'FDP: AI Innovation and Digital Skills',
+  date: '10 August 2026',
+  validity: '10 Years',
   signatory: 'Jaydev Rath',
   signatoryTitle: 'CEO, Super AI Polaris',
 };
 
 export const CERTIFICATES = {
-  'SAP/MSL/IMS/TT1/2026/001': { ...BATCH, name: 'Dr. Girish Kumar' },
-  'SAP/MSL/IMS/TT1/2026/002': { ...BATCH, name: 'Faculty Name 02' },
-  'SAP/MSL/IMS/TT1/2026/003': { ...BATCH, name: 'Faculty Name 03' },
-  'SAP/MSL/IMS/TT1/2026/004': { ...BATCH, name: 'Faculty Name 04' },
-  'SAP/MSL/IMS/TT1/2026/005': { ...BATCH, name: 'Faculty Name 05' },
-  'SAP/MSL/IMS/TT1/2026/006': { ...BATCH, name: 'Faculty Name 06' },
-  'SAP/MSL/IMS/TT1/2026/007': { ...BATCH, name: 'Faculty Name 07' },
-  'SAP/MSL/IMS/TT1/2026/008': { ...BATCH, name: 'Faculty Name 08' },
-  'SAP/MSL/IMS/TT1/2026/009': { ...BATCH, name: 'Faculty Name 09' },
+  'SAP/MSL/IMS/TT1/2026/001': { ...BATCH, name: 'Prof. Dr. Ajay Gupta',   department: 'Head of Department' },
+  'SAP/MSL/IMS/TT1/2026/002': { ...BATCH, name: 'Dr. Anita Pati Mishra',  department: 'School of Information Technology (SOIT)' },
+  'SAP/MSL/IMS/TT1/2026/003': { ...BATCH, name: 'Shaili Nigam',           department: 'School of Information Technology (SOIT)' },
+  'SAP/MSL/IMS/TT1/2026/004': { ...BATCH, name: 'Vyas Kumar Yadav',       department: 'Assistant Professor, Law' },
+  'SAP/MSL/IMS/TT1/2026/005': { ...BATCH, name: 'Dr. Rashi Garg',         department: 'School of Management' },
+  'SAP/MSL/IMS/TT1/2026/006': { ...BATCH, name: 'Dr. Laveena Pareek',     department: 'Master of Business Administration (MBA)' },
+  'SAP/MSL/IMS/TT1/2026/007': { ...BATCH, name: 'Anjali Pandey',          department: 'Information Technology' },
+  'SAP/MSL/IMS/TT1/2026/008': { ...BATCH, name: 'Anushrav Mudgal',        department: 'Information Technology' },
+  'SAP/MSL/IMS/TT1/2026/009': { ...BATCH, name: 'Dr. Girish Kumar',       department: 'School of Management' },
 };
 
 /* Look a certificate up tolerantly: trims whitespace, ignores case, and accepts
