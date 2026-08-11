@@ -29,6 +29,7 @@ const NeuraEaglei = lazy(() => import('./pages/NeuraEaglei'));
 const Careers = lazy(() => import('./pages/Careers'));
 const Team = lazy(() => import('./pages/Team'));
 const Legal = lazy(() => import('./pages/Legal'));
+const VerifyCertificate = lazy(() => import('./pages/VerifyCertificate'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 
 /* Shown while a route chunk is in flight. Deliberately minimal — a spinner that
@@ -79,6 +80,8 @@ function App() {
                 <Route path="/privacy" element={<Legal doc="privacy" />} />
                 <Route path="/terms" element={<Legal doc="terms" />} />
                 <Route path="/cookies" element={<Legal doc="cookies" />} />
+                {/* Public QR certificate verification: /verify?id=<number> */}
+                <Route path="/verify" element={<VerifyCertificate />} />
                 {/* Catch-all: previously an unknown URL rendered a blank page. */}
                 <Route path="*" element={<NotFound />} />
               </Routes>

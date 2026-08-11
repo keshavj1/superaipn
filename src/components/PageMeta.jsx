@@ -77,6 +77,7 @@ const META = {
   "/privacy": { title: `Privacy Policy — ${SITE}`, description: "How Super AI Polaris collects, uses, and protects your information." },
   "/terms": { title: `Terms of Service — ${SITE}`, description: "The terms governing use of Super AI Polaris platforms and services." },
   "/cookies": { title: `Cookie Policy — ${SITE}`, description: "How Super AI Polaris uses cookies and how to manage your preferences." },
+  "/verify": { title: `Verify Certificate — ${SITE}`, description: "Verify the authenticity of a certificate issued by Super AI Polaris using its certificate number or QR code." },
 };
 
 /* Unmatched routes get their own metadata rather than inheriting the

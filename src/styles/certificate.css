@@ -1,0 +1,261 @@
+/* ============================================================
+   CERTIFICATE VERIFICATION PAGE
+   ============================================================ */
+.verify-page {
+    min-height: 80vh;
+    padding: clamp(90px, 12vw, 130px) var(--gutter) var(--space-section);
+    background: #0a0e16;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.75rem;
+}
+
+/* ── Verified / invalid status banner ── */
+.verify-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.7rem 1.4rem;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.verify-status.ok {
+    background: rgba(16, 185, 129, 0.12);
+    border: 1px solid rgba(16, 185, 129, 0.4);
+    color: #6ee7b7;
+}
+
+.verify-status.bad {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.4);
+    color: #fca5a5;
+}
+
+.verify-status svg {
+    flex-shrink: 0;
+}
+
+.verify-sub {
+    color: #9fb0c4;
+    text-align: center;
+    max-width: 560px;
+    line-height: 1.6;
+    margin: -0.5rem 0 0;
+}
+
+/* ── The certificate itself (recreated, print-ready) ── */
+.certificate {
+    width: min(960px, 100%);
+    aspect-ratio: 1.414 / 1;          /* landscape A4-ish */
+    background: #ffffff;
+    color: #1f2d4a;
+    border-radius: 10px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 24px 60px -20px rgba(0, 0, 0, 0.7);
+    /* Serif face gives the document a formal, non-app feel. */
+    font-family: Georgia, 'Times New Roman', serif;
+    container-type: inline-size;
+}
+
+/* Blue geometric corner accents (top-right + bottom-left), like the artwork. */
+.cert-corner {
+    position: absolute;
+    width: 30%;
+    height: 26%;
+    z-index: 0;
+    pointer-events: none;
+}
+.cert-corner.tr { top: 0; right: 0; }
+.cert-corner.bl { bottom: 0; left: 0; }
+.cert-corner span {
+    position: absolute;
+    display: block;
+    transform: skewX(-24deg);
+    border-radius: 3px;
+}
+.cert-corner.tr span { top: 0; height: 22px; }
+.cert-corner.tr .c1 { right: 6%;  width: 55%; background: #23407e; }
+.cert-corner.tr .c2 { right: 6%;  width: 55%; background: #7d96c7; top: 30px; }
+.cert-corner.tr .c3 { right: 26%; width: 34%; background: #b9c6e0; top: 60px; }
+.cert-corner.bl span { bottom: 0; height: 22px; }
+.cert-corner.bl .c1 { left: 6%;  width: 55%; background: #23407e; }
+.cert-corner.bl .c2 { left: 6%;  width: 55%; background: #7d96c7; bottom: 30px; }
+.cert-corner.bl .c3 { left: 26%; width: 34%; background: #b9c6e0; bottom: 60px; }
+/* solid navy triangle in the very corner */
+.cert-corner.bl::before {
+    content: '';
+    position: absolute;
+    left: 0; bottom: 0;
+    border-width: 0 0 70px 70px;
+    border-style: solid;
+    border-color: transparent transparent #1e3a8a transparent;
+}
+
+.cert-inner {
+    position: relative;
+    z-index: 2;
+    height: 100%;
+    padding: 5cqw 7cqw;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+.cert-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+.cert-ms {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.cert-ms-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2px;
+    width: 3cqw;
+    height: 3cqw;
+    min-width: 22px;
+    min-height: 22px;
+}
+.cert-ms-grid span { display: block; }
+.cert-ms-word {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    font-size: 2.4cqw;
+    color: #5e5e5e;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+}
+.cert-sap-logo { height: 5cqw; min-height: 40px; width: auto; }
+
+.cert-title {
+    font-size: 5cqw;
+    letter-spacing: 0.04em;
+    color: #2f4a86;
+    margin: 3cqw 0 0.6cqw;
+    font-weight: 400;
+}
+.cert-awarded { font-size: 1.9cqw; color: #4a5a7a; margin: 0.4cqw 0; }
+.cert-name {
+    font-size: 4.2cqw;
+    color: #b07d2a;
+    font-weight: 700;
+    margin: 0.8cqw 0 0.2cqw;
+}
+.cert-dept { font-size: 2.1cqw; color: #b07d2a; font-weight: 700; }
+.cert-of { font-size: 1.8cqw; color: #4a5a7a; margin: 0.6cqw 0; }
+.cert-institute {
+    font-size: 3.3cqw;
+    color: #2f4a86;
+    letter-spacing: 0.02em;
+    margin: 0.2cqw 0;
+}
+
+.cert-footer {
+    margin-top: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 2cqw;
+}
+.cert-date { color: #b07d2a; font-weight: 700; font-size: 2cqw; text-align: left; }
+.cert-no {
+    font-family: 'Courier New', monospace;
+    color: #64748b;
+    font-size: 1.5cqw;
+    margin-top: 0.6cqw;
+    letter-spacing: 0.03em;
+}
+.cert-qr {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+.cert-qr svg { width: 11cqw; height: 11cqw; min-width: 74px; min-height: 74px; }
+.cert-qr small { font-size: 1.15cqw; color: #94a3b8; }
+.cert-sign { text-align: center; }
+.cert-sign-line {
+    width: 15cqw;
+    border-top: 2px solid #b07d2a;
+    margin: 0 auto 0.4cqw;
+}
+.cert-sign-name { font-weight: 700; color: #2f4a86; font-size: 2cqw; }
+.cert-sign-title { color: #64748b; font-size: 1.4cqw; }
+
+/* faint laurel watermark */
+.cert-watermark {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    opacity: 0.05;
+    pointer-events: none;
+    font-size: 40cqw;
+    color: #b8a24a;
+}
+
+/* ── Details table + actions below the certificate ── */
+.cert-details {
+    width: min(960px, 100%);
+    background: rgba(20, 25, 30, 0.6);
+    border: 1px solid var(--color-border);
+    border-radius: 14px;
+    padding: 1.5rem;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem 2rem;
+}
+.cert-detail-row { display: flex; flex-direction: column; gap: 0.15rem; }
+.cert-detail-row .k {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #7f8ea3;
+}
+.cert-detail-row .v { color: #e2e8f0; font-weight: 600; font-size: 0.98rem; }
+
+.verify-actions { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; }
+
+/* ── Manual lookup (shown when no / invalid id) ── */
+.verify-lookup {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: center;
+    width: min(520px, 100%);
+}
+.verify-lookup input {
+    flex: 1 1 260px;
+    padding: 0.85rem 1.1rem;
+    border-radius: 12px;
+    border: 1px solid var(--color-border);
+    background: rgba(255, 255, 255, 0.04);
+    color: #e2e8f0;
+    font-size: 0.95rem;
+}
+.verify-lookup input:focus-visible {
+    outline: 2px solid #00A4EF;
+    outline-offset: 1px;
+}
+
+@media (max-width: 620px) {
+    .cert-details { grid-template-columns: 1fr; }
+}
+
+/* Print: show only the certificate, full-bleed. */
+@media print {
+    body { background: #fff; }
+    .verify-page > *:not(.certificate),
+    nav, footer, .chatbot-root { display: none !important; }
+    .verify-page { padding: 0; }
+    .certificate { box-shadow: none; width: 100%; }
+}
