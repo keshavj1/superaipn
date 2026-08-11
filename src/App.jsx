@@ -80,7 +80,9 @@ function App() {
                 <Route path="/privacy" element={<Legal doc="privacy" />} />
                 <Route path="/terms" element={<Legal doc="terms" />} />
                 <Route path="/cookies" element={<Legal doc="cookies" />} />
-                {/* Public QR certificate verification: /verify?id=<number> */}
+                {/* A scanned QR opens the certificate directly: /certificate?id=<number>.
+                    /verify kept as an alias so any earlier links still resolve. */}
+                <Route path="/certificate" element={<VerifyCertificate />} />
                 <Route path="/verify" element={<VerifyCertificate />} />
                 {/* Catch-all: previously an unknown URL rendered a blank page. */}
                 <Route path="*" element={<NotFound />} />

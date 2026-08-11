@@ -1,50 +1,48 @@
 /* ============================================================
-   CERTIFICATE VERIFICATION PAGE
+   CERTIFICATE PAGE — a scanned QR lands here and shows the
+   document directly. No verification chrome.
    ============================================================ */
-.verify-page {
+.cert-page {
     min-height: 80vh;
     padding: clamp(90px, 12vw, 130px) var(--gutter) var(--space-section);
     background: #0a0e16;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1.75rem;
+    gap: 1.5rem;
 }
 
-/* ── Verified / invalid status banner ── */
-.verify-status {
+/* Not-found state (bad/missing number) */
+.cert-missing {
+    text-align: center;
+    max-width: 520px;
+    color: #9fb0c4;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.9rem;
+    padding: 3rem 0;
+}
+.cert-missing svg { color: #fca5a5; }
+.cert-missing h1 { color: #e2e8f0; font-size: 1.6rem; margin: 0; }
+.cert-missing p { line-height: 1.6; margin: 0; }
+
+/* Unobtrusive download/print action under the certificate */
+.cert-download {
     display: inline-flex;
     align-items: center;
-    gap: 0.6rem;
+    gap: 0.5rem;
     padding: 0.7rem 1.4rem;
-    border-radius: 999px;
+    border-radius: 12px;
+    border: 1px solid var(--color-border);
+    background: rgba(255, 255, 255, 0.05);
+    color: #cbd5e1;
+    font-size: 0.9rem;
     font-weight: 600;
-    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
 }
-
-.verify-status.ok {
-    background: rgba(16, 185, 129, 0.12);
-    border: 1px solid rgba(16, 185, 129, 0.4);
-    color: #6ee7b7;
-}
-
-.verify-status.bad {
-    background: rgba(239, 68, 68, 0.1);
-    border: 1px solid rgba(239, 68, 68, 0.4);
-    color: #fca5a5;
-}
-
-.verify-status svg {
-    flex-shrink: 0;
-}
-
-.verify-sub {
-    color: #9fb0c4;
-    text-align: center;
-    max-width: 560px;
-    line-height: 1.6;
-    margin: -0.5rem 0 0;
-}
+.cert-download:hover { background: rgba(255, 255, 255, 0.1); color: #fff; }
 
 /* ── The certificate itself (recreated, print-ready) ── */
 .certificate {
@@ -203,59 +201,11 @@
     color: #b8a24a;
 }
 
-/* ── Details table + actions below the certificate ── */
-.cert-details {
-    width: min(960px, 100%);
-    background: rgba(20, 25, 30, 0.6);
-    border: 1px solid var(--color-border);
-    border-radius: 14px;
-    padding: 1.5rem;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1rem 2rem;
-}
-.cert-detail-row { display: flex; flex-direction: column; gap: 0.15rem; }
-.cert-detail-row .k {
-    font-size: 0.72rem;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: #7f8ea3;
-}
-.cert-detail-row .v { color: #e2e8f0; font-weight: 600; font-size: 0.98rem; }
-
-.verify-actions { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; }
-
-/* ── Manual lookup (shown when no / invalid id) ── */
-.verify-lookup {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-    justify-content: center;
-    width: min(520px, 100%);
-}
-.verify-lookup input {
-    flex: 1 1 260px;
-    padding: 0.85rem 1.1rem;
-    border-radius: 12px;
-    border: 1px solid var(--color-border);
-    background: rgba(255, 255, 255, 0.04);
-    color: #e2e8f0;
-    font-size: 0.95rem;
-}
-.verify-lookup input:focus-visible {
-    outline: 2px solid #00A4EF;
-    outline-offset: 1px;
-}
-
-@media (max-width: 620px) {
-    .cert-details { grid-template-columns: 1fr; }
-}
-
 /* Print: show only the certificate, full-bleed. */
 @media print {
     body { background: #fff; }
-    .verify-page > *:not(.certificate),
+    .cert-page > *:not(.certificate),
     nav, footer, .chatbot-root { display: none !important; }
-    .verify-page { padding: 0; }
+    .cert-page { padding: 0; }
     .certificate { box-shadow: none; width: 100%; }
 }
