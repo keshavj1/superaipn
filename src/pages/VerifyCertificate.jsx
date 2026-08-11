@@ -85,6 +85,16 @@ export default function VerifyCertificate() {
   return (
     <div className="cert-page">
       <CertificateView cert={cert} />
+
+      <div className="cert-details">
+        <div className="cert-detail-row"><span className="k">Certificate No.</span><span className="v">{cert.id}</span></div>
+        <div className="cert-detail-row"><span className="k">Status</span><span className="v" style={{ color: '#6ee7b7' }}>Valid &amp; Verified</span></div>
+        <div className="cert-detail-row"><span className="k">Recipient</span><span className="v">{cert.name}</span></div>
+        <div className="cert-detail-row"><span className="k">Institution</span><span className="v">{cert.institute}</span></div>
+        <div className="cert-detail-row"><span className="k">Program</span><span className="v">{cert.program}</span></div>
+        <div className="cert-detail-row"><span className="k">Issue Date</span><span className="v">{cert.date}</span></div>
+      </div>
+
       <button type="button" className="cert-download" onClick={() => window.print()}>
         <Printer size={16} /> Download / Print
       </button>
