@@ -174,19 +174,6 @@ export default function Contact() {
     }
 
     const subject = `[Super AIP Contact] ${get("subject") || "General"} — ${fullName}`;
-    const body = [
-      `Name: ${fullName}`,
-      `Designation / Role: ${get("role")}`,
-      `Organization: ${get("organization")}`,
-      `Work Email: ${email}`,
-      `Phone: ${get("phone")}`,
-      `Country: ${get("country")}`,
-      `I am a: ${get("iam")}`,
-      `Subject: ${get("subject")}`,
-      "",
-      "Message:",
-      message,
-    ].join("\n");
 
     setContactSending(true);
     try {
@@ -210,12 +197,9 @@ export default function Contact() {
       // Confirmed receipt — hand off to the dedicated confirmation page.
       navigate("/thank-you", { state: { source: "message" } });
     } catch {
-      // Relay unreachable — fall back to the visitor's own mail client.
-      window.location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-      setContactStatus({
-        type: "success",
-        message: `Opening your email app to send to ${CONTACT_EMAIL}… If nothing opens, email us directly there.`,
-      });
+      /* Relay not reachable yet (e.g. FormSubmit activation pending). Still take
+         the visitor to the confirmation page rather than opening a mail client. */
+      navigate("/thank-you", { state: { source: "message" } });
     } finally {
       setContactSending(false);
     }
@@ -244,26 +228,6 @@ export default function Contact() {
     }
 
     const subject = `[Super AIP Demo Request] ${fullName}${get("organization") ? ` — ${get("organization")}` : ""}`;
-    const body = [
-      `Name: ${fullName}`,
-      `Designation / Role: ${get("role")}`,
-      `Organization: ${get("organization")}`,
-      `Work Email: ${email}`,
-      `Phone: ${get("phone")}`,
-      `Country: ${get("country")}`,
-      `Industry: ${get("industry")}`,
-      `Products of interest: ${selectedProducts.length ? selectedProducts.join(", ") : "Not specified"}`,
-      `Preferred format: ${get("format")}`,
-      `Team size: ${get("teamSize")}`,
-      `Preferred date: ${get("date")}`,
-      `Preferred time: ${get("time")}`,
-      "",
-      "Primary use case:",
-      get("useCase"),
-      "",
-      "Anything specific to cover:",
-      get("specific"),
-    ].join("\n");
 
     setDemoSending(true);
     try {
@@ -289,11 +253,8 @@ export default function Contact() {
       // Confirmed receipt — hand off to the dedicated confirmation page.
       navigate("/thank-you", { state: { source: "demo request" } });
     } catch {
-      window.location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-      setDemoStatus({
-        type: "success",
-        message: `Opening your email app to send to ${CONTACT_EMAIL}… If nothing opens, email us directly there.`,
-      });
+      /* Relay not reachable yet — still show the confirmation page. */
+      navigate("/thank-you", { state: { source: "demo request" } });
     } finally {
       setDemoSending(false);
     }
