@@ -16,6 +16,7 @@ const footerLinks = [
             /* Points at the dedicated landing page now; the Enterprise
                overview section stays reachable from that page's context. */
             { name: "NeuraEaglei", to: "/NeuraEaglei" },
+            { name: "NeuraBOT", to: "/Neurabot" },
             { name: "Education AI", to: "/Education" },
             { name: "Robotics", to: "/Products#robotics" },
             { name: "Physical AI", to: "/Enterprise#physical-ai" },

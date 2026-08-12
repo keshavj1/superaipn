@@ -26,6 +26,8 @@ const Products = lazy(() => import('./pages/Products'));
 const Education = lazy(() => import('./pages/Education'));
 const Enterprise = lazy(() => import('./pages/Enterprise'));
 const NeuraEaglei = lazy(() => import('./pages/NeuraEaglei'));
+const Neurabot = lazy(() => import('./pages/Neurabot'));
+const ThankYou = lazy(() => import('./pages/ThankYou'));
 const Careers = lazy(() => import('./pages/Careers'));
 const Team = lazy(() => import('./pages/Team'));
 const Legal = lazy(() => import('./pages/Legal'));
@@ -75,6 +77,9 @@ function App() {
                 <Route path="/Education" element={<Education />} />
                 <Route path="/Enterprise" element={<Enterprise />} />
                 <Route path="/NeuraEaglei" element={<NeuraEaglei />} />
+                <Route path="/Neurabot" element={<Neurabot />} />
+                {/* Post-submit confirmation for every site form. */}
+                <Route path="/thank-you" element={<ThankYou />} />
                 <Route path="/Careers" element={<Careers />} />
                 <Route path="/Team" element={<Team />} />
                 <Route path="/privacy" element={<Legal doc="privacy" />} />

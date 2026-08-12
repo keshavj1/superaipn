@@ -44,6 +44,11 @@ const META = {
     description:
       "Turn existing CCTV cameras into AI-powered enterprise intelligence. Detect safety, security, and compliance events in real time — on-premise, no new hardware.",
   },
+  "/neurabot": {
+    title: `NeuraBOT — Enterprise AI Chatbots — ${SITE}`,
+    description:
+      "Enterprise AI chatbots for customer support, citizen services, and employee helpdesks — cloud, private cloud, or secure on-premise, on every channel.",
+  },
   "/education": {
     title: `Education AI Solutions — ${SITE}`,
     description:
@@ -79,6 +84,13 @@ const META = {
   "/cookies": { title: `Cookie Policy — ${SITE}`, description: "How Super AI Polaris uses cookies and how to manage your preferences." },
   "/certificate": { title: `Certificate — ${SITE}`, description: "A certificate issued by Super AI Polaris." },
   "/verify": { title: `Certificate — ${SITE}`, description: "A certificate issued by Super AI Polaris." },
+  /* Post-submit confirmation. noindex: a thank-you page in search results
+     would land visitors on a confirmation for a form they never sent. */
+  "/thank-you": {
+    title: `Thank You — ${SITE}`,
+    description: "Your request has been received. The Super AI Polaris team will reach out shortly.",
+    noindex: true,
+  },
 };
 
 /* Unmatched routes get their own metadata rather than inheriting the
@@ -122,11 +134,12 @@ export default function PageMeta() {
     upsertMeta('meta[name="twitter:description"]', "content", meta.description, { name: "twitter:description" });
 
     /* Unknown paths must not invite indexing. The header comment in
-       NotFound.jsx already claimed a noindex tag existed; it did not. */
+       NotFound.jsx already claimed a noindex tag existed; it did not.
+       Known pages can also opt out via META[key].noindex (e.g. /thank-you). */
     upsertMeta(
       'meta[name="robots"]',
       "content",
-      isKnown ? "index, follow" : "noindex, follow",
+      isKnown && !meta.noindex ? "index, follow" : "noindex, follow",
       { name: "robots" }
     );
 

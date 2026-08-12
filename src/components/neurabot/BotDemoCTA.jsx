@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Send, CheckCircle2 } from "lucide-react";
 
 /* Same lead pipeline as Contact.jsx: the FormSubmit relay delivers straight
@@ -13,22 +13,23 @@ const CONTACT_EMAIL = "info@superaip.com";
    dot, without rejecting valid-but-unusual addresses. */
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+/* The industries this page names, so the dropdown mirrors the section above. */
 const INDUSTRY_OPTIONS = [
-    "Manufacturing",
-    "Construction",
-    "Corporate",
-    "Education",
-    "Government & Public Sector",
-    "Banking & Finance",
+    "Government",
     "Healthcare",
-    "Smart City & Infrastructure",
+    "Banking & Financial Services",
+    "Education",
+    "Retail",
+    "Logistics",
+    "Technology",
+    "Hospitality",
     "Other",
 ];
 
 const CTA_POINTS = [
-    "See live AI detections on real camera feeds",
-    "Session tailored to your industry and use cases",
-    "No new hardware — works with your existing cameras",
+    "Guidance on the right chatbot type for your goals",
+    "Cloud, private cloud, or secure on-premise deployment",
+    "One continuous conversation across every channel",
 ];
 
 async function sendViaRelay(subject, fields) {
@@ -64,7 +65,7 @@ function FormStatus({ status }) {
     );
 }
 
-export default function DemoCTA({ revealRef }) {
+export default function BotDemoCTA({ revealRef }) {
     const [status, setStatus] = useState(null);
     const [sending, setSending] = useState(false);
     const navigate = useNavigate();
@@ -89,7 +90,7 @@ export default function DemoCTA({ revealRef }) {
             return;
         }
 
-        const subject = `[NeuraEaglei] Demo Request — ${fullName}`;
+        const subject = `[NeuraBOT] Demo Request — ${fullName}`;
         const body = [
             `Name: ${fullName}`,
             `Phone: ${phone}`,
@@ -97,7 +98,7 @@ export default function DemoCTA({ revealRef }) {
             `Company: ${company}`,
             `Industry: ${industry}`,
             "",
-            "Source: NeuraEaglei landing page",
+            "Source: NeuraBOT landing page",
         ].join("\n");
 
         setSending(true);
@@ -105,16 +106,16 @@ export default function DemoCTA({ revealRef }) {
             await sendViaRelay(subject, {
                 _replyto: email,
                 _autoresponse:
-                    "Thank you for requesting a NeuraEaglei live demo. Our team will reach out shortly to schedule your session.\n\n— Team Super AIP\nsuperaip.com",
+                    "Thank you for requesting a personalized NeuraBOT demo. Our team will reach out shortly to schedule your session.\n\n— Team Super AIP\nsuperaip.com",
                 Name: fullName,
                 Phone: phone,
                 Email: email,
                 Company: company,
                 Industry: industry,
-                Source: "NeuraEaglei landing page",
+                Source: "NeuraBOT landing page",
             });
             // Confirmed receipt — hand off to the dedicated confirmation page.
-            navigate("/thank-you", { state: { source: "NeuraEaglei demo request" } });
+            navigate("/thank-you", { state: { source: "NeuraBOT demo request" } });
         } catch {
             // Relay unreachable — fall back to the visitor's own mail client.
             window.location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
@@ -128,50 +129,55 @@ export default function DemoCTA({ revealRef }) {
     };
 
     return (
-        <section className="ne-cta reveal-fade-up" ref={revealRef} aria-labelledby="ne-cta-title">
-            <div className="ne-cta-grid">
+        <section className="nb-cta reveal-fade-up" ref={revealRef} aria-labelledby="nb-cta-title">
+            <div className="nb-cta-grid">
                 <div>
-                    <h2 id="ne-cta-title" className="ne-cta-title">
-                        Ready to Transform Your Surveillance into <em>Intelligence</em>?
+                    <h2 id="nb-cta-title" className="nb-cta-title">
+                        Ready to Transform <em>Business Conversations</em>?
                     </h2>
-                    <p className="ne-cta-text">
-                        Book a live demo and see NeuraEaglei in action.
+                    <p className="nb-cta-text">
+                        Discover the right Enterprise AI Chatbot solution with a
+                        personalized NeuraBot consultation.
                     </p>
-                    <ul className="ne-cta-points">
+                    <ul className="nb-cta-points">
                         {CTA_POINTS.map((point) => (
                             <li key={point}>
                                 <CheckCircle2 size={17} aria-hidden="true" /> {point}
                             </li>
                         ))}
                     </ul>
+                    <Link to="/Contact#contact-us" className="nb-btn-secondary">
+                        Speak to Our AI Experts
+                    </Link>
                 </div>
 
-                <div className="ne-form-card" id="book-demo">
-                    <h3>Book a Demo</h3>
-                    <p className="ne-form-intro">
-                        Fill in your details and our team will schedule a live session.
+                <div className="nb-form-card" id="book-demo">
+                    <h3>Book Your Personalized Demo</h3>
+                    <p className="nb-form-intro">
+                        Fill in your details and our team will schedule a personalized
+                        session.
                     </p>
                     <form onSubmit={handleSubmit} noValidate>
-                        <div className="ne-form-grid">
-                            <div className="ne-field">
-                                <label htmlFor="ne-name">Full Name</label>
-                                <input id="ne-name" name="fullName" type="text" autoComplete="name" placeholder="Your full name" required />
+                        <div className="nb-form-grid">
+                            <div className="nb-field">
+                                <label htmlFor="nb-name">Full Name</label>
+                                <input id="nb-name" name="fullName" type="text" autoComplete="name" placeholder="Your full name" required />
                             </div>
-                            <div className="ne-field">
-                                <label htmlFor="ne-phone">Phone Number</label>
-                                <input id="ne-phone" name="phone" type="tel" autoComplete="tel" placeholder="+91 98765 43210" required />
+                            <div className="nb-field">
+                                <label htmlFor="nb-phone">Phone Number</label>
+                                <input id="nb-phone" name="phone" type="tel" autoComplete="tel" placeholder="+91 98765 43210" required />
                             </div>
-                            <div className="ne-field full">
-                                <label htmlFor="ne-email">Email Address</label>
-                                <input id="ne-email" name="email" type="email" autoComplete="email" placeholder="work@example.com" required />
+                            <div className="nb-field full">
+                                <label htmlFor="nb-email">Email Address</label>
+                                <input id="nb-email" name="email" type="email" autoComplete="email" placeholder="work@example.com" required />
                             </div>
-                            <div className="ne-field">
-                                <label htmlFor="ne-company">Company Name</label>
-                                <input id="ne-company" name="company" type="text" autoComplete="organization" placeholder="Your company" required />
+                            <div className="nb-field">
+                                <label htmlFor="nb-company">Company Name</label>
+                                <input id="nb-company" name="company" type="text" autoComplete="organization" placeholder="Your organization" required />
                             </div>
-                            <div className="ne-field">
-                                <label htmlFor="ne-industry">Industry</label>
-                                <select id="ne-industry" name="industry" defaultValue="">
+                            <div className="nb-field">
+                                <label htmlFor="nb-industry">Industry</label>
+                                <select id="nb-industry" name="industry" defaultValue="">
                                     <option value="" disabled>Select industry…</option>
                                     {INDUSTRY_OPTIONS.map((option) => (
                                         <option key={option} value={option}>{option}</option>
@@ -179,11 +185,11 @@ export default function DemoCTA({ revealRef }) {
                                 </select>
                             </div>
                         </div>
-                        <button type="submit" className="ne-btn-primary ne-form-submit" disabled={sending}>
-                            {sending ? "Sending…" : "Book Live Demo"} <Send size={16} aria-hidden="true" />
+                        <button type="submit" className="nb-btn-primary nb-form-submit" disabled={sending}>
+                            {sending ? "Sending…" : "Book Your Personalized Demo"} <Send size={16} aria-hidden="true" />
                         </button>
                         <FormStatus status={status} />
-                        <p className="ne-form-note">
+                        <p className="nb-form-note">
                             We respond to demo requests within 2 business days.
                         </p>
                     </form>

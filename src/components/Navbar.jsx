@@ -53,9 +53,7 @@ const navItems = [
             { title: "Enterprise AI Solutions", href: "/Enterprise" },
             { title: "Education AI Solutions", href: "/Education" },
             { title: "NeuraEaglei — Vision AI", href: "/NeuraEaglei" },
-            /* Standalone landing page served from a real /Neurabot/ directory,
-               not an SPA route — must be a hard <a> navigation. */
-            { title: "NeuraBOT — Conversational AI", href: "/Neurabot/", external: true },
+            { title: "NeuraBOT — Conversational AI", href: "/Neurabot" },
         ],
     },
     { title: "Products", href: "/Products" },

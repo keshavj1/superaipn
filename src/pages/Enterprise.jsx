@@ -397,12 +397,11 @@ const Enterprise = () => {
                                     </li>
                                 ))}
                             </ul>
-                            {/* Hard <a>: /Neurabot/ is a real server directory, not an SPA
-                                route. Inline styles mirror the NeuraEaglei page's primary
-                                CTA (bold dark ink on a bright fill) and defeat the page's
+                            {/* Inline styles mirror the NeuraEaglei page's primary CTA
+                                (bold dark ink on a bright fill) and defeat the page's
                                 link-color cascade that was graying the label out. */}
-                            <a
-                                href="/Neurabot/"
+                            <Link
+                                to="/Neurabot"
                                 className="inline-flex items-center gap-2 mt-8 transition-transform hover:-translate-y-0.5"
                                 style={{
                                     padding: "14px 30px",
@@ -415,7 +414,7 @@ const Enterprise = () => {
                                 }}
                             >
                                 Explore NeuraEduBOT →
-                            </a>
+                            </Link>
                         </div>
                         <div className="edge-media">
                             <div className="video-wrapper">
@@ -448,17 +447,12 @@ const Enterprise = () => {
                         <p className="tagline text-purple-400 font-bold uppercase tracking-widest text-xs mb-4">From FAQ to full intelligence. One platform.</p>
                         <h2 className="text-4xl font-extrabold text-white mb-6">NeuraBOT <span className="text-gray-500 font-normal"> Conversational AI</span></h2>
                         <p className="desc text-gray-400 max-w-3xl mx-auto text-lg">A full-spectrum conversational AI platform spanning simple FAQ bots to fully LLM-powered agents built for citizen services, customer support, and HR operations.</p>
-                        {/* Hidden on request (2026-08-07) — the /Neurabot/ landing page is
-                            reachable from the navbar Solutions dropdown instead. Restore by
-                            uncommenting. Plain <a>, not a router Link: /Neurabot/ is a real
-                            directory on the server, not an SPA route.
-                        <a
-                            href="/Neurabot/"
+                        <Link
+                            to="/Neurabot"
                             className="inline-flex items-center gap-2 mt-6 px-6 py-3 rounded-full bg-purple-600 hover:bg-purple-500 text-white font-semibold transition-colors"
                         >
                             Explore NeuraBOT →
-                        </a>
-                        */}
+                        </Link>
                     </div>
 
                     <div className="bot-split grid grid-cols-1 lg:grid-cols-5 gap-12 bg-[#0b0f19] rounded-3xl p-6 md:p-8 shadow-2xl">

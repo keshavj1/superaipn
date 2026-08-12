@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { SOCIAL_URLS } from "../data/social";
 import "../styles/contact.css";
 import {
@@ -152,6 +152,7 @@ export default function Contact() {
      validation failure and a successful hand-off previously rendered in the
      identical cyan, so users could not tell them apart. */
   const [contactStatus, setContactStatus] = useState(null);
+  const navigate = useNavigate();
 
   const [contactSending, setContactSending] = useState(false);
 
@@ -206,11 +207,8 @@ export default function Contact() {
         Subject: get("subject"),
         Message: message,
       });
-      setContactStatus({
-        type: "success",
-        message: "Thank you — your message has been sent. We'll get back to you shortly.",
-      });
-      e.target.reset();
+      // Confirmed receipt — hand off to the dedicated confirmation page.
+      navigate("/thank-you", { state: { source: "message" } });
     } catch {
       // Relay unreachable — fall back to the visitor's own mail client.
       window.location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
@@ -288,12 +286,8 @@ export default function Contact() {
         "Primary use case": get("useCase"),
         "Anything specific": get("specific"),
       });
-      setDemoStatus({
-        type: "success",
-        message: "Thank you — your demo request has been sent. Our team will reach out to schedule it.",
-      });
-      e.target.reset();
-      setSelectedProducts([]);
+      // Confirmed receipt — hand off to the dedicated confirmation page.
+      navigate("/thank-you", { state: { source: "demo request" } });
     } catch {
       window.location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
       setDemoStatus({

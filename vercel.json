@@ -19,7 +19,9 @@
     { "source": "/Partners", "destination": "/partners", "permanent": true },
     { "source": "/Team", "destination": "/team", "permanent": true },
     { "source": "/Careers", "destination": "/careers", "permanent": true },
-    { "source": "/Contact", "destination": "/contact", "permanent": true }
+    { "source": "/Contact", "destination": "/contact", "permanent": true },
+    { "source": "/NeuraEaglei", "destination": "/neuraeaglei", "permanent": true },
+    { "source": "/Neurabot", "destination": "/neurabot", "permanent": true }
   ],
   "rewrites": [
     {
