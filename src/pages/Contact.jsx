@@ -19,7 +19,7 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
    activation email to this address; until its link is clicked, nothing is
    delivered. On any network/service failure the forms fall back to the old
    mailto: hand-off, so a submission is never silently lost. */
-const FORM_RELAY = "https://formsubmit.co/ajax/info@superaip.com";
+const FORM_RELAY = "https://formsubmit.co/ajax/keshav.j@gmail.com";
 
 async function sendViaRelay(subject, fields) {
   const res = await fetch(FORM_RELAY, {
