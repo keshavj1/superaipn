@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { CheckCircle2, ClipboardCheck, PhoneCall, CalendarCheck, Home, ArrowRight } from "lucide-react";
 import "../styles/thankyou.css";
@@ -18,6 +18,17 @@ const STEPS = [
 export default function ThankYou() {
     const { state } = useLocation();
     const source = state?.source; // e.g. "NeuraBOT demo request"
+
+    /* Meta Pixel conversion. Gated on router state so only an arrival from a
+       real successful form submit counts — a direct visit, refresh, or shared
+       link has no state and must not inflate the numbers. The ref keeps it to
+       one event per arrival even if the component re-mounts. */
+    const conversionFired = useRef(false);
+    useEffect(() => {
+        if (!source || conversionFired.current) return;
+        conversionFired.current = true;
+        window.fbq?.("track", "CompleteRegistration", { content_name: source });
+    }, [source]);
 
     return (
         <div className="thankyou-page">

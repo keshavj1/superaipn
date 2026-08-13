@@ -7,6 +7,7 @@ import Home from './pages/Home';
 import PageMeta from './components/PageMeta';
 import Navbar from './components/Navbar';
 import ScrollToTop from './components/ScrollToTop';
+import PixelTracker from './components/PixelTracker';
 import Footer from "./components/Footer";
 import Chatbot from "./components/Chatbot";
 import ErrorBoundary from "./components/ErrorBoundary";
@@ -57,6 +58,8 @@ function App() {
         <ScrollToTop />
         {/* Per-route <title>/description/canonical. */}
         <PageMeta />
+        {/* Meta Pixel PageView per client-side route change. */}
+        <PixelTracker />
         {/* First focusable element on the page: lets keyboard users bypass the
             ~12 navbar tab stops that repeat on every route (WCAG 2.4.1). */}
         <a href="#main-content" className="skip-link">Skip to main content</a>
