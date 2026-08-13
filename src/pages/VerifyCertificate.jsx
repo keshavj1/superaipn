@@ -4,9 +4,29 @@ import { XCircle, Download } from 'lucide-react';
 import { findCertificate } from '../data/certificates';
 import '../styles/certificate.css';
 
-/* The last three digits of the certificate number map to its image file,
-   e.g. SAP/MSL/IMS/TT1/2026/001 -> /certificates/001.png */
-const imageFor = (id) => `/certificates/${id.slice(-3)}.png`;
+/* Certificate images are imported (not referenced from /public) so Vite gives
+   each one a CONTENT-HASHED filename, e.g. 001-a1b2c3.png. When an image is
+   updated, its hash changes, so browsers and the server cache can never serve
+   a stale version — the recurring "old image still loads" problem. To replace
+   a certificate: drop the new PNG over src/assets/certificates/00X.png and
+   rebuild. */
+import c001 from '../assets/certificates/001.png';
+import c002 from '../assets/certificates/002.png';
+import c003 from '../assets/certificates/003.png';
+import c004 from '../assets/certificates/004.png';
+import c005 from '../assets/certificates/005.png';
+import c006 from '../assets/certificates/006.png';
+import c007 from '../assets/certificates/007.png';
+import c008 from '../assets/certificates/008.png';
+import c009 from '../assets/certificates/009.png';
+
+const CERT_IMAGES = {
+  '001': c001, '002': c002, '003': c003, '004': c004, '005': c005,
+  '006': c006, '007': c007, '008': c008, '009': c009,
+};
+
+/* The last three digits of the certificate number pick its hashed image. */
+const imageFor = (id) => CERT_IMAGES[id.slice(-3)];
 
 export default function VerifyCertificate() {
   const [params] = useSearchParams();
