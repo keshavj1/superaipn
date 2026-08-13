@@ -19,7 +19,7 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
    activation email to this address; until its link is clicked, nothing is
    delivered. On failure the forms show an inline error instead of the
    thank-you page, so a visitor is never told "sent" when nothing went out. */
-const FORM_RELAY = "https://formsubmit.co/ajax/keshav.j@superaip.com";
+const FORM_RELAY = "https://formsubmit.co/ajax/info@superaip.com";
 
 async function sendViaRelay(subject, fields) {
   const res = await fetch(FORM_RELAY, {

@@ -6,7 +6,7 @@ import { Send, CheckCircle2 } from "lucide-react";
    to the inbox with no backend. On failure the form shows an inline error
    instead of the thank-you page, so a visitor is never told "sent" when
    nothing went out. */
-const FORM_RELAY = "https://formsubmit.co/ajax/keshav.j@superaip.com";
+const FORM_RELAY = "https://formsubmit.co/ajax/info@superaip.com";
 const CONTACT_EMAIL = "info@superaip.com";
 
 /* Deliberately permissive — enough to catch a typo like "name@" or a missing
