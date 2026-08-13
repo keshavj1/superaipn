@@ -3,10 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { Send, CheckCircle2 } from "lucide-react";
 
 /* Same lead pipeline as Contact.jsx: the FormSubmit relay delivers straight
-   to the inbox with no backend, and on any network/service failure the form
-   falls back to a mailto: hand-off so a submission is never silently lost.
-   The relay address is already activated by the Contact page's first send. */
-const FORM_RELAY = "https://formsubmit.co/ajax/keshav.j@gmail.com";
+   to the inbox with no backend. On failure the form shows an inline error
+   instead of the thank-you page, so a visitor is never told "sent" when
+   nothing went out. */
+const FORM_RELAY = "https://formsubmit.co/ajax/keshav.j@superaip.com";
 const CONTACT_EMAIL = "info@superaip.com";
 
 /* Deliberately permissive — enough to catch a typo like "name@" or a missing
@@ -107,8 +107,11 @@ export default function DemoCTA({ revealRef }) {
             // Confirmed receipt — hand off to the dedicated confirmation page.
             navigate("/thank-you", { state: { source: "NeuraEaglei demo request" } });
         } catch {
-            /* Relay not reachable yet — still show the confirmation page. */
-            navigate("/thank-you", { state: { source: "NeuraEaglei demo request" } });
+            /* Relay failed — surface the error instead of a false confirmation. */
+            setStatus({
+                type: "error",
+                message: `Your request could not be sent right now. Please try again in a moment, or email us directly at ${CONTACT_EMAIL}.`,
+            });
         } finally {
             setSending(false);
         }

@@ -17,9 +17,9 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 /* FormSubmit relay: delivers submissions straight to the inbox with no
    backend and no API key. NOTE — the FIRST submission triggers a one-time
    activation email to this address; until its link is clicked, nothing is
-   delivered. On any network/service failure the forms fall back to the old
-   mailto: hand-off, so a submission is never silently lost. */
-const FORM_RELAY = "https://formsubmit.co/ajax/keshav.j@gmail.com";
+   delivered. On failure the forms show an inline error instead of the
+   thank-you page, so a visitor is never told "sent" when nothing went out. */
+const FORM_RELAY = "https://formsubmit.co/ajax/keshav.j@superaip.com";
 
 async function sendViaRelay(subject, fields) {
   const res = await fetch(FORM_RELAY, {
@@ -197,9 +197,12 @@ export default function Contact() {
       // Confirmed receipt — hand off to the dedicated confirmation page.
       navigate("/thank-you", { state: { source: "message" } });
     } catch {
-      /* Relay not reachable yet (e.g. FormSubmit activation pending). Still take
-         the visitor to the confirmation page rather than opening a mail client. */
-      navigate("/thank-you", { state: { source: "message" } });
+      /* Relay failed (network down, or FormSubmit activation pending). Do NOT
+         show the confirmation page for a message that never went out. */
+      setContactStatus({
+        type: "error",
+        message: `Your message could not be sent right now. Please try again in a moment, or email us directly at ${CONTACT_EMAIL}.`,
+      });
     } finally {
       setContactSending(false);
     }
@@ -253,8 +256,11 @@ export default function Contact() {
       // Confirmed receipt — hand off to the dedicated confirmation page.
       navigate("/thank-you", { state: { source: "demo request" } });
     } catch {
-      /* Relay not reachable yet — still show the confirmation page. */
-      navigate("/thank-you", { state: { source: "demo request" } });
+      /* Relay failed — surface the error instead of a false confirmation. */
+      setDemoStatus({
+        type: "error",
+        message: `Your demo request could not be sent right now. Please try again in a moment, or email us directly at ${CONTACT_EMAIL}.`,
+      });
     } finally {
       setDemoSending(false);
     }
