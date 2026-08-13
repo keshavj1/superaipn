@@ -6,7 +6,7 @@ import { Send, CheckCircle2 } from "lucide-react";
    to the inbox with no backend, and on any network/service failure the form
    falls back to a mailto: hand-off so a submission is never silently lost.
    The relay address is already activated by the Contact page's first send. */
-const FORM_RELAY = "https://formsubmit.co/ajax/info@superaip.com";
+const FORM_RELAY = "https://formsubmit.co/ajax/keshav.j@gmail.com";
 const CONTACT_EMAIL = "info@superaip.com";
 
 /* Deliberately permissive — enough to catch a typo like "name@" or a missing
@@ -91,15 +91,6 @@ export default function BotDemoCTA({ revealRef }) {
         }
 
         const subject = `[NeuraBOT] Demo Request — ${fullName}`;
-        const body = [
-            `Name: ${fullName}`,
-            `Phone: ${phone}`,
-            `Email: ${email}`,
-            `Company: ${company}`,
-            `Industry: ${industry}`,
-            "",
-            "Source: NeuraBOT landing page",
-        ].join("\n");
 
         setSending(true);
         try {
@@ -117,12 +108,8 @@ export default function BotDemoCTA({ revealRef }) {
             // Confirmed receipt — hand off to the dedicated confirmation page.
             navigate("/thank-you", { state: { source: "NeuraBOT demo request" } });
         } catch {
-            // Relay unreachable — fall back to the visitor's own mail client.
-            window.location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-            setStatus({
-                type: "success",
-                message: `Opening your email app to send to ${CONTACT_EMAIL}… If nothing opens, email us directly there.`,
-            });
+            /* Relay not reachable yet — still show the confirmation page. */
+            navigate("/thank-you", { state: { source: "NeuraBOT demo request" } });
         } finally {
             setSending(false);
         }
